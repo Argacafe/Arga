@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#ffffff">
+<title>کافه Arga | منو</title>
+<meta name="description" content="منوی آنلاین کافه Arga؛ قهوه، نوشیدنی سرد، چای، دسر و صبحانه">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#1c1c1c;--mut:#737373;--line:#e6e6e6;--chip:#f3f3f3;--grad:linear-gradient(45deg,#f9a03f,#e1306c,#8a3ab9);--accent:#e1306c}
+@media(prefers-color-scheme:dark){:root{--bg:#000;--fg:#f5f5f5;--mut:#a3a3a3;--line:#262626;--chip:#1a1a1a}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);font-family:Vazirmatn,system-ui,sans-serif;max-width:560px;margin:0 auto;padding-bottom:76px;min-height:100vh}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+header.top{position:sticky;top:0;z-index:20;background:var(--bg);display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid var(--line)}
+.logo{font-weight:800;font-size:26px;letter-spacing:.5px;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;font-family:Vazirmatn,sans-serif}
+.top .ic{display:flex;gap:16px}
+svg.i{width:26px;height:26px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.profile{display:flex;align-items:center;gap:22px;padding:16px}
+.avatar{width:84px;height:84px;border-radius:50%;padding:3px;background:var(--grad);flex:none}
+.avatar div{width:100%;height:100%;border-radius:50%;background:var(--bg);display:grid;place-items:center;border:3px solid var(--bg);font-size:38px;background:#2b1d14}
+.stats{display:flex;flex:1;justify-content:space-around;text-align:center}
+.stats b{display:block;font-size:17px}.stats span{font-size:12.5px;color:var(--mut)}
+.bio{padding:0 16px 10px;font-size:14px;line-height:1.9}
+.bio h1{font-size:15px;margin:0}.bio .cat{color:var(--mut);font-size:13px}
+.actions{display:flex;gap:8px;padding:6px 16px 14px}
+.actions a,.actions button{flex:1;text-align:center;background:var(--chip);border-radius:9px;padding:8px;font-size:13.5px;font-weight:600;text-decoration:none;color:inherit}
+.actions .pri{background:#0095f6;color:#fff}
+.stories{display:flex;gap:16px;overflow-x:auto;padding:4px 16px 14px;scrollbar-width:none}
+.stories::-webkit-scrollbar{display:none}
+.story{flex:none;width:68px;text-align:center;font-size:11.5px}
+.ring{width:66px;height:66px;border-radius:50%;padding:2.5px;background:var(--line);margin-bottom:5px}
+.story.on .ring{background:var(--grad)}
+.ring div{width:100%;height:100%;border-radius:50%;border:2.5px solid var(--bg);display:grid;place-items:center;font-size:28px;background:var(--chip)}
+.tabs{display:flex;border-top:1px solid var(--line);position:sticky;top:49px;background:var(--bg);z-index:15}
+.tabs button{flex:1;padding:11px;color:var(--mut);border-bottom:2px solid transparent}
+.tabs button.on{color:var(--fg);border-color:var(--fg)}
+.search{display:none;padding:10px 16px}
+.search.show{display:block}
+.search input{width:100%;background:var(--chip);border:0;border-radius:10px;padding:10px 14px;font:inherit;color:var(--fg);outline:0}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+.tile{position:relative;aspect-ratio:1;overflow:hidden;display:grid;place-items:center;cursor:pointer;color:#fff}
+.tile .em{font-size:44px;filter:drop-shadow(0 3px 6px rgba(0,0,0,.35))}
+.tile img,.post img.ph{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.tile .nm{position:absolute;bottom:0;right:0;left:0;padding:14px 6px 5px;font-size:11.5px;font-weight:600;text-align:center;background:linear-gradient(transparent,rgba(0,0,0,.6))}
+.list{display:none}
+.post{border-bottom:1px solid var(--line);padding-bottom:12px;margin-bottom:6px}
+.post .hd{display:flex;align-items:center;gap:10px;padding:10px 14px;font-size:13.5px;font-weight:600}
+.post .hd .av{width:32px;height:32px;border-radius:50%;background:var(--grad);display:grid;place-items:center;font-size:15px;color:#fff;font-weight:800}
+.post .media{position:relative;aspect-ratio:1;display:grid;place-items:center;overflow:hidden;color:#fff}
+.post .media .em{font-size:110px;filter:drop-shadow(0 6px 10px rgba(0,0,0,.35))}
+.post .bar{display:flex;align-items:center;padding:10px 14px 4px;gap:14px}
+.post .bar .sp{flex:1}
+.heart.on svg{fill:#ed4956;stroke:#ed4956}
+.post .cap{padding:2px 14px;font-size:14px;line-height:1.9}
+.price{font-weight:800}
+.empty{padding:40px;text-align:center;color:var(--mut);display:none}
+nav.bottom{position:fixed;bottom:0;right:50%;transform:translateX(50%);width:100%;max-width:560px;background:var(--bg);border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:8px 0 calc(8px + env(safe-area-inset-bottom));z-index:30}
+nav.bottom button{padding:4px 14px;color:var(--mut)}
+nav.bottom button.on{color:var(--fg)}
+nav.bottom button.on svg{stroke-width:2.6}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;z-index:50;padding:16px}
+.modal.show{display:flex}
+.modal .card{background:var(--bg);width:100%;max-width:420px;border-radius:14px;overflow:hidden;max-height:92vh;overflow-y:auto}
+.toast{position:fixed;bottom:90px;right:50%;transform:translateX(50%);background:#262626;color:#fff;padding:9px 18px;border-radius:20px;font-size:13px;opacity:0;pointer-events:none;transition:.3s;z-index:60}
+.toast.show{opacity:1}
+.info{padding:16px;line-height:2;font-size:14px}
+.info h2{font-size:16px;margin:8px 0}
+.info .row{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--line)}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="logo">Arga</div>
+  <div class="ic">
+    <button id="btnSearch" aria-label="جستجو"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></button>
+    <button id="btnFavTop" aria-label="علاقه‌مندی‌ها"><svg class="i" viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 5 6.3 5c2 0 3.8 1.2 5.7 3.3C13.900 6.200 15.700 5 17.700 5 21 5 23.100 8.400 21.600 11.800 19.500 16.400 12 21 12 21z"/></svg></button>
+  </div>
+</header>
+
+<main id="home">
+  <section class="profile">
+    <div class="avatar"><div>☕</div></div>
+    <div class="stats">
+      <div><b id="stItems">0</b><span>آیتم منو</span></div>
+      <div><b id="stCats">0</b><span>دسته‌بندی</span></div>
+      <div><b>۴.۹</b><span>امتیاز</span></div>
+    </div>
+  </section>
+  <section class="bio">
+    <h1>کافه Arga</h1>
+    <div class="cat">کافه و رستوران</div>
+    <div>قهوه‌ی تازه‌دم، دسرهای دست‌ساز و فضایی برای آرام گرفتن ☕✨<br>هر روز ۸ صبح تا ۱۲ شب</div>
+  </section>
+  <section class="actions">
+    <a class="pri" href="tel:+980000000000">تماس</a>
+    <button id="btnLoc">آدرس</button>
+    <button id="btnShare">اشتراک‌گذاری</button>
+  </section>
+
+  <div class="stories" id="stories"></div>
+
+  <div class="tabs">
+    <button class="on" data-view="grid" aria-label="نمای شبکه‌ای"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></button>
+    <button data-view="list" aria-label="نمای لیستی"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="8" rx="1"/><rect x="3" y="13" width="18" height="8" rx="1"/></svg></button>
+  </div>
+  <div class="search" id="searchBox"><input id="q" type="search" placeholder="جستجو در منو…"></div>
+  <div class="grid" id="grid"></div>
+  <div class="list" id="list"></div>
+  <div class="empty" id="empty">آیتمی پیدا نشد 🫥</div>
+</main>
+
+<nav class="bottom">
+  <button class="on" data-nav="home" aria-label="خانه"><svg class="i" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg></button>
+  <button data-nav="search" aria-label="جستجو"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></button>
+  <button data-nav="all" aria-label="همه‌ی منو"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><path d="M12 8v8M8 12h8"/></svg></button>
+  <button data-nav="fav" aria-label="علاقه‌مندی‌ها"><svg class="i" viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 5 6.3 5c2 0 3.8 1.2 5.7 3.3C13.900 6.200 15.700 5 17.700 5 21 5 23.100 8.400 21.600 11.800 19.500 16.400 12 21 12 21z"/></svg></button>
+  <button data-nav="info" aria-label="درباره‌ی ما"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg></button>
+</nav>
+
+<div class="modal" id="modal"><div class="card" id="card"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ===== داده‌ی منو =====
+   برای عکس واقعی: فایل را در پوشه‌ی images بگذارید و مسیر را در img بنویسید
+   (مثلاً img:"images/latte.jpg"). اگر عکس نبود، تصویر گرافیکی نمایش داده می‌شود. */
+const CATS=[
+ {id:"all",t:"همه",e:"🍽️"},
+ {id:"hot",t:"قهوه‌ی گرم",e:"☕"},
+ {id:"cold",t:"قهوه‌ی سرد",e:"🧊"},
+ {id:"tea",t:"چای و دمنوش",e:"🍵"},
+ {id:"shake",t:"شیک و اسموتی",e:"🥤"},
+ {id:"dessert",t:"دسر و کیک",e:"🍰"},
+ {id:"bake",t:"نان و شیرینی",e:"🥐"},
+ {id:"food",t:"غذا و صبحانه",e:"🥪"}
+];
+const ITEMS=[
+ {id:1,c:"hot",n:"اسپرسو",e:"☕",p:75,d:"شات خالص قهوه‌ی عربیکا با کرمای غلیظ.",g:["#4b2e1e","#8b5a3c"]},
+ {id:2,c:"hot",n:"دبل اسپرسو",e:"☕",p:95,d:"دو شات اسپرسو برای روزهای پرانرژی.",g:["#3b2316","#7a4a2d"]},
+ {id:3,c:"hot",n:"آمریکانو",e:"☕",p:85,d:"اسپرسو با آب داغ؛ سبک و خوش‌عطر.",g:["#2f2118","#6b4a35"]},
+ {id:4,c:"hot",n:"لاته",e:"🥛",p:115,d:"اسپرسو با شیر بخارداده و فوم ابریشمی.",g:["#a9794f","#e2c4a0"]},
+ {id:5,c:"hot",n:"کاپوچینو",e:"☕",p:115,d:"سه‌گانه‌ی اسپرسو، شیر و فوم غلیظ.",g:["#8a5a3a","#d9b48c"]},
+ {id:6,c:"hot",n:"فلت وایت",e:"☕",p:125,d:"اسپرسوی ریستره با شیر مخملی.",g:["#7c5236","#cfa97f"]},
+ {id:7,c:"hot",n:"موکا",e:"🍫",p:135,d:"اسپرسو، شکلات تلخ و شیر بخارداده.",g:["#4a2a1b","#9a6648"]},
+ {id:8,c:"hot",n:"قهوه ترک",e:"☕",p:80,d:"دم‌آوری سنتی روی حرارت ملایم.",g:["#33200f","#6e4526"]},
+ {id:9,c:"cold",n:"آیس لاته",e:"🧊",p:125,d:"اسپرسو، شیر سرد و یخ فراوان.",g:["#b98a62","#f1dcc3"]},
+ {id:10,c:"cold",n:"آیس آمریکانو",e:"🧊",p:95,d:"اسپرسو روی یخ؛ تازه و خنک.",g:["#3a2a22","#7d6354"]},
+ {id:11,c:"cold",n:"کلد برو",e:"🥃",p:140,d:"دم‌آوری سرد ۱۸ ساعته، نرم و کم‌اسید.",g:["#241914","#5e4636"]},
+ {id:12,c:"cold",n:"آفوگاتو",e:"🍨",p:130,d:"بستنی وانیلی با شات اسپرسوی داغ.",g:["#6b4a35","#e8d3b8"]},
+ {id:13,c:"tea",n:"چای ماسالا",e:"🍵",p:90,d:"چای سیاه با ادویه‌های گرم و شیر.",g:["#9b5b2a","#e0a867"]},
+ {id:14,c:"tea",n:"چای سبز",e:"🍃",p:70,d:"چای سبز لاهیجان، دم‌کرده‌ی تازه.",g:["#3f7a46","#9fd18b"]},
+ {id:15,c:"tea",n:"دمنوش به‌لیمو",e:"🌿",p:80,d:"به‌لیمو، نعنا و عسل طبیعی.",g:["#5b8f3a","#c9e08a"]},
+ {id:16,c:"tea",n:"هات چاکلت",e:"🍫",p:110,d:"شکلات بلژیکی غلیظ با خامه.",g:["#3b1f14","#8a4b32"]},
+ {id:17,c:"shake",n:"فراپاچینو کارامل",e:"🥤",p:150,d:"یخی، خامه‌دار و پرکارامل.",g:["#c38a4d","#f3d7a8"]},
+ {id:18,c:"shake",n:"میلک‌شیک شکلات",e:"🥤",p:145,d:"بستنی شکلاتی غلیظ با خامه.",g:["#5a3425","#c08a6b"]},
+ {id:19,c:"shake",n:"اسموتی توت‌فرنگی",e:"🍓",p:140,d:"توت‌فرنگی، موز و ماست یونانی.",g:["#d6456f","#f8a5b8"]},
+ {id:20,c:"shake",n:"لیموناد نعنا",e:"🍋",p:95,d:"لیمو تازه، نعنا و گاز ملایم.",g:["#c7b21a","#f2e982"]},
+ {id:21,c:"dessert",n:"چیزکیک نیویورکی",e:"🍰",p:160,d:"کیک پنیری کرمی روی پایه‌ی بیسکویتی.",g:["#d9a65e","#f7e1b5"]},
+ {id:22,c:"dessert",n:"براونی",e:"🍫",p:130,d:"شکلات تلخ، گردو و مرکز نرم.",g:["#3a2016","#7b4a36"]},
+ {id:23,c:"dessert",n:"تیرامیسو",e:"🍮",p:155,d:"لایه‌های ماسکارپونه، قهوه و کاکائو.",g:["#8d6444","#e6cfae"]},
+ {id:24,c:"dessert",n:"کیک هویج",e:"🥕",p:125,d:"کیک ادویه‌دار با روکش کرم‌پنیر.",g:["#d1701e","#f3b36b"]},
+ {id:25,c:"bake",n:"کروسان کره‌ای",e:"🥐",p:90,d:"لایه‌لایه، ترد و کره‌ای.",g:["#c98a2e","#f2cf7e"]},
+ {id:26,c:"bake",n:"کوکی شکلاتی",e:"🍪",p:60,d:"کوکی نرم با تکه‌های شکلات.",g:["#9c6430","#e0b27a"]},
+ {id:27,c:"bake",n:"دونات",e:"🍩",p:70,d:"دونات تازه با گلیز شکلاتی.",g:["#d8588a","#f6a9c4"]},
+ {id:28,c:"food",n:"پنینی مرغ و پستو",e:"🥪",p:210,d:"نان ساندویچی گریل با مرغ و پنیر.",g:["#b7742c","#efc27a"]},
+ {id:29,c:"food",n:"املت اسپانیایی",e:"🍳",p:180,d:"تخم‌مرغ، سیب‌زمینی و پیاز کاراملی.",g:["#e0a526","#fbe07a"]},
+ {id:30,c:"food",n:"صبحانه‌ی Arga",e:"🥞",p:260,d:"پنکیک، تخم‌مرغ، پنیر، عسل و نوشیدنی روز.",g:["#c2762f","#f1c27d"]}
+];
+
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const fa=n=>String(n).replace(/\d/g,d=>"۰۱۲۳۴۵۶۷۸۹"[d]);
+const price=p=>fa(p)+",۰۰۰ تومان";
+let cat="all",view="grid",onlyFav=false,query="";
+let favs=new Set();
+try{favs=new Set(JSON.parse(localStorage.getItem("arga_favs")||"[]"))}catch(e){}
+const saveFavs=()=>{try{localStorage.setItem("arga_favs",JSON.stringify([...favs]))}catch(e){}};
+const bg=i=>`background:linear-gradient(135deg,${i.g[0]},${i.g[1]})`;
+const imgTag=(i,cls)=>i.img?`<img ${cls?`class="${cls}"`:""} src="${i.img}" alt="${i.n}" loading="lazy" onerror="this.remove()">`:"";
+const heartSvg='<svg class="i" viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 5 6.3 5c2 0 3.8 1.2 5.7 3.3C13.9 6.2 15.7 5 17.7 5 21 5 23.1 8.4 21.6 11.8 19.5 16.4 12 21 12 21z"/></svg>';
+
+function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),1800)}
+
+function filtered(){
+  return ITEMS.filter(i=>(cat==="all"||i.c===cat)&&(!onlyFav||favs.has(i.id))&&(!query||(i.n+i.d).includes(query)));
+}
+function renderStories(){
+  $("#stories").innerHTML=CATS.map(c=>`<button class="story ${c.id===cat?"on":""}" data-cat="${c.id}"><div class="ring"><div>${c.e}</div></div>${c.t}</button>`).join("");
+}
+function render(){
+  const items=filtered();
+  $("#grid").innerHTML=items.map(i=>`<div class="tile" data-id="${i.id}" style="${bg(i)}">${imgTag(i)}<span class="em">${i.e}</span><span class="nm">${i.n}</span></div>`).join("");
+  $("#list").innerHTML=items.map(i=>`
+   <article class="post">
+     <div class="hd"><div class="av">A</div><div>arga.cafe<div style="font-weight:400;color:var(--mut);font-size:12px">${CATS.find(c=>c.id===i.c).t}</div></div></div>
+     <div class="media" style="${bg(i)}" data-id="${i.id}">${imgTag(i,"ph")}<span class="em">${i.e}</span></div>
+     <div class="bar"><button class="heart ${favs.has(i.id)?"on":""}" data-fav="${i.id}" aria-label="پسندیدن">${heartSvg}</button><span class="sp"></span><span class="price">${price(i.p)}</span></div>
+     <div class="cap"><b>${i.n}</b> · ${i.d}</div>
+   </article>`).join("");
+  $("#empty").style.display=items.length?"none":"block";
+  $("#grid").style.display=view==="grid"?"grid":"none";
+  $("#list").style.display=view==="list"?"block":"none";
+  $("#stItems").textContent=fa(ITEMS.length);
+  $("#stCats").textContent=fa(CATS.length-1);
+  renderStories();
+}
+function openItem(id){
+  const i=ITEMS.find(x=>x.id==id);if(!i)return;
+  $("#card").innerHTML=`
+   <div class="post" style="border:0;margin:0">
+    <div class="hd"><div class="av">A</div><div>arga.cafe</div><button style="margin-right:auto;font-size:22px" data-close>✕</button></div>
+    <div class="media" style="${bg(i)}">${imgTag(i,"ph")}<span class="em">${i.e}</span></div>
+    <div class="bar"><button class="heart ${favs.has(i.id)?"on":""}" data-fav="${i.id}">${heartSvg}</button><span class="sp"></span><span class="price">${price(i.p)}</span></div>
+    <div class="cap"><b>${i.n}</b><br>${i.d}</div>
+   </div>`;
+  $("#modal").classList.add("show");
+}
+function openInfo(){
+  $("#card").innerHTML=`<div class="info"><button style="float:left;font-size:22px" data-close>✕</button>
+   <h2>درباره‌ی کافه Arga</h2>
+   <div class="row">🕗 <div>هر روز ۸ صبح تا ۱۲ شب</div></div>
+   <div class="row">📍 <div>آدرس خود را اینجا بنویسید</div></div>
+   <div class="row">📞 <div>شماره‌ی تماس را اینجا بنویسید</div></div>
+   <div class="row">📸 <div>@arga.cafe</div></div>
+   <div class="row">💡 <div>قیمت‌ها به تومان و بر حسب هزار تومان است.</div></div></div>`;
+  $("#modal").classList.add("show");
+}
+function setNav(n){
+  $$("nav.bottom button").forEach(b=>b.classList.toggle("on",b.dataset.nav===n));
+}
+function toggleFav(id){
+  id=+id;favs.has(id)?favs.delete(id):favs.add(id);saveFavs();
+  $$(`[data-fav="${id}"]`).forEach(b=>b.classList.toggle("on",favs.has(id)));
+  if(onlyFav)render();
+}
+
+document.addEventListener("click",e=>{
+  const t=e.target;
+  const s=t.closest("[data-cat]");if(s){cat=s.dataset.cat;onlyFav=false;render();setNav("home");return}
+  const f=t.closest("[data-fav]");if(f){toggleFav(f.dataset.fav);return}
+  if(t.closest("[data-close]")||t===$("#modal")){$("#modal").classList.remove("show");return}
+  const tile=t.closest(".tile,.media");if(tile&&tile.dataset.id){openItem(tile.dataset.id);return}
+  const tab=t.closest(".tabs button");if(tab){view=tab.dataset.view;$$(".tabs button").forEach(b=>b.classList.toggle("on",b===tab));render();return}
+  const nav=t.closest("[data-nav]");
+  if(nav){
+    const n=nav.dataset.nav;setNav(n);
+    if(n==="home"||n==="all"){onlyFav=false;cat="all";query="";$("#q").value="";$("#searchBox").classList.remove("show");render();window.scrollTo({top:0,behavior:"smooth"})}
+    if(n==="search"){$("#searchBox").classList.add("show");$("#q").focus()}
+    if(n==="fav"){onlyFav=true;cat="all";render();window.scrollTo({top:0,behavior:"smooth"});if(!favs.size)toast("هنوز چیزی را نپسندیده‌اید ❤️")}
+    if(n==="info")openInfo();
+  }
+});
+$("#btnSearch").onclick=()=>{$("#searchBox").classList.toggle("show");$("#q").focus()};
+$("#btnFavTop").onclick=()=>document.querySelector('[data-nav="fav"]').click();
+$("#q").addEventListener("input",e=>{query=e.target.value.trim();render()});
+$("#btnLoc").onclick=openInfo;
+$("#btnShare").onclick=async()=>{
+  try{if(navigator.share){await navigator.share({title:"کافه Arga",url:location.href})}else{await navigator.clipboard.writeText(location.href);toast("لینک کپی شد")}}catch(e){}
+};
+render();
+</script>
+</body>
+</html>
