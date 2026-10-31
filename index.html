@@ -112,6 +112,7 @@ nav.bottom button.on svg{stroke-width:2.6}
   <div class="grid" id="grid"></div>
   <div class="list" id="list"></div>
   <div class="empty" id="empty">آیتمی پیدا نشد 🫥</div>
+  <p style="text-align:center;color:var(--mut);font-size:11.5px;padding:18px 0 4px">عکس‌ها: <a href="https://unsplash.com" style="color:inherit">Unsplash</a></p>
 </main>
 
 <nav class="bottom">
@@ -172,6 +173,19 @@ const ITEMS=[
  {id:30,c:"food",n:"صبحانه‌ی Arga",e:"🥞",p:260,d:"پنکیک، تخم‌مرغ، پنیر، عسل و نوشیدنی روز.",g:["#c2762f","#f1c27d"]}
 ];
 
+/* عکس‌ها از Unsplash (لایسنس آزاد). آیتم‌هایی که اینجا نیستند، تصویر گرافیکی دارند. */
+const PHOTOS={
+ 1:"photo-1777558578066-44266564ee65",3:"photo-1583577012061-d69d2dbc900a",
+ 5:"photo-1670899604825-5b25fd14b4db",8:"photo-1506778020041-0ea35027d019",
+ 9:"photo-1676506739319-70bff65bfc48",11:"photo-1678982511897-7d15513d52bd",
+ 14:"photo-1761483281120-4fc47bfe3e29",16:"photo-1523754116966-300250e98597",
+ 17:"photo-1637178035575-b0dcbd28a09b",18:"photo-1648775948447-78c34dd56090",
+ 20:"photo-1623157980612-da2c2cdb4c0b",21:"photo-1745226518652-a2621a09e096",
+ 22:"photo-1717768024023-73768e73f630",25:"photo-1702090888946-d330cd452f5e",
+ 26:"photo-1547306767-5903924bbffd",27:"photo-1486888003044-2d3c1023ff81",
+ 29:"photo-1744492532345-cd7e48eb6d2b",30:"photo-1600615081337-a5ebfe4645d0"
+};
+ITEMS.forEach(i=>{if(PHOTOS[i.id])i.img="https://images.unsplash.com/"+PHOTOS[i.id]+"?w=600&q=70&auto=format&fit=crop"});
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const fa=n=>String(n).replace(/\d/g,d=>"۰۱۲۳۴۵۶۷۸۹"[d]);
 const price=p=>fa(p)+",۰۰۰ تومان";
@@ -180,7 +194,7 @@ let favs=new Set();
 try{favs=new Set(JSON.parse(localStorage.getItem("arga_favs")||"[]"))}catch(e){}
 const saveFavs=()=>{try{localStorage.setItem("arga_favs",JSON.stringify([...favs]))}catch(e){}};
 const bg=i=>`background:linear-gradient(135deg,${i.g[0]},${i.g[1]})`;
-const imgTag=(i,cls)=>i.img?`<img ${cls?`class="${cls}"`:""} src="${i.img}" alt="${i.n}" loading="lazy" onerror="this.remove()">`:"";
+const imgTag=(i,cls)=>i.img?`<img ${cls?`class="${cls}"`:""} src="${i.img}" alt="${i.n}" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">`:"";
 const heartSvg='<svg class="i" viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 5 6.3 5c2 0 3.8 1.2 5.7 3.3C13.9 6.2 15.7 5 17.7 5 21 5 23.1 8.4 21.6 11.8 19.5 16.4 12 21 12 21z"/></svg>';
 
 function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),1800)}
