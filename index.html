@@ -108,7 +108,7 @@ nav.bottom button.on svg{stroke-width:2.6}
   <section class="profile">
     <a class="avatar" href="https://instagram.com/Argacafe" target="_blank" rel="noopener" aria-label="اینستاگرام Argacafe" style="display:block"><img src="images/logo-192.png" alt="لوگوی کافه Arga"></a>
     <div class="stats">
-      <div><b id="stItems">0</b><span>آیتم منو</span></div>
+      <div><b id="stItems">0</b><span>آیتم</span></div>
       <div><b id="stCats">0</b><span>دسته‌بندی</span></div>
       <div><b>۱۰/۱۰</b><span>امتیاز</span></div>
     </div>
@@ -284,6 +284,7 @@ function openInfo(){
    <div class="row">🕗 <div>هر روز ۱۰ صبح تا ۱۰ شب</div></div>
    <div class="row">📍 <div>مریوان، چهارراه اصلی، خیابان باهنر</div></div>
    <div class="row">📞 <div>شماره‌ی تماس را اینجا بنویسید</div></div>
+   <div class="row">👁 <div>بازدید: <b id="visitNum">${VISITS===null?"…":VISITS===false?"—":fa(VISITS.toLocaleString("en"))}</b></div></div>
    <div class="row">📸 <div><a href="https://instagram.com/Argacafe" target="_blank" rel="noopener" style="color:inherit" dir="ltr">@Argacafe</a></div></div>
    <div class="row">💡 <div>قیمت‌ها به تومان و بر حسب هزار تومان است.</div></div></div>`;
   $("#modal").classList.add("show");
@@ -316,6 +317,19 @@ document.addEventListener("click",e=>{
     if(n==="info")openInfo();
   }
 });
+/* شمارنده‌ی بازدید: سرویس رایگان Abacus؛ هر مرورگر روزی یک بار شمرده می‌شود */
+let VISITS=null;
+(async()=>{
+  try{
+    const today=new Date().toISOString().slice(0,10);let last="";
+    try{last=localStorage.getItem("arga_visit_day")||""}catch(e){}
+    const r=await fetch("https://abacus.jasoncameron.dev/"+(last===today?"get":"hit")+"/argacafe-werya1992w/visits");
+    if(!r.ok)throw 0;
+    const j=await r.json();VISITS=+j.value;
+    if(last!==today)try{localStorage.setItem("arga_visit_day",today)}catch(e){}
+    const el=document.getElementById("visitNum");if(el)el.textContent=fa(VISITS.toLocaleString("en"));
+  }catch(e){VISITS=false;const el=document.getElementById("visitNum");if(el)el.textContent="—"}
+})();
 const FONTS=[
  ["وزیرمتن","Vazirmatn:wght@300;400;600;800","Vazirmatn"],
  ["نسخ","Noto+Naskh+Arabic:wght@400;600;700","Noto Naskh Arabic"],
