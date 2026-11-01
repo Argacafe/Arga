@@ -66,7 +66,8 @@ svg.i{width:26px;height:26px;stroke:currentColor;fill:none;stroke-width:1.8;stro
 .tile img.cut,.post img.ph.cut{object-fit:contain;padding:9% 7%;filter:drop-shadow(0 10px 12px rgba(40,20,5,.45))}
 .tile.cutbg,.post .media.cutbg{background:radial-gradient(circle at 50% 38%,#f6e6cf 0%,#dcb98f 55%,#b98a5e 100%)!important}
 .cutbg .em{display:none}
-.cap .price{font-weight:800;margin-top:1px}
+.cap .rw{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.cap .price{font-weight:800;white-space:nowrap}
 .cap .dsc{color:var(--mut);font-size:13px;line-height:1.8;margin-top:1px}
 .tile img~.em,.media img~.em{display:none}
 .list{display:none}
@@ -311,7 +312,7 @@ function render(){
      <div class="hd"><div class="av"></div><div>Argacafe<div style="font-weight:400;color:var(--mut);font-size:12px">${CATS.find(c=>c.id===i.c).t}</div></div></div>
      <div class="media${i.cut?" cutbg":""}" style="${bg(i)}" data-id="${i.id}">${imgTag(i,"ph")}<span class="em">${i.e}</span></div>
      <div class="bar"><button class="heart ${favs.has(i.id)?"on":""}" data-fav="${i.id}" aria-label="پسندیدن">${heartSvg}</button><span class="sp"></span></div>
-     <div class="cap"><b>${i.n}</b><div class="price">${price(i.p)}</div>${i.d?`<div class="dsc">${i.d}</div>`:""}</div>
+     <div class="cap"><div class="rw"><b>${i.n}</b><span class="price">${price(i.p)}</span></div>${i.d?`<div class="dsc">${i.d}</div>`:""}</div>
    </article>`).join("");
   $("#empty").style.display=items.length?"none":"block";
   $("#grid").style.display=view==="grid"?"grid":"none";
@@ -327,7 +328,7 @@ function openItem(id){
     <div class="hd"><div class="av"></div><div>Argacafe</div><button style="margin-right:auto;font-size:22px" data-close>✕</button></div>
     <div class="media${i.cut?" cutbg":""}" style="${bg(i)}">${imgTag(i,"ph")}<span class="em">${i.e}</span></div>
     <div class="bar"><button class="heart ${favs.has(i.id)?"on":""}" data-fav="${i.id}">${heartSvg}</button><span class="sp"></span></div>
-    <div class="cap"><b>${i.n}</b><div class="price">${price(i.p)}</div>${i.d?`<div class="dsc">${i.d}</div>`:""}</div>
+    <div class="cap"><div class="rw"><b>${i.n}</b><span class="price">${price(i.p)}</span></div>${i.d?`<div class="dsc">${i.d}</div>`:""}</div>
    </div>`;
   $("#modal").classList.add("show");
 }
