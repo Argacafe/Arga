@@ -12,14 +12,14 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#fff;--fg:#1c1c1c;--mut:#737373;--line:#e6e6e6;--chip:#f3f3f3;--grad:linear-gradient(45deg,#e0a766,#b87333,#7a4a26);--accent:#b87333}
+:root{--bg:#fff;--fg:#1c1c1c;--mut:#737373;--line:#e6e6e6;--chip:#f3f3f3;--font:Vazirmatn,system-ui,sans-serif;--grad:linear-gradient(45deg,#e0a766,#b87333,#7a4a26);--accent:#b87333}
 @media(prefers-color-scheme:dark){:root{--bg:#000;--fg:#f5f5f5;--mut:#a3a3a3;--line:#262626;--chip:#1a1a1a}}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0}
-body{background:var(--bg);color:var(--fg);font-family:Vazirmatn,system-ui,sans-serif;max-width:560px;margin:0 auto;padding-bottom:76px;min-height:100vh}
+body{background:var(--bg);color:var(--fg);font-family:var(--font);max-width:560px;margin:0 auto;padding-bottom:76px;min-height:100vh}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 header.top{position:sticky;top:0;z-index:20;background:var(--bg);display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid var(--line)}
-.logo{display:flex;align-items:center;gap:8px;font-weight:800;font-size:26px;letter-spacing:.5px;font-family:Vazirmatn,sans-serif}.logo span{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.logo{display:flex;align-items:center;gap:8px;font-weight:800;font-size:26px;letter-spacing:.5px;font-family:var(--font)}.logo span{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
 .top .ic{display:flex;gap:16px}
 svg.i{width:26px;height:26px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .profile{display:flex;align-items:center;gap:22px;padding:16px}
@@ -28,13 +28,15 @@ svg.i{width:26px;height:26px;stroke:currentColor;fill:none;stroke-width:1.8;stro
 .stats{display:flex;flex:1;justify-content:space-around;text-align:center}
 .stats b{display:block;font-size:17px}.stats span{font-size:12.5px;color:var(--mut)}
 .bio{padding:0 16px 10px;font-size:14px;line-height:1.9}
-.bio h1{font-size:15px;margin:0}.bio .cat{color:var(--mut);font-size:13px}
+.bio h1{font-size:15px;margin:0}.bio .cat{color:var(--fg);font-size:15px;font-weight:800}
 .actions{display:flex;gap:8px;padding:6px 16px 14px}
 .actions a,.actions button{flex:1;text-align:center;background:var(--chip);border-radius:9px;padding:8px;font-size:13.5px;font-weight:600;text-decoration:none;color:inherit}
 .actions .pri{background:#b87333;color:#fff}
-.stories{display:flex;gap:16px;overflow-x:auto;padding:4px 16px 14px;scrollbar-width:none}
+.stories{display:flex;align-items:flex-start;gap:14px;overflow-x:auto;padding:4px 16px 14px;scrollbar-width:none}
 .stories::-webkit-scrollbar{display:none}
-.story{flex:none;width:68px;text-align:center;font-size:11.5px}
+.story{flex:none;width:76px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;text-align:center;font-size:11px;line-height:1.5;padding:0}
+.story .ring{flex:none}
+.story .lb{display:block;width:100%;height:3em;overflow:hidden}
 .ring{width:66px;height:66px;border-radius:50%;padding:2.5px;background:var(--line);margin-bottom:5px}
 .story.on .ring{background:var(--grad)}
 .ring div{overflow:hidden}
@@ -96,6 +98,7 @@ nav.bottom button.on svg{stroke-width:2.6}
 <header class="top">
   <div class="logo"><img src="images/logo-96.png" alt="" width="30" height="30" style="border-radius:50%"><span>Arga</span></div>
   <div class="ic">
+    <button id="btnFont" aria-label="تغییر فونت" title="تغییر فونت"><svg class="i" viewBox="0 0 24 24" style="width:21px;height:21px"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M20 20l-4.8-4.8"/><text x="10.5" y="13.6" font-size="8.5" text-anchor="middle" fill="currentColor" stroke="none" font-family="sans-serif" font-weight="700">ف</text></svg></button>
     <button id="btnSearch" aria-label="جستجو"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></button>
     <button id="btnFavTop" aria-label="علاقه‌مندی‌ها"><svg class="i" viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 5 6.3 5c2 0 3.8 1.2 5.7 3.3C13.900 6.200 15.700 5 17.700 5 21 5 23.100 8.400 21.600 11.800 19.500 16.400 12 21 12 21z"/></svg></button>
   </div>
@@ -103,16 +106,15 @@ nav.bottom button.on svg{stroke-width:2.6}
 
 <main id="home">
   <section class="profile">
-    <div class="avatar"><img src="images/logo-192.png" alt="لوگوی کافه Arga"></div>
+    <a class="avatar" href="https://instagram.com/Argacafe" target="_blank" rel="noopener" aria-label="اینستاگرام Argacafe" style="display:block"><img src="images/logo-192.png" alt="لوگوی کافه Arga"></a>
     <div class="stats">
       <div><b id="stItems">0</b><span>آیتم منو</span></div>
       <div><b id="stCats">0</b><span>دسته‌بندی</span></div>
-      <div><b>۴.۹</b><span>امتیاز</span></div>
+      <div><b>۱۰/۱۰</b><span>امتیاز</span></div>
     </div>
   </section>
   <section class="bio">
-    <h1>کافه Arga</h1>
-    <div class="cat">کافه و رستوران</div>
+    <div class="cat">کافه خونه ئارگا</div>
     <div>📍 مریوان، چهارراه اصلی، خیابان باهنر<br>هر روز ۱۰ صبح تا ۱۰ شب</div>
   </section>
   <section class="actions">
@@ -137,9 +139,8 @@ nav.bottom button.on svg{stroke-width:2.6}
 <nav class="bottom">
   <button class="on" data-nav="home" aria-label="خانه"><svg class="i" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg></button>
   <button data-nav="search" aria-label="جستجو"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></button>
-  <button data-nav="all" aria-label="همه‌ی منو"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><path d="M12 8v8M8 12h8"/></svg></button>
+  <button data-nav="gallery" aria-label="گالری کافه"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><path d="M12 8v8M8 12h8"/></svg></button>
   <button data-nav="fav" aria-label="علاقه‌مندی‌ها"><svg class="i" viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 5 6.3 5c2 0 3.8 1.2 5.7 3.3C13.900 6.200 15.700 5 17.700 5 21 5 23.100 8.400 21.600 11.800 19.500 16.400 12 21 12 21z"/></svg></button>
-  <button data-nav="gallery" aria-label="گالری"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9.5" r="1.8"/><path d="M21 16l-5.5-5.5L5 21"/></svg></button>
   <button data-nav="info" aria-label="درباره‌ی ما"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg></button>
 </nav>
 
@@ -240,7 +241,7 @@ const STORY={
  extra:{img:"https://images.unsplash.com/photo-1750520335073-2535aa280946?w=200&h=200&q=70&auto=format&fit=crop"}
 };
 function renderStories(){
-  $("#stories").innerHTML=CATS.map(c=>`<button class="story ${c.id===cat?"on":""}" data-cat="${c.id}"><div class="ring"><div class="${STORY[c.id]&&STORY[c.id].cut?"cut":""}">${STORY[c.id]?`<img src="${STORY[c.id].img}" alt="" referrerpolicy="no-referrer" onerror="this.replaceWith(document.createTextNode('${c.e}'))">`:c.e}</div></div>${c.t}</button>`).join("");
+  $("#stories").innerHTML=CATS.map(c=>`<button class="story ${c.id===cat?"on":""}" data-cat="${c.id}"><div class="ring"><div class="${STORY[c.id]&&STORY[c.id].cut?"cut":""}">${STORY[c.id]?`<img src="${STORY[c.id].img}" alt="" referrerpolicy="no-referrer" onerror="this.replaceWith(document.createTextNode('${c.e}'))">`:c.e}</div></div><span class="lb">${c.t}</span></button>`).join("");
 }
 function render(){
   const items=filtered();
@@ -307,7 +308,7 @@ document.addEventListener("click",e=>{
   const tab=t.closest(".tabs button");if(tab){view=tab.dataset.view;$$(".tabs button").forEach(b=>b.classList.toggle("on",b===tab));render();return}
   const nav=t.closest("[data-nav]");
   if(nav){
-    const n=nav.dataset.nav;setNav(n);
+    const n=nav.dataset.nav;if(n!=="gallery")setNav(n);
     if(n==="home"||n==="all"){onlyFav=false;cat="all";query="";$("#q").value="";$("#searchBox").classList.remove("show");render();window.scrollTo({top:0,behavior:"smooth"})}
     if(n==="search"){$("#searchBox").classList.add("show");$("#q").focus()}
     if(n==="fav"){onlyFav=true;cat="all";render();window.scrollTo({top:0,behavior:"smooth"});if(!favs.size)toast("هنوز چیزی را نپسندیده‌اید ❤️")}
@@ -315,6 +316,30 @@ document.addEventListener("click",e=>{
     if(n==="info")openInfo();
   }
 });
+const FONTS=[
+ ["وزیرمتن","Vazirmatn:wght@300;400;600;800","Vazirmatn"],
+ ["نسخ","Noto+Naskh+Arabic:wght@400;600;700","Noto Naskh Arabic"],
+ ["کوفی","Noto+Kufi+Arabic:wght@400;600;800","Noto Kufi Arabic"],
+ ["لاله‌زار","Lalezar","Lalezar"],
+ ["امیری","Amiri:wght@400;700","Amiri"],
+ ["قاهره","Cairo:wght@400;600;800","Cairo"],
+ ["چنگا","Changa:wght@400;600;800","Changa"],
+ ["المسیری","El+Messiri:wght@400;600;700","El Messiri"],
+ ["لمونادا","Lemonada:wght@400;600;700","Lemonada"],
+ ["هارماتان","Harmattan:wght@400;700","Harmattan"],
+ ["نوتو سنس","Noto+Sans+Arabic:wght@400;600;800","Noto Sans Arabic"]
+];
+let fi=0;try{fi=+localStorage.getItem("arga_font")||0}catch(e){}
+if(!(fi>=0&&fi<FONTS.length))fi=0;
+function applyFont(i,say){
+  const [nm,q,fam]=FONTS[i];
+  if(!document.getElementById("gf-"+i)){const l=document.createElement("link");l.id="gf-"+i;l.rel="stylesheet";l.href="https://fonts.googleapis.com/css2?family="+q+"&display=swap";document.head.appendChild(l)}
+  document.documentElement.style.setProperty("--font",'"'+fam+'",Vazirmatn,system-ui,sans-serif');
+  try{localStorage.setItem("arga_font",String(i))}catch(e){}
+  if(say)toast("فونت: "+nm);
+}
+if(fi)applyFont(fi,false);
+$("#btnFont").onclick=()=>{fi=(fi+1)%FONTS.length;applyFont(fi,true)};
 $("#btnSearch").onclick=()=>{$("#searchBox").classList.toggle("show");$("#q").focus()};
 $("#btnFavTop").onclick=()=>document.querySelector('[data-nav="fav"]').click();
 $("#q").addEventListener("input",e=>{query=e.target.value.trim();render()});
