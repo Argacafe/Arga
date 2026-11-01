@@ -188,6 +188,303 @@ nav.bottom button.on .navav{border-color:var(--fg)}
    هر آیتم: [نام، قیمت، توضیح/ترکیبات، (اختیاری) ایموجی]
    عکس واقعی: در PHOTOS با نام آیتم، یا img:"images/x.jpg" بعد از ساخت ITEMS. */
 const MENU=[
+ {id:"hotcoffee",t:"نوشیدنی گرم با قهوه",e:"☕",g:["#3b2316","#9a6a47"],items:[
+  ["لته",200,"","🥛"],["کاپوچینو",200],["موکا",240,"","🍫"],
+  ["لته با سیروپ دلخواه",240,"کارامل، فندق، نارگیل"],["آمریکانو",150],["اسپرسو",140,"۷۰-۳۰ روبوستا"]]},
+ {id:"coldcoffee",t:"نوشیدنی سرد با قهوه",e:"🧊",g:["#4a362b","#b98a62"],items:[
+  ["آیس لته",200,"اسپرسو دبل، شیر، یخ"],["آیس با سیروپ دلخواه",240,"کارامل، فندق، نارگیل"],["آیس موکا",240,"اسپرسو، شیر، سیروپ شکلات، یخ","🍫"],
+  ["آیس آمریکانو",130],["آیس آمریکانو سودا",145,"","🫧"],["اورنج آمریکانو",190,"آب پرتقال + اسپرسو + یخ","🍊"]]},
+ {id:"frappe",t:"فراپاچینو و فراپه",e:"🥤",g:["#a9794f","#f0d3a8"],items:[
+  ["فراپه توت فرنگی",185,"توت فرنگی، بستنی وانیلی، شیر، یخ","🍓"],
+  ["فراپاچینو کره بیسکویت",285,"بستنی کره‌ای، کره بیسکویت، شیر، یخ","🍪"],
+  ["فراپاچینو لوتوس",340,"بستنی وانیلی، اسپرسو، کره لوتوس، شیر، یخ","🍪"],
+  ["فراپاچینو پرو وی",370,"پروتئین وی، کره بادام زمینی، خرما، اسپرسو، موز، شیر، یخ","💪"],
+  ["فراپاچینو موز نوتلا",340,"بستنی وانیلی، اسپرسو، موز، نوتلا، شیر، یخ","🍌"]]},
+ {id:"shake",t:"میلک شیک",e:"🥛",g:["#5a3425","#c9a07f"],items:[
+  ["شکلات",320,"","🍫"],["نوتلا",390,"","🍫"],["بادام زمینی",385,"","🥜"],["بادام زمینی نوتلا",395,"","🥜"],
+  ["توت فرنگی",345,"","🍓"],["لوتوس",405,"","🍪"],["تیرامیسو",345,"","🍰"],["پسته",445,"","🌰"],
+  ["موز",345,"","🍌"],["موز نوتلا",425,"","🍌"],["موز شکلات",375,"","🍌"]]},
+ {id:"smoothie",t:"اسموتی",e:"🍓",g:["#d6456f","#f8a5b8"],items:[
+  ["تروپیکال",310,"انبه، آناناس، موز، لیمو","🍍"],["فرش پیچ",310,"هلو، توت فرنگی، موز","🍑"],
+  ["آلبالو نمکی",340,"آلبالو، تمشک، توت فرنگی، آب انار","🍒"],["رد بری",185,"شاه‌توت، توت فرنگی، انبه","🍓"]]},
+ {id:"mocktail",t:"ماکتیل‌ها",e:"🍹",g:["#1f8fb3","#7fe0d4"],items:[
+  ["لیموناد",185,"لیمو، سودا، سیروپ لیمو","🍋"],["موهیتو",185,"کلاسیک","🌿"],["میدنایت رز",190,"","🌹"],["رد موهیتو",210,"تمشک، لیمو، نعناع، سودا","🍹"],
+  ["فرش اورنج",195,"پرتقال، توت فرنگی، آب آناناس، سیروپ بلو کاراسائو، سودا","🍊"],
+  ["آرگارین",205,"","🍹"]]},
+ {id:"coolbev",t:"سرد نوش‌ها",e:"🧃",g:["#c9702a","#f6c27a"],items:[
+  ["آیس تی",185,"","🧊"],["آیس تی هلو",115,"","🍑"],
+  ["شربت مجنون",185,"شربت گلاب زعفران، خاکشیر، عرق بیدمشک","🌸"],
+  ["شربت شیراز",195,"شربت بهارنارنج، خاکشیر، تخم شربتی، سردم پنیرک","🌼"],["سان ست",225,"آب پرتقال، سیروپ انبه، سردم پنیرک","🌅"]]},
+ {id:"tea",t:"گرم نوش‌ها",e:"🍵",g:["#5b8f3a","#d6e59a"],items:[
+  ["دمنوش آرامش",185,"گل گاوزبان، اسطوخودوس، بهارنارنج، گل محمدی","🌿"],
+  ["دمنوش شه نوش",185,"سیب، زعفران، گل محمدی، هل","🌹"],
+  ["دمنوش سلامت",195,"گل ختمی، زنجبیل، گل گاوزبان، لیمو تازه","🍋"],
+  ["چای ترش",95],["چای مراکشی",95],["چای زعفران",125],["چای سیاه",85]]},
+ {id:"hotnocoffee",t:"نوشیدنی گرم بدون قهوه",e:"🍫",g:["#3b1f14","#a0603e"],items:[
+  ["هات چاکلت",200],["ماسالا",200,"","🍵"],["شیر شکلات",185,"","🥛"],
+  ["وایت چاکلت",200,"","🤍"],["بری چاکلت",175,"","🍓"],["پینک چاکلت",175,"","🩷"]]},
+ {id:"extra",t:"افزودنی‌ها",e:"➕",g:["#7a6a5a","#d9cbb8"],items:[
+  ["سیروپ",35,"کارامل، شکلات، فندق، نارگیل ...","🍯"],["نوتلا",85,"","🍫"],["خامه",50,"","🍦"],["نبات",30,"","🍬"],["شیر",80,"","🥛"],["اسکوپ بستنی",50,"","🍨"]]}
+];
+const CATS=[{id:"all",t:"همه",e:"🍽️"},...MENU.map(m=>({id:m.id,t:m.t,e:m.e}))];
+const ITEMS=[];let _id=0;
+MENU.forEach(m=>m.items.forEach(([n,p,d,e])=>ITEMS.push({id:++_id,c:m.id,n,p,d:d||"",e:e||m.e,g:m.g})));
+
+/* عکس‌ها از Unsplash (لایسنس آزاد) با نام آیتم؛ بقیه تصویر گرافیکی دارند. */
+const PHOTOS={
+ "آیس لته":"photo-1676506739319-70bff65bfc48",
+ "آیس با سیروپ دلخواه":"photo-1637178035575-b0dcbd28a09b",
+ "آمریکانو":"photo-1583577012061-d69d2dbc900a",
+ "کاپوچینو":"photo-1670899604825-5b25fd14b4db",
+ "هات چاکلت":"photo-1523754116966-300250e98597",
+ "شکلات":"photo-1648775948447-78c34dd56090",
+ "لیموناد":"photo-1623157980612-da2c2cdb4c0b"
+};
+/* عکس‌های خود کافه (از منوی argacafe.ir) */
+const LOCAL={"آیس لته":"images/ice-latte.jpg","آیس با سیروپ دلخواه":"images/ice-syrup.jpg","آیس آمریکانو سودا":"images/ice-americano-soda.jpg","آیس موکا":"images/ice-mocha.jpg","توت فرنگی":"images/strawberry-shake.jpg","فراپه توت فرنگی":"images/strawberry-shake.jpg"};
+ITEMS.forEach(i=>{if(LOCAL[i.n])i.img=LOCAL[i.n]});
+const E=ITEMS.find(i=>i.n==="اسپرسو");if(E){E.img="images/espresso.png";E.cut=true}
+ITEMS.forEach(i=>{const k=PHOTOS[i.n];if(k&&!LOCAL[i.n]&&!(i.c==="shake"&&i.n!=="شکلات"))i.img="https://images.unsplash.com/"+k+"?w=600&q=70&auto=format&fit=crop"});
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const fa=n=>String(n).replace(/\d/g,d=>"۰۱۲۳۴۵۶۷۸۹"[d]);
+const price=p=>fa(p)+",۰۰۰ تومان";
+let cat="all",view="grid",onlyFav=false,query="";
+let favs=new Set();
+try{favs=new Set(JSON.parse(localStorage.getItem("arga_favs")||"[]"))}catch(e){}
+const saveFavs=()=>{try{localStorage.setItem("arga_favs",JSON.stringify([...favs]))}catch(e){}};
+const bg=i=>`background:linear-gradient(135deg,${i.g[0]},${i.g[1]})`;
+const imgTag=(i,cls)=>i.img?`<img class="${[cls,i.cut?"cut":""].join(" ").trim()}" src="${i.img}" alt="${i.n}" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">`:"";
+const heartSvg='<svg class="i" viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 5 6.3 5c2 0 3.8 1.2 5.7 3.3C13.9 6.2 15.7 5 17.7 5 21 5 23.1 8.4 21.6 11.8 19.5 16.4 12 21 12 21z"/></svg>';
+
+function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),1800)}
+
+function filtered(){
+  return ITEMS.filter(i=>(cat==="all"||i.c===cat)&&(!onlyFav||favs.has(i.id))&&(!query||(i.n+i.d).includes(query)));
+}
+const STORY={
+ all:{img:"images/logo-96.png"},
+ coldcoffee:{img:"images/ice-latte.jpg"},
+ smoothie:{img:"https://images.unsplash.com/photo-1508869901315-49c557f3969d?w=200&h=200&q=70&auto=format&fit=crop"},
+ frappe:{img:"https://images.unsplash.com/photo-1637178035575-b0dcbd28a09b?w=200&h=200&q=70&auto=format&fit=crop"},
+ mocktail:{img:"https://images.unsplash.com/photo-1623157980612-da2c2cdb4c0b?w=200&h=200&q=70&auto=format&fit=crop"},
+ shake:{img:"https://images.unsplash.com/photo-1648775948447-78c34dd56090?w=200&h=200&q=70&auto=format&fit=crop"},
+ coolbev:{img:"https://images.unsplash.com/photo-1531264071041-3a69924b182d?w=200&h=200&q=70&auto=format&fit=crop"},
+ hotcoffee:{img:"images/espresso.png",cut:1},
+ hotnocoffee:{img:"https://images.unsplash.com/photo-1523754116966-300250e98597?w=200&h=200&q=70&auto=format&fit=crop"},
+ tea:{img:"https://images.unsplash.com/photo-1761483281120-4fc47bfe3e29?w=200&h=200&q=70&auto=format&fit=crop"},
+ extra:{img:"https://images.unsplash.com/photo-1750520335073-2535aa280946?w=200&h=200&q=70&auto=format&fit=crop"}
+};
+function renderStories(){
+  $("#stories").innerHTML=CATS.map(c=>`<button class="story ${c.id===cat?"on":""}" data-cat="${c.id}"><div class="ring"><div class="${STORY[c.id]&&STORY[c.id].cut?"cut":""}">${STORY[c.id]?`<img src="${STORY[c.id].img}" alt="" referrerpolicy="no-referrer" onerror="this.replaceWith(document.createTextNode('${c.e}'))">`:c.e}</div></div><span class="lb">${c.t}</span></button>`).join("");
+}
+function render(){
+  const items=filtered();
+  $("#grid").innerHTML=items.map(i=>`<div class="tile${i.cut?" cutbg":""}" data-id="${i.id}" style="${bg(i)}">${imgTag(i)}<span class="em">${i.e}</span><span class="nm">${i.n}</span></div>`).join("");
+  $("#list").innerHTML=items.map(i=>`
+   <article class="post">
+     <div class="hd"><div class="av"></div><div>Argacafe<div style="font-weight:400;color:var(--mut);font-size:12px">${CATS.find(c=>c.id===i.c).t}</div></div></div>
+     <div class="media${i.cut?" cutbg":""}" style="${bg(i)}" data-id="${i.id}">${imgTag(i,"ph")}<span class="em">${i.e}</span></div>
+     <div class="bar"><button class="heart ${favs.has(i.id)?"on":""}" data-fav="${i.id}" aria-label="پسندیدن">${heartSvg}</button><span class="sp"></span><span class="price">${price(i.p)}</span></div>
+     <div class="cap"><b>${i.n}</b>${i.d?" · "+i.d:""}</div>
+   </article>`).join("");
+  $("#empty").style.display=items.length?"none":"block";
+  $("#grid").style.display=view==="grid"?"grid":"none";
+  $("#list").style.display=view==="list"?"block":"none";
+  $("#stItems").textContent=fa(ITEMS.length);
+  $("#stCats").textContent=fa(CATS.length-1);
+  renderStories();
+}
+function openItem(id){
+  const i=ITEMS.find(x=>x.id==id);if(!i)return;
+  $("#card").innerHTML=`
+   <div class="post" style="border:0;margin:0">
+    <div class="hd"><div class="av"></div><div>Argacafe</div><button style="margin-right:auto;font-size:22px" data-close>✕</button></div>
+    <div class="media${i.cut?" cutbg":""}" style="${bg(i)}">${imgTag(i,"ph")}<span class="em">${i.e}</span></div>
+    <div class="bar"><button class="heart ${favs.has(i.id)?"on":""}" data-fav="${i.id}">${heartSvg}</button><span class="sp"></span><span class="price">${price(i.p)}</span></div>
+    <div class="cap"><b>${i.n}</b>${i.d?"<br>"+i.d:""}</div>
+   </div>`;
+  $("#modal").classList.add("show");
+}
+/* گالری عکس‌های فضای کافه؛ هر آیتم فقط مسیر عکس است */
+const GALLERY=["images/gallery-1.webp"];
+function openGallery(){
+  $("#card").innerHTML=`<div class="gal-hd"><button data-close>✕</button><h2>گالری کافه</h2><span style="width:22px"></span></div>
+   <div class="gal-grid">${GALLERY.map((src,idx)=>`<img src="${src}" alt="عکس کافه Arga" loading="lazy" data-gal="${idx}">`).join("")}</div>`;
+  $("#modal").classList.add("show");
+}
+function openInfo(){
+  $("#card").innerHTML=`<div class="info"><button style="float:left;font-size:22px" data-close>✕</button>
+   <img src="images/logo-192.png" alt="" width="84" height="84" style="display:block;margin:6px auto;border-radius:50%"><h2 style="text-align:center">درباره‌ی کافه Arga</h2>
+   <div class="row">🕗 <div>هر روز ۱۰ صبح تا ۱۰ شب</div></div>
+   <div class="row">📍 <div><a href="https://maps.app.goo.gl/nutpnMqZqy9oqxxEA?g_st=ac" target="_blank" rel="noopener" style="color:inherit">مریوان، چهارراه اصلی، خیابان باهنر</a></div></div>
+   <div class="row">📞 <div><a href="tel:093676199xx" dir="ltr" style="color:inherit">093676199xx</a></div></div>
+   <div class="row">👁 <div>بازدید: <b id="visitNum">${VISITS===null?"…":VISITS===false?"—":fa(VISITS.toLocaleString("en"))}</b></div></div>
+   ${INSTALLED?"":`<div class="row">📲 <div><button id="btnInstall" style="font:inherit;font-weight:700;text-decoration:underline">نصب اپلیکیشن روی گوشی</button></div></div>`}
+   <div class="row">📸 <div><a href="https://instagram.com/Argacafe" target="_blank" rel="noopener" style="color:inherit" dir="ltr">@Argacafe</a></div></div></div>`;
+  $("#modal").classList.add("show");
+}
+function setNav(n){
+  $$("nav.bottom button").forEach(b=>b.classList.toggle("on",b.dataset.nav===n));
+}
+function toggleFav(id){
+  id=+id;favs.has(id)?favs.delete(id):favs.add(id);saveFavs();
+  $$(`[data-fav="${id}"]`).forEach(b=>b.classList.toggle("on",favs.has(id)));
+  if(onlyFav)render();
+}
+
+document.addEventListener("click",e=>{
+  const t=e.target;
+  const s=t.closest("[data-cat]");if(s){cat=s.dataset.cat;onlyFav=false;render();setNav("home");return}
+  if(t.closest("#btnInstall,#btnPlus")){installApp();return}
+  const f=t.closest("[data-fav]");if(f){toggleFav(f.dataset.fav);return}
+  if(t.closest("[data-close]")||t===$("#modal")){$("#modal").classList.remove("show");return}
+  if(t.closest("[data-closeGal]")||t===$("#galView")){$("#galView").classList.remove("show");return}
+  const g=t.closest("[data-gal]");if(g){$("#galImg").src=GALLERY[+g.dataset.gal];$("#galView").classList.add("show");return}
+  const tile=t.closest(".tile,.media");if(tile&&tile.dataset.id){openItem(tile.dataset.id);return}
+  const tab=t.closest(".tabs button");if(tab){view=tab.dataset.view;$$(".tabs button").forEach(b=>b.classList.toggle("on",b===tab));render();return}
+  const nav=t.closest("[data-nav]");
+  if(nav){
+    const n=nav.dataset.nav;if(n!=="gallery")setNav(n);
+    if(n==="home"||n==="all"){onlyFav=false;cat="all";query="";$("#q").value="";$("#searchBox").classList.remove("show");render();window.scrollTo({top:0,behavior:"smooth"})}
+    if(n==="search"){$("#searchBox").classList.add("show");$("#q").focus()}
+    if(n==="fav"){onlyFav=true;cat="all";render();window.scrollTo({top:0,behavior:"smooth"});if(!favs.size)toast("هنوز چیزی را نپسندیده‌اید ❤️")}
+    if(n==="gallery")openGallery();
+    if(n==="info")openInfo();
+  }
+});
+/* شمارنده‌ی بازدید: سرویس رایگان Abacus؛ هر مرورگر روزی یک بار شمرده می‌شود */
+const INSTALLED=matchMedia("(display-mode: fullscreen), (display-mode: standalone)").matches||navigator.standalone===true;
+let deferredPrompt=null;
+addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredPrompt=e});
+addEventListener("appinstalled",()=>{deferredPrompt=null;toast("اپلیکیشن نصب شد ✅")});
+if("serviceWorker" in navigator&&(location.protocol==="https:"||location.hostname==="localhost")){addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}))}
+function installApp(){
+  if(INSTALLED){toast("اپلیکیشن قبلاً نصب شده است ✅");return}
+  if(deferredPrompt){const d=deferredPrompt;deferredPrompt=null;d.prompt();return}
+  const ios=/iphone|ipad|ipod/i.test(navigator.userAgent);
+  $("#card").innerHTML=`<div class="info"><button style="float:left;font-size:22px" data-close>✕</button>
+   <img src="images/logo-192.png" alt="" width="72" height="72" style="display:block;margin:6px auto;border-radius:50%">
+   <h2 style="text-align:center">نصب اپلیکیشن Arga</h2>
+   ${ios?`<div class="row">1️⃣ <div>در Safari دکمه‌ی اشتراک‌گذاری (مربع با فلش) را بزنید</div></div>
+   <div class="row">2️⃣ <div>گزینه‌ی <b dir="ltr">Add to Home Screen</b> را انتخاب کنید</div></div>
+   <div class="row">3️⃣ <div>روی <b dir="ltr">Add</b> بزنید</div></div>`
+   :`<div class="row">1️⃣ <div>منوی مرورگر (⋮ بالا) را باز کنید</div></div>
+   <div class="row">2️⃣ <div>گزینه‌ی <b dir="ltr">Install app</b> یا <b dir="ltr">Add to Home screen</b> را بزنید</div></div>
+   <div class="row">3️⃣ <div>روی <b>نصب</b> بزنید؛ اپ تمام‌صفحه باز می‌شود</div></div>`}
+   <div class="row" style="border:0;color:var(--mut);font-size:12.5px">اگر گزینه‌ی نصب را نمی‌بینید، سایت را با Chrome یا Safari (نه از داخل برنامه‌های دیگر) باز کنید.</div></div>`;
+  $("#modal").classList.add("show");
+}
+let VISITS=null;
+(async()=>{
+  try{
+    const today=new Date().toISOString().slice(0,10);let last="";
+    try{last=localStorage.getItem("arga_visit_day")||""}catch(e){}
+    const r=await fetch("https://abacus.jasoncameron.dev/"+(last===today?"get":"hit")+"/argacafe-werya1992w/visits");
+    if(!r.ok)throw 0;
+    const j=await r.json();VISITS=+j.value;
+    if(last!==today)try{localStorage.setItem("arga_visit_day",today)}catch(e){}
+    const el=document.getElementById("visitNum");if(el)el.textContent=fa(VISITS.toLocaleString("en"));
+  }catch(e){VISITS=false;const el=document.getElementById("visitNum");if(el)el.textContent="—"}
+})();
+const FONTS=[
+ ["وزیرمتن","Vazirmatn:wght@300;400;600;800","Vazirmatn"],
+ ["نسخ","Noto+Naskh+Arabic:wght@400;600;700","Noto Naskh Arabic"],
+ ["کوفی","Noto+Kufi+Arabic:wght@400;600;800","Noto Kufi Arabic"],
+ ["لاله‌زار","Lalezar","Lalezar"],
+ ["امیری","Amiri:wght@400;700","Amiri"],
+ ["قاهره","Cairo:wght@400;600;800","Cairo"],
+ ["چنگا","Changa:wght@400;600;800","Changa"],
+ ["المسیری","El+Messiri:wght@400;600;700","El Messiri"],
+ ["لمونادا","Lemonada:wght@400;600;700","Lemonada"],
+ ["هارماتان","Harmattan:wght@400;700","Harmattan"],
+ ["نوتو سنس","Noto+Sans+Arabic:wght@400;600;800","Noto Sans Arabic"]
+];
+let fi=0; /* همیشه با وزیرمتن شروع می‌شود */
+function applyFont(i,say){
+  const [nm,q,fam]=FONTS[i];
+  if(!document.getElementById("gf-"+i)){const l=document.createElement("link");l.id="gf-"+i;l.rel="stylesheet";l.href="https://fonts.googleapis.com/css2?family="+q+"&display=swap";document.head.appendChild(l)}
+  document.documentElement.style.setProperty("--font",'"'+fam+'",Vazirmatn,system-ui,sans-serif');
+  if(say)toast("فونت: "+nm);
+}
+$("#btnFont").onclick=()=>{fi=(fi+1)%FONTS.length;applyFont(fi,true)};
+const themeMeta=document.querySelector('meta[name="theme-color"]');
+const sysDark=()=>matchMedia("(prefers-color-scheme: dark)").matches;
+function curTheme(){return document.documentElement.dataset.theme||(sysDark()?"dark":"light")}
+function setTheme(t,say){
+  document.documentElement.dataset.theme=t;
+  if(themeMeta)themeMeta.content=t==="dark"?"#000000":"#ffffff";
+  try{localStorage.setItem("arga_theme",t)}catch(e){}
+  if(say)toast(t==="dark"?"حالت تاریک 🌙":"حالت روشن ☀️");
+}
+try{const t=localStorage.getItem("arga_theme");if(t==="dark"||t==="light")setTheme(t,false)}catch(e){}
+$("#btnTheme").onclick=()=>setTheme(curTheme()==="dark"?"light":"dark",true);
+$("#btnFavTop").onclick=()=>document.querySelector('[data-nav="fav"]').click();
+$("#q").addEventListener("input",e=>{query=e.target.value.trim();render()});
+$("#btnShare").onclick=async()=>{
+  try{if(navigator.share){await navigator.share({title:"کافه Arga",url:location.href})}else{await navigator.clipboard.writeText(location.href);toast("لینک کپی شد")}}catch(e){}
+};
+render();
+</script>
+</body>
+</html>
+idth="18" height="18" rx="5"/><path d="M12 8v8M8 12h8"/></svg></button><div class="uname">Argacafe<svg class="i" viewBox="0 0 24 24" style="width:16px;height:16px;stroke-width:2.6"><path d="M6 9l6 6 6-6"/></svg></div>
+  <div class="ic">
+    <button id="btnFont" aria-label="تغییر فونت" title="تغییر فونت"><svg class="i" viewBox="0 0 24 24" style="width:21px;height:21px"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M20 20l-4.8-4.8"/><text x="10.5" y="13.6" font-size="8.5" text-anchor="middle" fill="currentColor" stroke="none" font-family="sans-serif" font-weight="700">ف</text></svg></button>
+    <button id="btnTheme" aria-label="حالت تاریک / روشن" title="حالت تاریک / روشن"><svg class="i ic-moon" viewBox="0 0 24 24"><path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a6.8 6.8 0 0 0 9.8 9.8z"/></svg><svg class="i ic-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"/></svg></button>
+    <button id="btnFavTop" aria-label="علاقه‌مندی‌ها"><svg class="i" viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 5 6.3 5c2 0 3.8 1.2 5.7 3.3C13.900 6.200 15.700 5 17.700 5 21 5 23.100 8.400 21.600 11.800 19.500 16.400 12 21 12 21z"/></svg></button>
+  </div>
+</header>
+
+<main id="home">
+  <section class="profile">
+    <a class="avatar" href="https://instagram.com/Argacafe" target="_blank" rel="noopener" aria-label="اینستاگرام Argacafe" style="display:block"><img src="images/logo-192.png" alt="لوگوی کافه Arga"></a>
+    <div class="stats">
+      <div><b id="stItems">0</b><span>آیتم</span></div>
+      <div><b id="stCats">0</b><span>دسته‌بندی</span></div>
+      <div><b>۱۰/۱۰</b><span>امتیاز</span></div>
+    </div>
+  </section>
+  <section class="bio">
+    <div class="cat">کافه خونه ئارگا</div>
+    <div>📍 مریوان، چهارراه اصلی، خیابان باهنر<br>هر روز ۱۰ صبح تا ۱۰ شب</div>
+  </section>
+  <section class="actions">
+    <a class="pri" href="tel:093676199xx">تماس</a>
+    <a id="btnLoc" href="https://maps.app.goo.gl/nutpnMqZqy9oqxxEA?g_st=ac" target="_blank" rel="noopener">آدرس</a>
+    <button id="btnShare">اشتراک‌گذاری</button>
+  </section>
+
+  <div class="stories" id="stories"></div>
+
+  <div class="tabs">
+    <button class="on" data-view="grid" aria-label="نمای شبکه‌ای"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></button>
+    <button data-view="list" aria-label="نمای لیستی"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="8" rx="1"/><rect x="3" y="13" width="18" height="8" rx="1"/></svg></button>
+  </div>
+  <div class="search" id="searchBox"><input id="q" type="search" placeholder="جستجو در منو…"></div>
+  <div class="grid" id="grid"></div>
+  <div class="list" id="list"></div>
+  <div class="empty" id="empty">آیتمی پیدا نشد 🫥</div>
+  <p style="text-align:center;color:var(--mut);font-size:11.5px;padding:18px 0 4px">عکس‌ها: <a href="https://unsplash.com" style="color:inherit">Unsplash</a></p>
+</main>
+
+<nav class="bottom">
+  <button class="on" data-nav="home" aria-label="خانه"><svg class="i" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg></button>
+  <button data-nav="gallery" aria-label="گالری کافه"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><path d="M3 8.5h18M9 3l3 5.5M15 3l3 5.5"/><path d="M10.5 13l4 2.5-4 2.5z" fill="currentColor"/></svg></button>
+  <button data-nav="fav" aria-label="علاقه‌مندی‌ها"><svg class="i" viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 5 6.3 5c2 0 3.8 1.2 5.7 3.3C13.9 6.2 15.7 5 17.7 5 21 5 23.1 8.4 21.6 11.8 19.5 16.4 12 21 12 21z"/></svg></button>
+  <button data-nav="search" aria-label="جستجو"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></button>
+  <button data-nav="info" aria-label="درباره‌ی ما"><img class="navav" src="images/logo-96.png" alt=""></button>
+</nav>
+
+<div class="modal" id="modal"><div class="card" id="card"></div></div>
+<div class="gal-view" id="galView"><button data-closeGal>✕</button><img id="galImg" alt=""></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ===== منوی کافه Arga =====
+   قیمت‌ها به هزار تومان‌اند (۱۴۰ = ۱۴۰,۰۰۰ تومان).
+   هر آیتم: [نام، قیمت، توضیح/ترکیبات، (اختیاری) ایموجی]
+   عکس واقعی: در PHOTOS با نام آیتم، یا img:"images/x.jpg" بعد از ساخت ITEMS. */
+const MENU=[
  {id:"coldcoffee",t:"نوشیدنی سرد با قهوه",e:"🧊",g:["#4a362b","#b98a62"],items:[
   ["آیس لته",140],["آیس با سیروپ دلخواه",165,"کارامل، نارگیل، فندق، اسطوخودوس"],["آیس موکا",170,"","🍫"],
   ["آیس آمریکانو",130],["آیس آمریکانو سودا",145,"","🫧"],["اورنج آمریکانو",190,"آب پرتقال + اسپرسو + یخ","🍊"]]},
