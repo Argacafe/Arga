@@ -49,6 +49,9 @@ svg.i{width:26px;height:26px;stroke:currentColor;fill:none;stroke-width:1.8;stro
 .tile .em{font-size:44px;filter:drop-shadow(0 3px 6px rgba(0,0,0,.35))}
 .tile img,.post img.ph{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .tile .nm{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;position:absolute;bottom:0;right:0;left:0;padding:14px 6px 5px;font-size:11.5px;font-weight:600;text-align:center;background:linear-gradient(transparent,rgba(0,0,0,.6))}
+.tile img.cut,.post img.ph.cut{object-fit:contain;padding:9% 7%;filter:drop-shadow(0 10px 12px rgba(40,20,5,.45))}
+.tile.cutbg,.post .media.cutbg{background:radial-gradient(circle at 50% 38%,#f6e6cf 0%,#dcb98f 55%,#b98a5e 100%)!important}
+.cutbg .em{display:none}
 .list{display:none}
 .post{border-bottom:1px solid var(--line);padding-bottom:12px;margin-bottom:6px}
 .post .hd{display:flex;align-items:center;gap:10px;padding:10px 14px;font-size:13.5px;font-weight:600}
@@ -181,13 +184,13 @@ MENU.forEach(m=>m.items.forEach(([n,p,d,e])=>ITEMS.push({id:++_id,c:m.id,n,p,d:d
 const PHOTOS={
  "آیس لته":"photo-1676506739319-70bff65bfc48",
  "آیس با سیروپ دلخواه":"photo-1637178035575-b0dcbd28a09b",
- "اسپرسو":"photo-1777558578066-44266564ee65",
  "آمریکانو":"photo-1583577012061-d69d2dbc900a",
  "کاپوچینو":"photo-1670899604825-5b25fd14b4db",
  "هات چاکلت":"photo-1523754116966-300250e98597",
  "شکلات":"photo-1648775948447-78c34dd56090",
  "لیموناد":"photo-1623157980612-da2c2cdb4c0b"
 };
+const E=ITEMS.find(i=>i.n==="اسپرسو");if(E){E.img="images/espresso.png";E.cut=true}
 ITEMS.forEach(i=>{const k=PHOTOS[i.n];if(k&&!(i.c==="shake"&&i.n!=="شکلات"))i.img="https://images.unsplash.com/"+k+"?w=600&q=70&auto=format&fit=crop"});
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const fa=n=>String(n).replace(/\d/g,d=>"۰۱۲۳۴۵۶۷۸۹"[d]);
@@ -197,7 +200,7 @@ let favs=new Set();
 try{favs=new Set(JSON.parse(localStorage.getItem("arga_favs")||"[]"))}catch(e){}
 const saveFavs=()=>{try{localStorage.setItem("arga_favs",JSON.stringify([...favs]))}catch(e){}};
 const bg=i=>`background:linear-gradient(135deg,${i.g[0]},${i.g[1]})`;
-const imgTag=(i,cls)=>i.img?`<img ${cls?`class="${cls}"`:""} src="${i.img}" alt="${i.n}" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">`:"";
+const imgTag=(i,cls)=>i.img?`<img class="${[cls,i.cut?"cut":""].join(" ").trim()}" src="${i.img}" alt="${i.n}" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">`:"";
 const heartSvg='<svg class="i" viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 5 6.3 5c2 0 3.8 1.2 5.7 3.3C13.9 6.2 15.7 5 17.7 5 21 5 23.1 8.4 21.6 11.8 19.5 16.4 12 21 12 21z"/></svg>';
 
 function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),1800)}
@@ -210,11 +213,11 @@ function renderStories(){
 }
 function render(){
   const items=filtered();
-  $("#grid").innerHTML=items.map(i=>`<div class="tile" data-id="${i.id}" style="${bg(i)}">${imgTag(i)}<span class="em">${i.e}</span><span class="nm">${i.n}</span></div>`).join("");
+  $("#grid").innerHTML=items.map(i=>`<div class="tile${i.cut?" cutbg":""}" data-id="${i.id}" style="${bg(i)}">${imgTag(i)}<span class="em">${i.e}</span><span class="nm">${i.n}</span></div>`).join("");
   $("#list").innerHTML=items.map(i=>`
    <article class="post">
      <div class="hd"><div class="av"></div><div>Argacafe<div style="font-weight:400;color:var(--mut);font-size:12px">${CATS.find(c=>c.id===i.c).t}</div></div></div>
-     <div class="media" style="${bg(i)}" data-id="${i.id}">${imgTag(i,"ph")}<span class="em">${i.e}</span></div>
+     <div class="media${i.cut?" cutbg":""}" style="${bg(i)}" data-id="${i.id}">${imgTag(i,"ph")}<span class="em">${i.e}</span></div>
      <div class="bar"><button class="heart ${favs.has(i.id)?"on":""}" data-fav="${i.id}" aria-label="پسندیدن">${heartSvg}</button><span class="sp"></span><span class="price">${price(i.p)}</span></div>
      <div class="cap"><b>${i.n}</b>${i.d?" · "+i.d:""}</div>
    </article>`).join("");
@@ -230,7 +233,7 @@ function openItem(id){
   $("#card").innerHTML=`
    <div class="post" style="border:0;margin:0">
     <div class="hd"><div class="av"></div><div>Argacafe</div><button style="margin-right:auto;font-size:22px" data-close>✕</button></div>
-    <div class="media" style="${bg(i)}">${imgTag(i,"ph")}<span class="em">${i.e}</span></div>
+    <div class="media${i.cut?" cutbg":""}" style="${bg(i)}">${imgTag(i,"ph")}<span class="em">${i.e}</span></div>
     <div class="bar"><button class="heart ${favs.has(i.id)?"on":""}" data-fav="${i.id}">${heartSvg}</button><span class="sp"></span><span class="price">${price(i.p)}</span></div>
     <div class="cap"><b>${i.n}</b>${i.d?"<br>"+i.d:""}</div>
    </div>`;
