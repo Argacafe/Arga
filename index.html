@@ -210,7 +210,7 @@ function render(){
   $("#grid").innerHTML=items.map(i=>`<div class="tile" data-id="${i.id}" style="${bg(i)}">${imgTag(i)}<span class="em">${i.e}</span><span class="nm">${i.n}</span></div>`).join("");
   $("#list").innerHTML=items.map(i=>`
    <article class="post">
-     <div class="hd"><div class="av">A</div><div>arga.cafe<div style="font-weight:400;color:var(--mut);font-size:12px">${CATS.find(c=>c.id===i.c).t}</div></div></div>
+     <div class="hd"><div class="av">A</div><div>Argacafe<div style="font-weight:400;color:var(--mut);font-size:12px">${CATS.find(c=>c.id===i.c).t}</div></div></div>
      <div class="media" style="${bg(i)}" data-id="${i.id}">${imgTag(i,"ph")}<span class="em">${i.e}</span></div>
      <div class="bar"><button class="heart ${favs.has(i.id)?"on":""}" data-fav="${i.id}" aria-label="پسندیدن">${heartSvg}</button><span class="sp"></span><span class="price">${price(i.p)}</span></div>
      <div class="cap"><b>${i.n}</b>${i.d?" · "+i.d:""}</div>
@@ -226,7 +226,7 @@ function openItem(id){
   const i=ITEMS.find(x=>x.id==id);if(!i)return;
   $("#card").innerHTML=`
    <div class="post" style="border:0;margin:0">
-    <div class="hd"><div class="av">A</div><div>arga.cafe</div><button style="margin-right:auto;font-size:22px" data-close>✕</button></div>
+    <div class="hd"><div class="av">A</div><div>Argacafe</div><button style="margin-right:auto;font-size:22px" data-close>✕</button></div>
     <div class="media" style="${bg(i)}">${imgTag(i,"ph")}<span class="em">${i.e}</span></div>
     <div class="bar"><button class="heart ${favs.has(i.id)?"on":""}" data-fav="${i.id}">${heartSvg}</button><span class="sp"></span><span class="price">${price(i.p)}</span></div>
     <div class="cap"><b>${i.n}</b>${i.d?"<br>"+i.d:""}</div>
@@ -239,7 +239,7 @@ function openInfo(){
    <div class="row">🕗 <div>هر روز ۱۰ صبح تا ۱۰ شب</div></div>
    <div class="row">📍 <div>مریوان، چهارراه اصلی، خیابان باهنر</div></div>
    <div class="row">📞 <div>شماره‌ی تماس را اینجا بنویسید</div></div>
-   <div class="row">📸 <div>@arga.cafe</div></div>
+   <div class="row">📸 <div><a href="https://instagram.com/Argacafe" target="_blank" rel="noopener" style="color:inherit" dir="ltr">@Argacafe</a></div></div>
    <div class="row">💡 <div>قیمت‌ها به تومان و بر حسب هزار تومان است.</div></div></div>`;
   $("#modal").classList.add("show");
 }
