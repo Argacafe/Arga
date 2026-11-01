@@ -62,7 +62,7 @@ svg.i{width:26px;height:26px;stroke:currentColor;fill:none;stroke-width:1.8;stro
 .tile{position:relative;aspect-ratio:1;overflow:hidden;display:grid;place-items:center;cursor:pointer;color:#fff}
 .tile .em{font-size:44px;filter:drop-shadow(0 3px 6px rgba(0,0,0,.35))}
 .tile img,.post img.ph{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.tile .nm{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;position:absolute;bottom:0;right:0;left:0;padding:14px 6px 5px;font-size:11.5px;font-weight:600;text-align:center;background:linear-gradient(transparent,rgba(0,0,0,.6))}
+.tile .nm{display:block;position:absolute;bottom:0;right:0;left:0;padding:14px 6px 5px;font-size:11.5px;font-weight:600;text-align:center;background:linear-gradient(transparent,rgba(0,0,0,.6))}
 .tile img.cut,.post img.ph.cut{object-fit:contain;padding:9% 7%;filter:drop-shadow(0 10px 12px rgba(40,20,5,.45))}
 .tile.cutbg,.post .media.cutbg{background:radial-gradient(circle at 50% 38%,#f6e6cf 0%,#dcb98f 55%,#b98a5e 100%)!important}
 .cutbg .em{display:none}
@@ -122,7 +122,9 @@ header.top .ic{justify-self:end;gap:14px}
 .tabs button.on{border-bottom:1.5px solid var(--fg)}
 .grid{gap:1px}
 .tile{aspect-ratio:3/4}
-.tile .nm{font-size:11px;padding:18px 6px 6px}
+.tile .nm{font-size:11px;padding:22px 6px 6px;line-height:1.45}
+.tile .nn{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.tile .np{display:block;font-size:10.5px;font-weight:800;margin-top:1px;opacity:.95;white-space:nowrap}
 nav.bottom{border-top:0;padding-top:10px;background:var(--navbg);backdrop-filter:blur(14px)}
 nav.bottom button svg{width:27px;height:27px;stroke-width:1.9}
 nav.bottom button.on svg{stroke-width:2.6;fill:currentColor}
@@ -306,7 +308,7 @@ function renderStories(){
 }
 function render(){
   const items=filtered();
-  $("#grid").innerHTML=items.map(i=>`<div class="tile${i.cut?" cutbg":""}" data-id="${i.id}" style="${bg(i)}">${imgTag(i)}<span class="em">${i.e}</span><span class="nm">${i.n}</span></div>`).join("");
+  $("#grid").innerHTML=items.map(i=>`<div class="tile${i.cut?" cutbg":""}" data-id="${i.id}" style="${bg(i)}">${imgTag(i)}<span class="em">${i.e}</span><span class="nm"><span class="nn">${i.n}</span><span class="np">${price(i.p)}</span></span></div>`).join("");
   $("#list").innerHTML=items.map(i=>`
    <article class="post">
      <div class="hd"><div class="av"></div><div>Argacafe<div style="font-weight:400;color:var(--mut);font-size:12px">${CATS.find(c=>c.id===i.c).t}</div></div></div>
