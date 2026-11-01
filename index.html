@@ -37,6 +37,10 @@ svg.i{width:26px;height:26px;stroke:currentColor;fill:none;stroke-width:1.8;stro
 .story{flex:none;width:68px;text-align:center;font-size:11.5px}
 .ring{width:66px;height:66px;border-radius:50%;padding:2.5px;background:var(--line);margin-bottom:5px}
 .story.on .ring{background:var(--grad)}
+.ring div{overflow:hidden}
+.ring div img{width:100%;height:100%;object-fit:cover;display:block}
+.ring div.cut{background:radial-gradient(circle at 50% 40%,#f6e6cf,#d3ad82)}
+.ring div.cut img{object-fit:contain;padding:3px}
 .ring div{width:100%;height:100%;border-radius:50%;border:2.5px solid var(--bg);display:grid;place-items:center;font-size:28px;background:var(--chip)}
 .tabs{display:flex;border-top:1px solid var(--line);position:sticky;top:49px;background:var(--bg);z-index:15}
 .tabs button{flex:1;padding:11px;color:var(--mut);border-bottom:2px solid transparent}
@@ -208,8 +212,21 @@ function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");se
 function filtered(){
   return ITEMS.filter(i=>(cat==="all"||i.c===cat)&&(!onlyFav||favs.has(i.id))&&(!query||(i.n+i.d).includes(query)));
 }
+const STORY={
+ all:{img:"images/logo-96.png"},
+ coldcoffee:{img:"https://images.unsplash.com/photo-1676506739319-70bff65bfc48?w=200&h=200&q=70&auto=format&fit=crop"},
+ smoothie:{img:"https://images.unsplash.com/photo-1508869901315-49c557f3969d?w=200&h=200&q=70&auto=format&fit=crop"},
+ frappe:{img:"https://images.unsplash.com/photo-1637178035575-b0dcbd28a09b?w=200&h=200&q=70&auto=format&fit=crop"},
+ mocktail:{img:"https://images.unsplash.com/photo-1623157980612-da2c2cdb4c0b?w=200&h=200&q=70&auto=format&fit=crop"},
+ shake:{img:"https://images.unsplash.com/photo-1648775948447-78c34dd56090?w=200&h=200&q=70&auto=format&fit=crop"},
+ coolbev:{img:"https://images.unsplash.com/photo-1531264071041-3a69924b182d?w=200&h=200&q=70&auto=format&fit=crop"},
+ hotcoffee:{img:"images/espresso.png",cut:1},
+ hotnocoffee:{img:"https://images.unsplash.com/photo-1523754116966-300250e98597?w=200&h=200&q=70&auto=format&fit=crop"},
+ tea:{img:"https://images.unsplash.com/photo-1761483281120-4fc47bfe3e29?w=200&h=200&q=70&auto=format&fit=crop"},
+ extra:{img:"https://images.unsplash.com/photo-1750520335073-2535aa280946?w=200&h=200&q=70&auto=format&fit=crop"}
+};
 function renderStories(){
-  $("#stories").innerHTML=CATS.map(c=>`<button class="story ${c.id===cat?"on":""}" data-cat="${c.id}"><div class="ring"><div>${c.e}</div></div>${c.t}</button>`).join("");
+  $("#stories").innerHTML=CATS.map(c=>`<button class="story ${c.id===cat?"on":""}" data-cat="${c.id}"><div class="ring"><div class="${STORY[c.id]&&STORY[c.id].cut?"cut":""}">${STORY[c.id]?`<img src="${STORY[c.id].img}" alt="" referrerpolicy="no-referrer" onerror="this.replaceWith(document.createTextNode('${c.e}'))">`:c.e}</div></div>${c.t}</button>`).join("");
 }
 function render(){
   const items=filtered();
