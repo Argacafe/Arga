@@ -3,32 +3,35 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#ffffff">
+<meta name="theme-color" content="#2b2118">
 <title>کافه Arga | منو</title>
 <meta name="description" content="منوی آنلاین کافه Arga؛ قهوه، نوشیدنی سرد، چای، دسر و صبحانه">
+<link rel="icon" type="image/png" href="images/favicon.png">
+<link rel="apple-touch-icon" href="images/logo-192.png">
+<meta property="og:image" content="images/logo-512.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#fff;--fg:#1c1c1c;--mut:#737373;--line:#e6e6e6;--chip:#f3f3f3;--grad:linear-gradient(45deg,#f9a03f,#e1306c,#8a3ab9);--accent:#e1306c}
+:root{--bg:#fff;--fg:#1c1c1c;--mut:#737373;--line:#e6e6e6;--chip:#f3f3f3;--grad:linear-gradient(45deg,#e0a766,#b87333,#7a4a26);--accent:#b87333}
 @media(prefers-color-scheme:dark){:root{--bg:#000;--fg:#f5f5f5;--mut:#a3a3a3;--line:#262626;--chip:#1a1a1a}}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0}
 body{background:var(--bg);color:var(--fg);font-family:Vazirmatn,system-ui,sans-serif;max-width:560px;margin:0 auto;padding-bottom:76px;min-height:100vh}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 header.top{position:sticky;top:0;z-index:20;background:var(--bg);display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid var(--line)}
-.logo{font-weight:800;font-size:26px;letter-spacing:.5px;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;font-family:Vazirmatn,sans-serif}
+.logo{display:flex;align-items:center;gap:8px;font-weight:800;font-size:26px;letter-spacing:.5px;font-family:Vazirmatn,sans-serif}.logo span{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
 .top .ic{display:flex;gap:16px}
 svg.i{width:26px;height:26px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .profile{display:flex;align-items:center;gap:22px;padding:16px}
 .avatar{width:84px;height:84px;border-radius:50%;padding:3px;background:var(--grad);flex:none}
-.avatar div{width:100%;height:100%;border-radius:50%;background:var(--bg);display:grid;place-items:center;border:3px solid var(--bg);font-size:38px;background:#2b1d14}
+.avatar img{width:100%;height:100%;border-radius:50%;display:block;border:3px solid var(--bg);object-fit:cover}
 .stats{display:flex;flex:1;justify-content:space-around;text-align:center}
 .stats b{display:block;font-size:17px}.stats span{font-size:12.5px;color:var(--mut)}
 .bio{padding:0 16px 10px;font-size:14px;line-height:1.9}
 .bio h1{font-size:15px;margin:0}.bio .cat{color:var(--mut);font-size:13px}
 .actions{display:flex;gap:8px;padding:6px 16px 14px}
 .actions a,.actions button{flex:1;text-align:center;background:var(--chip);border-radius:9px;padding:8px;font-size:13.5px;font-weight:600;text-decoration:none;color:inherit}
-.actions .pri{background:#0095f6;color:#fff}
+.actions .pri{background:#b87333;color:#fff}
 .stories{display:flex;gap:16px;overflow-x:auto;padding:4px 16px 14px;scrollbar-width:none}
 .stories::-webkit-scrollbar{display:none}
 .story{flex:none;width:68px;text-align:center;font-size:11.5px}
@@ -49,7 +52,7 @@ svg.i{width:26px;height:26px;stroke:currentColor;fill:none;stroke-width:1.8;stro
 .list{display:none}
 .post{border-bottom:1px solid var(--line);padding-bottom:12px;margin-bottom:6px}
 .post .hd{display:flex;align-items:center;gap:10px;padding:10px 14px;font-size:13.5px;font-weight:600}
-.post .hd .av{width:32px;height:32px;border-radius:50%;background:var(--grad);display:grid;place-items:center;font-size:15px;color:#fff;font-weight:800}
+.post .hd .av{width:32px;height:32px;border-radius:50%;background:url(images/logo-96.png) center/cover}
 .post .media{position:relative;aspect-ratio:1;display:grid;place-items:center;overflow:hidden;color:#fff}
 .post .media .em{font-size:110px;filter:drop-shadow(0 6px 10px rgba(0,0,0,.35))}
 .post .bar{display:flex;align-items:center;padding:10px 14px 4px;gap:14px}
@@ -75,7 +78,7 @@ nav.bottom button.on svg{stroke-width:2.6}
 <body>
 
 <header class="top">
-  <div class="logo">Arga</div>
+  <div class="logo"><img src="images/logo-96.png" alt="" width="30" height="30" style="border-radius:50%"><span>Arga</span></div>
   <div class="ic">
     <button id="btnSearch" aria-label="جستجو"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></button>
     <button id="btnFavTop" aria-label="علاقه‌مندی‌ها"><svg class="i" viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 5 6.3 5c2 0 3.8 1.2 5.7 3.3C13.900 6.200 15.700 5 17.700 5 21 5 23.100 8.400 21.600 11.800 19.500 16.400 12 21 12 21z"/></svg></button>
@@ -84,7 +87,7 @@ nav.bottom button.on svg{stroke-width:2.6}
 
 <main id="home">
   <section class="profile">
-    <div class="avatar"><div>☕</div></div>
+    <div class="avatar"><img src="images/logo-192.png" alt="لوگوی کافه Arga"></div>
     <div class="stats">
       <div><b id="stItems">0</b><span>آیتم منو</span></div>
       <div><b id="stCats">0</b><span>دسته‌بندی</span></div>
@@ -210,7 +213,7 @@ function render(){
   $("#grid").innerHTML=items.map(i=>`<div class="tile" data-id="${i.id}" style="${bg(i)}">${imgTag(i)}<span class="em">${i.e}</span><span class="nm">${i.n}</span></div>`).join("");
   $("#list").innerHTML=items.map(i=>`
    <article class="post">
-     <div class="hd"><div class="av">A</div><div>Argacafe<div style="font-weight:400;color:var(--mut);font-size:12px">${CATS.find(c=>c.id===i.c).t}</div></div></div>
+     <div class="hd"><div class="av"></div><div>Argacafe<div style="font-weight:400;color:var(--mut);font-size:12px">${CATS.find(c=>c.id===i.c).t}</div></div></div>
      <div class="media" style="${bg(i)}" data-id="${i.id}">${imgTag(i,"ph")}<span class="em">${i.e}</span></div>
      <div class="bar"><button class="heart ${favs.has(i.id)?"on":""}" data-fav="${i.id}" aria-label="پسندیدن">${heartSvg}</button><span class="sp"></span><span class="price">${price(i.p)}</span></div>
      <div class="cap"><b>${i.n}</b>${i.d?" · "+i.d:""}</div>
@@ -226,7 +229,7 @@ function openItem(id){
   const i=ITEMS.find(x=>x.id==id);if(!i)return;
   $("#card").innerHTML=`
    <div class="post" style="border:0;margin:0">
-    <div class="hd"><div class="av">A</div><div>Argacafe</div><button style="margin-right:auto;font-size:22px" data-close>✕</button></div>
+    <div class="hd"><div class="av"></div><div>Argacafe</div><button style="margin-right:auto;font-size:22px" data-close>✕</button></div>
     <div class="media" style="${bg(i)}">${imgTag(i,"ph")}<span class="em">${i.e}</span></div>
     <div class="bar"><button class="heart ${favs.has(i.id)?"on":""}" data-fav="${i.id}">${heartSvg}</button><span class="sp"></span><span class="price">${price(i.p)}</span></div>
     <div class="cap"><b>${i.n}</b>${i.d?"<br>"+i.d:""}</div>
@@ -235,7 +238,7 @@ function openItem(id){
 }
 function openInfo(){
   $("#card").innerHTML=`<div class="info"><button style="float:left;font-size:22px" data-close>✕</button>
-   <h2>درباره‌ی کافه Arga</h2>
+   <img src="images/logo-192.png" alt="" width="84" height="84" style="display:block;margin:6px auto;border-radius:50%"><h2 style="text-align:center">درباره‌ی کافه Arga</h2>
    <div class="row">🕗 <div>هر روز ۱۰ صبح تا ۱۰ شب</div></div>
    <div class="row">📍 <div>مریوان، چهارراه اصلی، خیابان باهنر</div></div>
    <div class="row">📞 <div>شماره‌ی تماس را اینجا بنویسید</div></div>
