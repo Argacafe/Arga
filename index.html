@@ -124,7 +124,7 @@ nav.bottom button.on svg{stroke-width:2.6}
   </section>
   <section class="actions">
     <a class="pri" href="tel:093676199xx">تماس</a>
-    <button id="btnLoc">آدرس</button>
+    <a id="btnLoc" href="https://maps.app.goo.gl/nutpnMqZqy9oqxxEA?g_st=ac" target="_blank" rel="noopener">آدرس</a>
     <button id="btnShare">اشتراک‌گذاری</button>
   </section>
 
@@ -287,7 +287,7 @@ function openInfo(){
   $("#card").innerHTML=`<div class="info"><button style="float:left;font-size:22px" data-close>✕</button>
    <img src="images/logo-192.png" alt="" width="84" height="84" style="display:block;margin:6px auto;border-radius:50%"><h2 style="text-align:center">درباره‌ی کافه Arga</h2>
    <div class="row">🕗 <div>هر روز ۱۰ صبح تا ۱۰ شب</div></div>
-   <div class="row">📍 <div>مریوان، چهارراه اصلی، خیابان باهنر</div></div>
+   <div class="row">📍 <div><a href="https://maps.app.goo.gl/nutpnMqZqy9oqxxEA?g_st=ac" target="_blank" rel="noopener" style="color:inherit">مریوان، چهارراه اصلی، خیابان باهنر</a></div></div>
    <div class="row">📞 <div><a href="tel:093676199xx" dir="ltr" style="color:inherit">093676199xx</a></div></div>
    <div class="row">👁 <div>بازدید: <b id="visitNum">${VISITS===null?"…":VISITS===false?"—":fa(VISITS.toLocaleString("en"))}</b></div></div>
    ${INSTALLED?"":`<div class="row">📲 <div><button id="btnInstall" style="font:inherit;font-weight:700;text-decoration:underline">نصب اپلیکیشن روی گوشی</button></div></div>`}
@@ -372,7 +372,6 @@ $("#btnFont").onclick=()=>{fi=(fi+1)%FONTS.length;applyFont(fi,true)};
 $("#btnSearch").onclick=()=>{$("#searchBox").classList.toggle("show");$("#q").focus()};
 $("#btnFavTop").onclick=()=>document.querySelector('[data-nav="fav"]').click();
 $("#q").addEventListener("input",e=>{query=e.target.value.trim();render()});
-$("#btnLoc").onclick=openInfo;
 $("#btnShare").onclick=async()=>{
   try{if(navigator.share){await navigator.share({title:"کافه Arga",url:location.href})}else{await navigator.clipboard.writeText(location.href);toast("لینک کپی شد")}}catch(e){}
 };
