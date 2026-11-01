@@ -56,6 +56,7 @@ svg.i{width:26px;height:26px;stroke:currentColor;fill:none;stroke-width:1.8;stro
 .tile img.cut,.post img.ph.cut{object-fit:contain;padding:9% 7%;filter:drop-shadow(0 10px 12px rgba(40,20,5,.45))}
 .tile.cutbg,.post .media.cutbg{background:radial-gradient(circle at 50% 38%,#f6e6cf 0%,#dcb98f 55%,#b98a5e 100%)!important}
 .cutbg .em{display:none}
+.tile img~.em,.media img~.em{display:none}
 .list{display:none}
 .post{border-bottom:1px solid var(--line);padding-bottom:12px;margin-bottom:6px}
 .post .hd{display:flex;align-items:center;gap:10px;padding:10px 14px;font-size:13.5px;font-weight:600}
@@ -194,8 +195,11 @@ const PHOTOS={
  "شکلات":"photo-1648775948447-78c34dd56090",
  "لیموناد":"photo-1623157980612-da2c2cdb4c0b"
 };
+/* عکس‌های خود کافه (از منوی argacafe.ir) */
+const LOCAL={"آیس لته":"images/ice-latte.jpg","آیس با سیروپ دلخواه":"images/ice-syrup.jpg","آیس آمریکانو سودا":"images/ice-americano-soda.jpg","آیس موکا":"images/ice-mocha.jpg"};
+ITEMS.forEach(i=>{if(LOCAL[i.n])i.img=LOCAL[i.n]});
 const E=ITEMS.find(i=>i.n==="اسپرسو");if(E){E.img="images/espresso.png";E.cut=true}
-ITEMS.forEach(i=>{const k=PHOTOS[i.n];if(k&&!(i.c==="shake"&&i.n!=="شکلات"))i.img="https://images.unsplash.com/"+k+"?w=600&q=70&auto=format&fit=crop"});
+ITEMS.forEach(i=>{const k=PHOTOS[i.n];if(k&&!LOCAL[i.n]&&!(i.c==="shake"&&i.n!=="شکلات"))i.img="https://images.unsplash.com/"+k+"?w=600&q=70&auto=format&fit=crop"});
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const fa=n=>String(n).replace(/\d/g,d=>"۰۱۲۳۴۵۶۷۸۹"[d]);
 const price=p=>fa(p)+",۰۰۰ تومان";
@@ -214,7 +218,7 @@ function filtered(){
 }
 const STORY={
  all:{img:"images/logo-96.png"},
- coldcoffee:{img:"https://images.unsplash.com/photo-1676506739319-70bff65bfc48?w=200&h=200&q=70&auto=format&fit=crop"},
+ coldcoffee:{img:"images/ice-latte.jpg"},
  smoothie:{img:"https://images.unsplash.com/photo-1508869901315-49c557f3969d?w=200&h=200&q=70&auto=format&fit=crop"},
  frappe:{img:"https://images.unsplash.com/photo-1637178035575-b0dcbd28a09b?w=200&h=200&q=70&auto=format&fit=crop"},
  mocktail:{img:"https://images.unsplash.com/photo-1623157980612-da2c2cdb4c0b?w=200&h=200&q=70&auto=format&fit=crop"},
