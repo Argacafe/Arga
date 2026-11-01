@@ -81,6 +81,14 @@ nav.bottom button.on svg{stroke-width:2.6}
 .info{padding:16px;line-height:2;font-size:14px}
 .info h2{font-size:16px;margin:8px 0}
 .info .row{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--line)}
+.gal-hd{display:flex;align-items:center;padding:14px 14px 4px}
+.gal-hd h2{font-size:16px;margin:0;flex:1;text-align:center}
+.gal-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;padding:4px}
+.gal-grid img{width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;display:block}
+.gal-view{position:fixed;inset:0;background:#000;display:none;align-items:center;justify-content:center;z-index:70}
+.gal-view.show{display:flex}
+.gal-view img{max-width:100%;max-height:100%;object-fit:contain}
+.gal-view button{position:absolute;top:16px;left:16px;color:#fff;font-size:26px}
 </style>
 </head>
 <body>
@@ -131,10 +139,12 @@ nav.bottom button.on svg{stroke-width:2.6}
   <button data-nav="search" aria-label="جستجو"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></button>
   <button data-nav="all" aria-label="همه‌ی منو"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><path d="M12 8v8M8 12h8"/></svg></button>
   <button data-nav="fav" aria-label="علاقه‌مندی‌ها"><svg class="i" viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 5 6.3 5c2 0 3.8 1.2 5.7 3.3C13.900 6.200 15.700 5 17.700 5 21 5 23.100 8.400 21.600 11.800 19.500 16.400 12 21 12 21z"/></svg></button>
+  <button data-nav="gallery" aria-label="گالری"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9.5" r="1.8"/><path d="M21 16l-5.5-5.5L5 21"/></svg></button>
   <button data-nav="info" aria-label="درباره‌ی ما"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg></button>
 </nav>
 
 <div class="modal" id="modal"><div class="card" id="card"></div></div>
+<div class="gal-view" id="galView"><button data-closeGal>✕</button><img id="galImg" alt=""></div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -260,6 +270,13 @@ function openItem(id){
    </div>`;
   $("#modal").classList.add("show");
 }
+/* گالری عکس‌های فضای کافه؛ هر آیتم فقط مسیر عکس است */
+const GALLERY=["images/gallery-1.webp"];
+function openGallery(){
+  $("#card").innerHTML=`<div class="gal-hd"><button data-close>✕</button><h2>گالری کافه</h2><span style="width:22px"></span></div>
+   <div class="gal-grid">${GALLERY.map((src,idx)=>`<img src="${src}" alt="عکس کافه Arga" loading="lazy" data-gal="${idx}">`).join("")}</div>`;
+  $("#modal").classList.add("show");
+}
 function openInfo(){
   $("#card").innerHTML=`<div class="info"><button style="float:left;font-size:22px" data-close>✕</button>
    <img src="images/logo-192.png" alt="" width="84" height="84" style="display:block;margin:6px auto;border-radius:50%"><h2 style="text-align:center">درباره‌ی کافه Arga</h2>
@@ -284,6 +301,8 @@ document.addEventListener("click",e=>{
   const s=t.closest("[data-cat]");if(s){cat=s.dataset.cat;onlyFav=false;render();setNav("home");return}
   const f=t.closest("[data-fav]");if(f){toggleFav(f.dataset.fav);return}
   if(t.closest("[data-close]")||t===$("#modal")){$("#modal").classList.remove("show");return}
+  if(t.closest("[data-closeGal]")||t===$("#galView")){$("#galView").classList.remove("show");return}
+  const g=t.closest("[data-gal]");if(g){$("#galImg").src=GALLERY[+g.dataset.gal];$("#galView").classList.add("show");return}
   const tile=t.closest(".tile,.media");if(tile&&tile.dataset.id){openItem(tile.dataset.id);return}
   const tab=t.closest(".tabs button");if(tab){view=tab.dataset.view;$$(".tabs button").forEach(b=>b.classList.toggle("on",b===tab));render();return}
   const nav=t.closest("[data-nav]");
@@ -292,6 +311,7 @@ document.addEventListener("click",e=>{
     if(n==="home"||n==="all"){onlyFav=false;cat="all";query="";$("#q").value="";$("#searchBox").classList.remove("show");render();window.scrollTo({top:0,behavior:"smooth"})}
     if(n==="search"){$("#searchBox").classList.add("show");$("#q").focus()}
     if(n==="fav"){onlyFav=true;cat="all";render();window.scrollTo({top:0,behavior:"smooth"});if(!favs.size)toast("هنوز چیزی را نپسندیده‌اید ❤️")}
+    if(n==="gallery")openGallery();
     if(n==="info")openInfo();
   }
 });
