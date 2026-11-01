@@ -6,8 +6,13 @@
 <meta name="theme-color" content="#2b2118">
 <title>کافه Arga | منو</title>
 <meta name="description" content="منوی آنلاین کافه Arga؛ قهوه، نوشیدنی سرد، چای، دسر و صبحانه">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Arga">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="icon" type="image/png" href="images/favicon.png">
-<link rel="apple-touch-icon" href="images/logo-192.png">
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
 <meta property="og:image" content="images/logo-512.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;800&display=swap" rel="stylesheet">
@@ -18,7 +23,7 @@
 html,body{margin:0}
 body{background:var(--bg);color:var(--fg);font-family:var(--font);max-width:560px;margin:0 auto;padding-bottom:76px;min-height:100vh}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
-header.top{position:sticky;top:0;z-index:20;background:var(--bg);display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid var(--line)}
+header.top{padding-top:calc(10px + env(safe-area-inset-top))!important;position:sticky;top:0;z-index:20;background:var(--bg);display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid var(--line)}
 .logo{display:flex;align-items:center;gap:8px;font-weight:800;font-size:26px;letter-spacing:.5px;font-family:var(--font)}.logo span{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
 .top .ic{display:flex;gap:16px}
 svg.i{width:26px;height:26px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
@@ -44,7 +49,7 @@ svg.i{width:26px;height:26px;stroke:currentColor;fill:none;stroke-width:1.8;stro
 .ring div.cut{background:radial-gradient(circle at 50% 40%,#f6e6cf,#d3ad82)}
 .ring div.cut img{object-fit:contain;padding:3px}
 .ring div{width:100%;height:100%;border-radius:50%;border:2.5px solid var(--bg);display:grid;place-items:center;font-size:28px;background:var(--chip)}
-.tabs{display:flex;border-top:1px solid var(--line);position:sticky;top:49px;background:var(--bg);z-index:15}
+.tabs{display:flex;border-top:1px solid var(--line);position:sticky;top:calc(49px + env(safe-area-inset-top));background:var(--bg);z-index:15}
 .tabs button{flex:1;padding:11px;color:var(--mut);border-bottom:2px solid transparent}
 .tabs button.on{color:var(--fg);border-color:var(--fg)}
 .search{display:none;padding:10px 16px}
@@ -285,6 +290,7 @@ function openInfo(){
    <div class="row">📍 <div>مریوان، چهارراه اصلی، خیابان باهنر</div></div>
    <div class="row">📞 <div><a href="tel:093676199xx" dir="ltr" style="color:inherit">093676199xx</a></div></div>
    <div class="row">👁 <div>بازدید: <b id="visitNum">${VISITS===null?"…":VISITS===false?"—":fa(VISITS.toLocaleString("en"))}</b></div></div>
+   ${INSTALLED?"":`<div class="row">📲 <div><button id="btnInstall" style="font:inherit;font-weight:700;text-decoration:underline">نصب اپلیکیشن روی گوشی</button></div></div>`}
    <div class="row">📸 <div><a href="https://instagram.com/Argacafe" target="_blank" rel="noopener" style="color:inherit" dir="ltr">@Argacafe</a></div></div></div>`;
   $("#modal").classList.add("show");
 }
@@ -300,6 +306,11 @@ function toggleFav(id){
 document.addEventListener("click",e=>{
   const t=e.target;
   const s=t.closest("[data-cat]");if(s){cat=s.dataset.cat;onlyFav=false;render();setNav("home");return}
+  if(t.closest("#btnInstall")){
+    if(deferredPrompt){deferredPrompt.prompt();deferredPrompt.userChoice.finally(()=>{deferredPrompt=null})}
+    else if(/iphone|ipad|ipod/i.test(navigator.userAgent))toast("در سافاری: دکمه‌ی اشتراک‌گذاری ← Add to Home Screen");
+    else toast("از منوی مرورگر (⋮) گزینه‌ی Install app یا Add to Home screen را بزنید");
+    return}
   const f=t.closest("[data-fav]");if(f){toggleFav(f.dataset.fav);return}
   if(t.closest("[data-close]")||t===$("#modal")){$("#modal").classList.remove("show");return}
   if(t.closest("[data-closeGal]")||t===$("#galView")){$("#galView").classList.remove("show");return}
@@ -317,6 +328,11 @@ document.addEventListener("click",e=>{
   }
 });
 /* شمارنده‌ی بازدید: سرویس رایگان Abacus؛ هر مرورگر روزی یک بار شمرده می‌شود */
+const INSTALLED=matchMedia("(display-mode: fullscreen), (display-mode: standalone)").matches||navigator.standalone===true;
+let deferredPrompt=null;
+addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredPrompt=e});
+addEventListener("appinstalled",()=>{deferredPrompt=null;toast("اپلیکیشن نصب شد ✅")});
+if("serviceWorker" in navigator&&(location.protocol==="https:"||location.hostname==="localhost")){addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}))}
 let VISITS=null;
 (async()=>{
   try{
