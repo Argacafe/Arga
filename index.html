@@ -130,7 +130,7 @@ nav.bottom button.on .navav{border-color:var(--fg)}
 <body>
 
 <header class="top">
-  <button aria-label="افزودن" style="justify-self:start"><svg class="i" viewBox="0 0 24 24" style="width:27px;height:27px"><rect x="3" y="3" width="18" height="18" rx="5"/><path d="M12 8v8M8 12h8"/></svg></button><div class="uname">Argacafe<svg class="i" viewBox="0 0 24 24" style="width:16px;height:16px;stroke-width:2.6"><path d="M6 9l6 6 6-6"/></svg></div>
+  <button id="btnPlus" aria-label="نصب اپلیکیشن" title="نصب اپلیکیشن" style="justify-self:start"><svg class="i" viewBox="0 0 24 24" style="width:27px;height:27px"><rect x="3" y="3" width="18" height="18" rx="5"/><path d="M12 8v8M8 12h8"/></svg></button><div class="uname">Argacafe<svg class="i" viewBox="0 0 24 24" style="width:16px;height:16px;stroke-width:2.6"><path d="M6 9l6 6 6-6"/></svg></div>
   <div class="ic">
     <button id="btnFont" aria-label="تغییر فونت" title="تغییر فونت"><svg class="i" viewBox="0 0 24 24" style="width:21px;height:21px"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M20 20l-4.8-4.8"/><text x="10.5" y="13.6" font-size="8.5" text-anchor="middle" fill="currentColor" stroke="none" font-family="sans-serif" font-weight="700">ف</text></svg></button>
     <button id="btnTheme" aria-label="حالت تاریک / روشن" title="حالت تاریک / روشن"><svg class="i ic-moon" viewBox="0 0 24 24"><path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a6.8 6.8 0 0 0 9.8 9.8z"/></svg><svg class="i ic-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"/></svg></button>
@@ -335,11 +335,7 @@ function toggleFav(id){
 document.addEventListener("click",e=>{
   const t=e.target;
   const s=t.closest("[data-cat]");if(s){cat=s.dataset.cat;onlyFav=false;render();setNav("home");return}
-  if(t.closest("#btnInstall")){
-    if(deferredPrompt){deferredPrompt.prompt();deferredPrompt.userChoice.finally(()=>{deferredPrompt=null})}
-    else if(/iphone|ipad|ipod/i.test(navigator.userAgent))toast("در سافاری: دکمه‌ی اشتراک‌گذاری ← Add to Home Screen");
-    else toast("از منوی مرورگر (⋮) گزینه‌ی Install app یا Add to Home screen را بزنید");
-    return}
+  if(t.closest("#btnInstall,#btnPlus")){installApp();return}
   const f=t.closest("[data-fav]");if(f){toggleFav(f.dataset.fav);return}
   if(t.closest("[data-close]")||t===$("#modal")){$("#modal").classList.remove("show");return}
   if(t.closest("[data-closeGal]")||t===$("#galView")){$("#galView").classList.remove("show");return}
@@ -362,6 +358,22 @@ let deferredPrompt=null;
 addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredPrompt=e});
 addEventListener("appinstalled",()=>{deferredPrompt=null;toast("اپلیکیشن نصب شد ✅")});
 if("serviceWorker" in navigator&&(location.protocol==="https:"||location.hostname==="localhost")){addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}))}
+function installApp(){
+  if(INSTALLED){toast("اپلیکیشن قبلاً نصب شده است ✅");return}
+  if(deferredPrompt){const d=deferredPrompt;deferredPrompt=null;d.prompt();return}
+  const ios=/iphone|ipad|ipod/i.test(navigator.userAgent);
+  $("#card").innerHTML=`<div class="info"><button style="float:left;font-size:22px" data-close>✕</button>
+   <img src="images/logo-192.png" alt="" width="72" height="72" style="display:block;margin:6px auto;border-radius:50%">
+   <h2 style="text-align:center">نصب اپلیکیشن Arga</h2>
+   ${ios?`<div class="row">1️⃣ <div>در Safari دکمه‌ی اشتراک‌گذاری (مربع با فلش) را بزنید</div></div>
+   <div class="row">2️⃣ <div>گزینه‌ی <b dir="ltr">Add to Home Screen</b> را انتخاب کنید</div></div>
+   <div class="row">3️⃣ <div>روی <b dir="ltr">Add</b> بزنید</div></div>`
+   :`<div class="row">1️⃣ <div>منوی مرورگر (⋮ بالا) را باز کنید</div></div>
+   <div class="row">2️⃣ <div>گزینه‌ی <b dir="ltr">Install app</b> یا <b dir="ltr">Add to Home screen</b> را بزنید</div></div>
+   <div class="row">3️⃣ <div>روی <b>نصب</b> بزنید؛ اپ تمام‌صفحه باز می‌شود</div></div>`}
+   <div class="row" style="border:0;color:var(--mut);font-size:12.5px">اگر گزینه‌ی نصب را نمی‌بینید، سایت را با Chrome یا Safari (نه از داخل برنامه‌های دیگر) باز کنید.</div></div>`;
+  $("#modal").classList.add("show");
+}
 let VISITS=null;
 (async()=>{
   try{
@@ -387,16 +399,13 @@ const FONTS=[
  ["هارماتان","Harmattan:wght@400;700","Harmattan"],
  ["نوتو سنس","Noto+Sans+Arabic:wght@400;600;800","Noto Sans Arabic"]
 ];
-let fi=0;try{fi=+localStorage.getItem("arga_font")||0}catch(e){}
-if(!(fi>=0&&fi<FONTS.length))fi=0;
+let fi=0; /* همیشه با وزیرمتن شروع می‌شود */
 function applyFont(i,say){
   const [nm,q,fam]=FONTS[i];
   if(!document.getElementById("gf-"+i)){const l=document.createElement("link");l.id="gf-"+i;l.rel="stylesheet";l.href="https://fonts.googleapis.com/css2?family="+q+"&display=swap";document.head.appendChild(l)}
   document.documentElement.style.setProperty("--font",'"'+fam+'",Vazirmatn,system-ui,sans-serif');
-  try{localStorage.setItem("arga_font",String(i))}catch(e){}
   if(say)toast("فونت: "+nm);
 }
-if(fi)applyFont(fi,false);
 $("#btnFont").onclick=()=>{fi=(fi+1)%FONTS.length;applyFont(fi,true)};
 const themeMeta=document.querySelector('meta[name="theme-color"]');
 const sysDark=()=>matchMedia("(prefers-color-scheme: dark)").matches;
