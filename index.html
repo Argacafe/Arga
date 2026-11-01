@@ -196,7 +196,7 @@ const PHOTOS={
  "لیموناد":"photo-1623157980612-da2c2cdb4c0b"
 };
 /* عکس‌های خود کافه (از منوی argacafe.ir) */
-const LOCAL={"آیس لته":"images/ice-latte.jpg","آیس با سیروپ دلخواه":"images/ice-syrup.jpg","آیس آمریکانو سودا":"images/ice-americano-soda.jpg","آیس موکا":"images/ice-mocha.jpg"};
+const LOCAL={"آیس لته":"images/ice-latte.jpg","آیس با سیروپ دلخواه":"images/ice-syrup.jpg","آیس آمریکانو سودا":"images/ice-americano-soda.jpg","آیس موکا":"images/ice-mocha.jpg","توت فرنگی":"images/strawberry-shake.jpg","فراپه توت فرنگی":"images/strawberry-shake.jpg"};
 ITEMS.forEach(i=>{if(LOCAL[i.n])i.img=LOCAL[i.n]});
 const E=ITEMS.find(i=>i.n==="اسپرسو");if(E){E.img="images/espresso.png";E.cut=true}
 ITEMS.forEach(i=>{const k=PHOTOS[i.n];if(k&&!LOCAL[i.n]&&!(i.c==="shake"&&i.n!=="شکلات"))i.img="https://images.unsplash.com/"+k+"?w=600&q=70&auto=format&fit=crop"});
