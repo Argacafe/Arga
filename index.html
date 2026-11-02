@@ -270,7 +270,7 @@ const PHOTOS={
  "لیموناد":"photo-1623157980612-da2c2cdb4c0b"
 };
 /* عکس‌های خود کافه (از منوی argacafe.ir) */
-const LOCAL={"آیس لته":"images/ice-latte.jpg","آیس لته (سیروپ دلخواه)":"images/ice-syrup.jpg","آیس تونیک آمریکانو":"images/tonic-americano.jpg","فراپه کره بیسکویت":"images/frappe-biscuit-butter.jpg","آیس موکا":"images/ice-mocha.jpg","شیک توت فرنگی":"images/strawberry-shake.jpg","شیر توت فرنگی":"images/strawberry-shake.jpg","آرگارین":"images/argarin.jpg","رد موهیتو":"images/red-mojito.jpg","تروپیکال":"images/tropical.jpg","فرش پیچ":"images/fresh-peach.jpg","آلبالو نمکی":"images/albaloo.jpg"};
+const LOCAL={"آیس لته":"images/ice-latte.jpg","آیس لته (سیروپ دلخواه)":"images/ice-syrup.jpg","آیس تونیک آمریکانو":"images/tonic-americano.jpg","فراپه کره بیسکویت":"images/frappe-biscuit-butter.jpg","فراپاچینو لوتوس":"images/frappuccino-lotus.jpg","آیس موکا":"images/ice-mocha.jpg","شیک توت فرنگی":"images/strawberry-shake.jpg","شیر توت فرنگی":"images/strawberry-shake.jpg","آرگارین":"images/argarin.jpg","رد موهیتو":"images/red-mojito.jpg","تروپیکال":"images/tropical.jpg","فرش پیچ":"images/fresh-peach.jpg","آلبالو نمکی":"images/albaloo.jpg"};
 ITEMS.forEach(i=>{if(LOCAL[i.n])i.img=LOCAL[i.n]});
 const E=ITEMS.find(i=>i.n==="اسپرسو");if(E){E.img="images/espresso.png";E.cut=true}
 ITEMS.forEach(i=>{const k=PHOTOS[i.n];if(k&&!LOCAL[i.n]&&!(i.c==="shake"&&i.n!=="شیک شکلات"))i.img="https://images.unsplash.com/"+k+"?w=600&q=70&auto=format&fit=crop"});
