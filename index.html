@@ -66,6 +66,7 @@ svg.i{width:26px;height:26px;stroke:currentColor;fill:none;stroke-width:1.8;stro
 .tile img.cut,.post img.ph.cut{object-fit:contain;padding:9% 7%;filter:drop-shadow(0 10px 12px rgba(40,20,5,.45))}
 .tile.cutbg,.post .media.cutbg{background:radial-gradient(circle at 50% 38%,#f6e6cf 0%,#dcb98f 55%,#b98a5e 100%)!important}
 .cutbg .em{display:none}
+.tile img.fit,.post img.ph.fit{object-fit:contain;background:#fff}
 .cap .rw{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
 .cap .price{font-weight:800;white-space:nowrap}
 .cap .dsc{color:var(--mut);font-size:13px;line-height:1.8;margin-top:1px}
@@ -270,10 +271,13 @@ const PHOTOS={
  "لیموناد":"photo-1623157980612-da2c2cdb4c0b"
 };
 /* عکس‌های خود کافه (از منوی argacafe.ir) */
-const LOCAL={"آیس لته":"images/ice-latte.jpg","آیس لته (سیروپ دلخواه)":"images/ice-syrup.jpg","آیس تونیک آمریکانو":"images/tonic-americano.jpg","فراپه کره بیسکویت":"images/frappe-biscuit-butter.jpg","فراپاچینو لوتوس":"images/frappuccino-lotus.jpg","چای":"images/tea.jpg","چای زعفران":"images/tea.jpg","شربت شیراز":"images/sharbat-shiraz.jpg","سان ست":"images/sunset.jpg","آیس موکا":"images/ice-mocha.jpg","شیک توت فرنگی":"images/strawberry-shake.jpg","شیر توت فرنگی":"images/strawberry-shake.jpg","آرگارین":"images/argarin.jpg","رد موهیتو":"images/red-mojito.jpg","تروپیکال":"images/tropical.jpg","فرش پیچ":"images/fresh-peach.jpg","آلبالو نمکی":"images/albaloo.jpg"};
+const LOCAL={"آیس لته":"images/ice-latte.jpg","آیس لته (سیروپ دلخواه)":"images/ice-syrup.jpg","آیس تونیک آمریکانو":"images/tonic-americano.jpg","فراپه کره بیسکویت":"images/frappe-biscuit-butter.jpg","فراپاچینو لوتوس":"images/frappuccino-lotus.jpg","چای":"images/tea.jpg","چای زعفران":"images/tea.jpg","شربت شیراز":"images/sharbat-shiraz.jpg","سان ست":"images/sunset.jpg","لته":"images/latte-cup.jpg","موکا":"images/latte-cup.jpg","کاپوچینو":"images/latte-cup.jpg","لته با سیروپ دلخواه":"images/latte-cup.jpg","آمریکانو":"images/americano-cup.jpg","آیس موکا":"images/ice-mocha.jpg","شیک توت فرنگی":"images/strawberry-shake.jpg","شیر توت فرنگی":"images/strawberry-shake.jpg","آرگارین":"images/argarin.jpg","رد موهیتو":"images/red-mojito.jpg","تروپیکال":"images/tropical.jpg","فرش پیچ":"images/fresh-peach.jpg","آلبالو نمکی":"images/albaloo.jpg"};
 ITEMS.forEach(i=>{if(LOCAL[i.n])i.img=LOCAL[i.n]});
 const E=ITEMS.find(i=>i.n==="اسپرسو");if(E){E.img="images/espresso.png";E.cut=true}
 ITEMS.forEach(i=>{const k=PHOTOS[i.n];if(k&&!LOCAL[i.n]&&!(i.c==="shake"&&i.n!=="شیک شکلات"))i.img="https://images.unsplash.com/"+k+"?w=600&q=70&auto=format&fit=crop"});
+/* عکس‌های عریض کامل نمایش داده می‌شوند (بریده نشوند) */
+const FIT=new Set(["images/latte-cup.jpg","images/americano-cup.jpg","images/tea.jpg"]);
+ITEMS.forEach(i=>{if(FIT.has(i.img))i.fit=true});
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const fa=n=>String(n).replace(/\d/g,d=>"۰۱۲۳۴۵۶۷۸۹"[d]);
 const price=p=>fa(p)+",۰۰۰ تومان";
@@ -282,7 +286,7 @@ let favs=new Set();
 try{favs=new Set(JSON.parse(localStorage.getItem("arga_favs")||"[]"))}catch(e){}
 const saveFavs=()=>{try{localStorage.setItem("arga_favs",JSON.stringify([...favs]))}catch(e){}};
 const bg=i=>`background:linear-gradient(135deg,${i.g[0]},${i.g[1]})`;
-const imgTag=(i,cls)=>i.img?`<img class="${[cls,i.cut?"cut":""].join(" ").trim()}" src="${i.img}" alt="${i.n}" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">`:"";
+const imgTag=(i,cls)=>i.img?`<img class="${[cls,i.cut?"cut":"",i.fit?"fit":""].join(" ").trim()}" src="${i.img}" alt="${i.n}" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">`:"";
 const heartSvg='<svg class="i" viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 5 6.3 5c2 0 3.8 1.2 5.7 3.3C13.9 6.2 15.7 5 17.7 5 21 5 23.1 8.4 21.6 11.8 19.5 16.4 12 21 12 21z"/></svg>';
 
 function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),1800)}
