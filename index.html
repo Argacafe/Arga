@@ -131,6 +131,25 @@ nav.bottom button svg{width:27px;height:27px;stroke-width:1.9}
 nav.bottom button.on svg{stroke-width:2.6;fill:currentColor}
 .navav{width:27px;height:27px;border-radius:50%;display:block;border:1.5px solid transparent}
 nav.bottom button.on .navav{border-color:var(--fg)}
+
+/* ===== انیمیشن‌ها (الهام‌گرفته از transitions.dev): مودال، لایت‌باکس، جابه‌جایی دسته‌ها ===== */
+:root{--t-ease:cubic-bezier(.22,1,.36,1)}
+@keyframes t-fade-in{from{opacity:0}to{opacity:1}}
+@keyframes t-fade-out{from{opacity:1}to{opacity:0}}
+@keyframes t-pop-in{from{opacity:0;transform:scale(.94) translateY(10px)}to{opacity:1;transform:none}}
+@keyframes t-pop-out{from{opacity:1;transform:none}to{opacity:0;transform:scale(.96) translateY(6px)}}
+@keyframes t-swap{from{opacity:0;transform:translateX(var(--dx,0))}to{opacity:1;transform:none}}
+.modal.show{animation:t-fade-in .22s ease both}
+.modal.show .card{animation:t-pop-in .32s var(--t-ease) both}
+.modal.closing{display:flex;pointer-events:none;animation:t-fade-out .18s ease both}
+.modal.closing .card{animation:t-pop-out .18s ease both}
+.gal-view.show{animation:t-fade-in .22s ease both}
+.gal-view.show img{animation:t-pop-in .36s var(--t-ease) both}
+.gal-view.closing{display:flex;pointer-events:none;animation:t-fade-out .18s ease both}
+.swap{animation:t-swap .34s var(--t-ease) both}
+@media(prefers-reduced-motion:reduce){
+  .modal.show,.modal.show .card,.modal.closing,.modal.closing .card,.gal-view.show,.gal-view.show img,.gal-view.closing,.swap{animation:none!important}
+}
 </style>
 </head>
 <body>
@@ -289,6 +308,15 @@ const bg=i=>`background:linear-gradient(135deg,${i.g[0]},${i.g[1]})`;
 const imgTag=(i,cls)=>i.img?`<img class="${[cls,i.cut?"cut":"",i.fit?"fit":""].join(" ").trim()}" src="${i.img}" alt="${i.n}" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">`:"";
 const heartSvg='<svg class="i" viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 5 6.3 5c2 0 3.8 1.2 5.7 3.3C13.9 6.2 15.7 5 17.7 5 21 5 23.1 8.4 21.6 11.8 19.5 16.4 12 21 12 21z"/></svg>';
 
+/* باز و بسته کردن لایه‌ها با انیمیشن (کلاس closing تا پایان انیمیشن خروج) */
+function openLayer(el){clearTimeout(el._ct);el.classList.remove("closing");el.classList.add("show")}
+function closeLayer(el){
+  if(!el.classList.contains("show"))return;
+  el.classList.remove("show");el.classList.add("closing");
+  clearTimeout(el._ct);el._ct=setTimeout(()=>el.classList.remove("closing"),200);
+}
+const openModal=()=>openLayer($("#modal"));
+let animDir=null; /* جهت (px) برای انیمیشن جابه‌جایی محتوای منو؛ null یعنی بدون انیمیشن */
 function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),1800)}
 
 function filtered(){
@@ -326,6 +354,12 @@ function render(){
   $("#stItems").textContent=fa(ITEMS.length);
   $("#stCats").textContent=fa(CATS.length-1);
   renderStories();
+  if(animDir!==null){
+    const el=$(view==="grid"?"#grid":"#list");
+    el.style.setProperty("--dx",animDir+"px");
+    el.classList.remove("swap");void el.offsetWidth;el.classList.add("swap");
+    animDir=null;
+  }
 }
 function openItem(id){
   const i=ITEMS.find(x=>x.id==id);if(!i)return;
@@ -336,14 +370,14 @@ function openItem(id){
     <div class="bar"><button class="heart ${favs.has(i.id)?"on":""}" data-fav="${i.id}">${heartSvg}</button><span class="sp"></span></div>
     <div class="cap"><div class="rw"><b>${i.n}</b><span class="price">${price(i.p)}</span></div>${i.d?`<div class="dsc">${i.d}</div>`:""}</div>
    </div>`;
-  $("#modal").classList.add("show");
+  openModal();
 }
 /* گالری عکس‌های فضای کافه؛ هر آیتم فقط مسیر عکس است */
 const GALLERY=["images/gallery-1.webp"];
 function openGallery(){
   $("#card").innerHTML=`<div class="gal-hd"><button data-close>✕</button><h2>گالری کافه</h2><span style="width:22px"></span></div>
    <div class="gal-grid">${GALLERY.map((src,idx)=>`<img src="${src}" alt="عکس کافه Arga" loading="lazy" data-gal="${idx}">`).join("")}</div>`;
-  $("#modal").classList.add("show");
+  openModal();
 }
 function openInfo(){
   $("#card").innerHTML=`<div class="info"><button style="float:left;font-size:22px" data-close>✕</button>
@@ -354,7 +388,7 @@ function openInfo(){
    <div class="row">👁 <div>بازدید: <b id="visitNum">${VISITS===null?"…":VISITS===false?"—":fa(VISITS.toLocaleString("en"))}</b></div></div>
    ${INSTALLED?"":`<div class="row">📲 <div><button id="btnInstall" style="font:inherit;font-weight:700;text-decoration:underline">نصب اپلیکیشن روی گوشی</button></div></div>`}
    <div class="row">📸 <div><a href="https://instagram.com/Argacafe" target="_blank" rel="noopener" style="color:inherit" dir="ltr">@Argacafe</a></div></div></div>`;
-  $("#modal").classList.add("show");
+  openModal();
 }
 function setNav(n){
   $$("nav.bottom button").forEach(b=>b.classList.toggle("on",b.dataset.nav===n));
@@ -367,14 +401,18 @@ function toggleFav(id){
 
 document.addEventListener("click",e=>{
   const t=e.target;
-  const s=t.closest("[data-cat]");if(s){cat=s.dataset.cat;onlyFav=false;render();setNav("home");return}
+  const s=t.closest("[data-cat]");if(s){
+    const oi=CATS.findIndex(c=>c.id===cat),ni=CATS.findIndex(c=>c.id===s.dataset.cat);
+    /* در حالت راست‌به‌چپ، دسته‌ی بعدی سمت چپ است: محتوا از چپ وارد می‌شود */
+    animDir=ni===oi&&!onlyFav?null:(ni>oi?-28:28);
+    cat=s.dataset.cat;onlyFav=false;render();setNav("home");return}
   if(t.closest("#btnInstall,#btnPlus")){installApp();return}
   const f=t.closest("[data-fav]");if(f){toggleFav(f.dataset.fav);return}
-  if(t.closest("[data-close]")||t===$("#modal")){$("#modal").classList.remove("show");return}
-  if(t.closest("[data-closeGal]")||t===$("#galView")){$("#galView").classList.remove("show");return}
-  const g=t.closest("[data-gal]");if(g){$("#galImg").src=GALLERY[+g.dataset.gal];$("#galView").classList.add("show");return}
+  if(t.closest("[data-close]")||t===$("#modal")){closeLayer($("#modal"));return}
+  if(t.closest("[data-closeGal]")||t===$("#galView")){closeLayer($("#galView"));return}
+  const g=t.closest("[data-gal]");if(g){$("#galImg").src=GALLERY[+g.dataset.gal];openLayer($("#galView"));return}
   const tile=t.closest(".tile,.media");if(tile&&tile.dataset.id){openItem(tile.dataset.id);return}
-  const tab=t.closest(".tabs button");if(tab){view=tab.dataset.view;$$(".tabs button").forEach(b=>b.classList.toggle("on",b===tab));render();return}
+  const tab=t.closest(".tabs button");if(tab){if(view!==tab.dataset.view)animDir=0;view=tab.dataset.view;$$(".tabs button").forEach(b=>b.classList.toggle("on",b===tab));render();return}
   const nav=t.closest("[data-nav]");
   if(nav){
     const n=nav.dataset.nav;if(n!=="gallery")setNav(n);
@@ -405,7 +443,7 @@ function installApp(){
    <div class="row">2️⃣ <div>گزینه‌ی <b dir="ltr">Install app</b> یا <b dir="ltr">Add to Home screen</b> را بزنید</div></div>
    <div class="row">3️⃣ <div>روی <b>نصب</b> بزنید؛ اپ تمام‌صفحه باز می‌شود</div></div>`}
    <div class="row" style="border:0;color:var(--mut);font-size:12.5px">اگر گزینه‌ی نصب را نمی‌بینید، سایت را با Chrome یا Safari (نه از داخل برنامه‌های دیگر) باز کنید.</div></div>`;
-  $("#modal").classList.add("show");
+  openModal();
 }
 let VISITS=null;
 (async()=>{
