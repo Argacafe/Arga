@@ -92,6 +92,11 @@ nav.bottom button.on svg{stroke-width:2.6}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;z-index:50;padding:16px}
 .modal.show{display:flex}
 .modal .card{background:var(--bg);width:100%;max-width:420px;border-radius:14px;overflow:hidden;max-height:92vh;overflow-y:auto}
+/* افکت نیون پایین صفحه */
+.neon-foot{text-align:center;font-size:11.5px;padding:18px 0 4px;color:#ffd9a0;text-shadow:0 0 4px #ffb860,0 0 10px #e0884a,0 0 20px #b87333;animation:neonFoot 2.4s ease-in-out infinite alternate}
+.neon-foot a{color:inherit}
+@keyframes neonFoot{from{opacity:.7;text-shadow:0 0 2px #ffb860,0 0 6px #b87333}to{opacity:1;text-shadow:0 0 6px #ffcf8a,0 0 16px #e0884a,0 0 30px #b87333}}
+@media(prefers-reduced-motion:reduce){.neon-foot{animation:none}}
 .toast{position:fixed;bottom:90px;right:50%;transform:translateX(50%);background:#262626;color:#fff;padding:9px 18px;border-radius:20px;font-size:13px;opacity:0;pointer-events:none;transition:.3s;z-index:60}
 .toast.show{opacity:1}
 .info{padding:16px;line-height:2;font-size:14px}
@@ -198,7 +203,7 @@ nav.bottom button.on .navav{border-color:var(--fg)}
   <div class="grid" id="grid"></div>
   <div class="list" id="list"></div>
   <div class="empty" id="empty">همچین چیزی تو منو نداریم ☕ یه اسم دیگه امتحان کن</div>
-  <p style="text-align:center;color:var(--mut);font-size:11.5px;padding:18px 0 4px">Made By AI: <a href="https://kurd.cc" style="color:inherit">An Idiot</a></p>
+  <p class="neon-foot">Made By AI: <a href="https://kurd.cc">An Idiot</a></p>
 </main>
 
 <nav class="bottom">
