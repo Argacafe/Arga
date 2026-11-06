@@ -99,12 +99,18 @@ nav.bottom button.on svg{stroke-width:2.6}
 .neon-foot a{color:inherit}
 @keyframes neonFoot{from{background-position:0 0,0% 50%}to{background-position:0 0,300% 50%}}
 @media(prefers-reduced-motion:reduce){.neon-foot{animation:none}}
-/* نگه داشتن ۳ ثانیه روی قلب پایین: کلمه‌ها پخش می‌شوند و kurd.cc باز می‌شود */
+/* نگه داشتن ۳ ثانیه روی قلب پایین: شمارش معکوس + آتش دور صفحه، بعد پخش کلمه‌ها و باز شدن kurd.cc */
 [data-nav="fav"]{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;touch-action:none;-webkit-tap-highlight-color:transparent}
 [data-nav="fav"].hold svg{animation:heartHold 3s linear forwards;transform-origin:center}
-@keyframes heartHold{0%{transform:scale(1);filter:drop-shadow(0 0 0 #c05cff)}100%{transform:scale(1.45);filter:drop-shadow(0 0 8px #c05cff) drop-shadow(0 0 16px #7a2cff)}}
-.burst{position:fixed;z-index:80;pointer-events:none;white-space:nowrap;font-weight:300;color:var(--fg);text-shadow:0 0 6px #c05cff,0 0 14px #7a2cff;opacity:0;animation:burst 1.5s ease-out forwards}
+@keyframes heartHold{0%{transform:scale(1);filter:drop-shadow(0 0 0 #ff7a00)}100%{transform:scale(1.45);filter:drop-shadow(0 0 8px #ff7a00) drop-shadow(0 0 16px #ff2a00)}}
+.fire{position:fixed;inset:0;width:100%;height:100%;z-index:90;pointer-events:none}
+.fire-glow{position:fixed;inset:0;z-index:89;pointer-events:none;opacity:0;animation:fireGlow 3s ease-in forwards;background:radial-gradient(ellipse at center,rgba(0,0,0,0) 30%,rgba(45,8,0,.72) 100%);box-shadow:inset 0 0 40px 8px rgba(255,140,0,.75),inset 0 0 110px 30px rgba(255,50,0,.5)}
+@keyframes fireGlow{0%{opacity:0}100%{opacity:1}}
+.cd{position:fixed;left:50%;top:calc(env(safe-area-inset-top) + 64px);transform:translateX(-50%);z-index:95;pointer-events:none;font-size:72px;font-weight:800;line-height:1;color:#fff1c8;-webkit-text-stroke:1.5px #8a1c00;text-shadow:0 0 8px rgba(0,0,0,.6),0 0 16px #ff5a00,0 0 36px #ff2a00;animation:cdPop 1s ease-out}
+@keyframes cdPop{0%{transform:translateX(-50%) scale(1.8);opacity:0}25%{opacity:1}100%{transform:translateX(-50%) scale(1);opacity:1}}
+.burst{position:fixed;z-index:100;pointer-events:none;white-space:nowrap;font-weight:300;color:var(--fg);text-shadow:0 0 6px #ff9a2e,0 0 14px #ff3a00;opacity:0;animation:burst 1.5s ease-out forwards}
 @keyframes burst{0%{opacity:0;transform:translate(-50%,-50%) scale(.2)}12%{opacity:1}100%{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) rotate(var(--r)) scale(var(--s))}}
+@media(prefers-reduced-motion:reduce){.cd,.fire-glow{animation:none}.fire-glow{opacity:.8}}
 .toast{position:fixed;bottom:90px;right:50%;transform:translateX(50%);background:#262626;color:#fff;padding:9px 18px;border-radius:20px;font-size:13px;opacity:0;pointer-events:none;transition:.3s;z-index:60}
 .toast.show{opacity:1}
 .info{padding:16px;line-height:2;font-size:14px}
@@ -517,7 +523,7 @@ $("#q").addEventListener("input",e=>{query=e.target.value.trim();render()});
 $("#btnShare").onclick=async()=>{
   try{if(navigator.share){await navigator.share({title:"کافه Arga",url:location.href})}else{await navigator.clipboard.writeText(location.href);toast("لینک کپی شد")}}catch(e){}
 };
-/* نگه داشتن ۳ ثانیه روی قلب پایین: کلمه‌های «Made By AI: An Idiot» روی صفحه پخش می‌شوند و سپس kurd.cc باز می‌شود */
+/* نگه داشتن ۳ ثانیه روی قلب پایین: شمارش معکوس ۳-۲-۱ بالای صفحه، آتش دور صفحه، بعد پخش کلمه‌ها و باز شدن kurd.cc */
 (()=>{
   const WORDS=["Made","By","AI:","An","Idiot"],URL_="https://kurd.cc",HOLD=3000;
   const reduce=()=>matchMedia("(prefers-reduced-motion:reduce)").matches;
@@ -532,23 +538,66 @@ $("#btnShare").onclick=async()=>{
     }
     try{navigator.vibrate&&navigator.vibrate([40,40,80])}catch(e){}
   }
+  /* آتش: ذره‌های روشن که از لبه‌های صفحه به داخل می‌آیند و با گذشت زمان بیشتر می‌شوند */
+  const SPR=(()=>{const mk=(c)=>{const k=document.createElement("canvas");k.width=k.height=64;const g=k.getContext("2d"),r=g.createRadialGradient(32,32,0,32,32,32);
+      r.addColorStop(0,c[0]);r.addColorStop(.35,c[1]);r.addColorStop(1,c[2]);g.fillStyle=r;g.fillRect(0,0,64,64);return k};
+    return [mk(["rgba(255,250,200,.95)","rgba(255,200,60,.55)","rgba(255,160,0,0)"]),mk(["rgba(255,200,80,.9)","rgba(255,110,0,.5)","rgba(255,70,0,0)"]),mk(["rgba(255,110,30,.8)","rgba(220,30,0,.4)","rgba(120,0,0,0)"])]})();
+  let fire=null;
+  function startFire(){
+    const cv=document.createElement("canvas");cv.className="fire";
+    const sc=Math.min(devicePixelRatio||1,1.5),W=innerWidth,H=innerHeight;cv.width=W*sc;cv.height=H*sc;
+    const glow=document.createElement("div");glow.className="fire-glow";
+    document.body.append(glow,cv);
+    const ctx=cv.getContext("2d");ctx.scale(sc,sc);
+    const P=[],t0=performance.now();let raf=0,alive=true;
+    function spawn(k){
+      const e=Math.random(),sz=(14+Math.random()*26)*(.6+k*.7);let x,y,vx,vy;
+      if(e<.45){x=Math.random()*W;y=H;vx=(Math.random()-.5)*.8;vy=-(1.2+Math.random()*2.8)*(.7+k)}
+      else if(e<.65){x=0;y=Math.random()*H;vx=.4+Math.random()*1.2;vy=-(.8+Math.random()*2.2)*(.7+k)}
+      else if(e<.85){x=W;y=Math.random()*H;vx=-(.4+Math.random()*1.2);vy=-(.8+Math.random()*2.2)*(.7+k)}
+      else{x=Math.random()*W;y=0;vx=(Math.random()-.5)*.8;vy=.3+Math.random()*1.2}
+      P.push({x,y,vx,vy,l:1,d:.012+Math.random()*.014,s:sz});
+    }
+    function frame(now){
+      if(!alive)return;
+      const k=Math.min((now-t0)/HOLD,1);
+      const n=Math.floor(4+k*18);for(let i=0;i<n&&P.length<420;i++)spawn(k);
+      ctx.clearRect(0,0,W,H);ctx.globalCompositeOperation="lighter";
+      for(let i=P.length-1;i>=0;i--){
+        const p=P[i];p.x+=p.vx+(Math.random()-.5)*.9;p.y+=p.vy;p.l-=p.d;
+        if(p.l<=0){P.splice(i,1);continue}
+        const sp=SPR[p.l>.66?0:p.l>.33?1:2],sz=p.s*(.4+p.l*.8);
+        ctx.globalAlpha=Math.min(1,p.l*1.4);ctx.drawImage(sp,p.x-sz/2,p.y-sz/2,sz,sz);
+      }
+      ctx.globalAlpha=1;raf=requestAnimationFrame(frame);
+    }
+    raf=requestAnimationFrame(frame);
+    fire={stop(){alive=false;cancelAnimationFrame(raf);cv.remove();glow.remove()}};
+  }
+  function stopFire(){if(fire){fire.stop();fire=null}}
+  let cd=null;
+  function showNum(n){if(!cd){cd=document.createElement("div");document.body.appendChild(cd)}cd.className="cd";void cd.offsetWidth;cd.textContent=fa(n);cd.style.animation="none";void cd.offsetWidth;cd.style.animation=""}
+  function hideNum(){if(cd){cd.remove();cd=null}}
   const btn=$('[data-nav="fav"]');if(!btn)return;
-  let timer=null,sx=0,sy=0;
-  const stop=()=>{clearTimeout(timer);timer=null;btn.classList.remove("hold")};
+  let timers=[],sx=0,sy=0,active=false;
+  const clearAll=()=>{timers.forEach(clearTimeout);timers=[]};
+  const stop=()=>{if(!active)return;active=false;clearAll();btn.classList.remove("hold");hideNum();stopFire()};
   btn.addEventListener("pointerdown",e=>{
-    sx=e.clientX;sy=e.clientY;stop();
-    btn.classList.add("hold");
-    timer=setTimeout(()=>{
-      timer=null;btn.classList.remove("hold");
+    sx=e.clientX;sy=e.clientY;stop();active=true;
+    btn.classList.add("hold");showNum(3);
+    if(!reduce())startFire();
+    timers.push(setTimeout(()=>showNum(2),1000),setTimeout(()=>showNum(1),2000));
+    timers.push(setTimeout(()=>{
+      active=false;clearAll();btn.classList.remove("hold");hideNum();
       const eat=ev=>{ev.stopPropagation();ev.preventDefault()};
       document.addEventListener("click",eat,{capture:true,once:true});
-      setTimeout(()=>document.removeEventListener("click",eat,true),1500);
-      if(reduce()){openSite();return}
+      setTimeout(()=>document.removeEventListener("click",eat,true),1800);
+      if(reduce()){stopFire();openSite();return}
       const r=btn.getBoundingClientRect();burst(r.left+r.width/2,r.top+r.height/2);
-      setTimeout(openSite,1300);
-    },HOLD);
+      setTimeout(()=>{openSite();setTimeout(stopFire,1200)},1300);
+    },HOLD));
   });
-  btn.addEventListener("pointermove",e=>{if(timer&&Math.hypot(e.clientX-sx,e.clientY-sy)>14)stop()});
+  btn.addEventListener("pointermove",e=>{if(active&&Math.hypot(e.clientX-sx,e.clientY-sy)>14)stop()});
   ["pointerup","pointercancel","pointerleave"].forEach(ev=>btn.addEventListener(ev,stop));
   btn.addEventListener("contextmenu",e=>e.preventDefault());
 })();
