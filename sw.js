@@ -1,6 +1,6 @@
 /* Service worker: اجازه‌ی نصب + باز شدن سایت بدون اینترنت.
    صفحه‌ی اصلی اول از اینترنت گرفته می‌شود (تا تغییرات جدید زود دیده شود) و اگر نبود از حافظه. */
-const V = "arga-v19";
+const V = "arga-v20";
 const SHELL = ["./", "index.html", "manifest.webmanifest", "images/logo-96.png", "images/logo-192.png", "images/favicon.png"];
 
 self.addEventListener("install", e => {
