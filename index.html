@@ -92,10 +92,12 @@ nav.bottom button.on svg{stroke-width:2.6}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;z-index:50;padding:16px}
 .modal.show{display:flex}
 .modal .card{background:var(--bg);width:100%;max-width:420px;border-radius:14px;overflow:hidden;max-height:92vh;overflow-y:auto}
-/* افکت نیون پایین صفحه */
-.neon-foot{text-align:center;font-size:13px;font-weight:700;padding:22px 0 8px;color:#fff3e0;text-shadow:0 0 6px #ffc070,0 0 14px #ff9a2e,0 0 28px #e0712a;animation:neonFoot 1.6s ease-in-out infinite alternate}
+/* قاب نیونی بنفش-مشکی پایین صفحه */
+.neon-foot{display:table;margin:22px auto 10px;padding:5px 18px;font-size:12px;font-weight:300;color:var(--fg);border:1px solid transparent;border-radius:20px;
+  background:linear-gradient(var(--bg),var(--bg)) padding-box,linear-gradient(120deg,#c05cff,#000,#7a2cff,#000,#c05cff) border-box;background-size:100% 100%,300% 300%;
+  box-shadow:0 0 6px rgba(176,76,255,.55),0 0 16px rgba(122,44,255,.35);animation:neonFoot 4s linear infinite}
 .neon-foot a{color:inherit}
-@keyframes neonFoot{from{text-shadow:0 0 4px #ffc070,0 0 10px #e0712a}to{text-shadow:0 0 8px #fff0c0,0 0 20px #ff9a2e,0 0 40px #e0712a,0 0 60px #b85a1e}}
+@keyframes neonFoot{from{background-position:0 0,0% 50%}to{background-position:0 0,300% 50%}}
 @media(prefers-reduced-motion:reduce){.neon-foot{animation:none}}
 .toast{position:fixed;bottom:90px;right:50%;transform:translateX(50%);background:#262626;color:#fff;padding:9px 18px;border-radius:20px;font-size:13px;opacity:0;pointer-events:none;transition:.3s;z-index:60}
 .toast.show{opacity:1}
