@@ -359,7 +359,7 @@ function render(){
      <div class="bar"><button class="heart ${favs.has(i.id)?"on":""}" data-fav="${i.id}" aria-label="پسندیدن">${heartSvg}</button><span class="sp"></span></div>
      <div class="cap"><div class="rw"><b>${i.n}</b><span class="price">${price(i.p)}</span></div>${i.d?`<div class="dsc">${i.d}</div>`:""}</div>
    </article>`).join("");
-  $("#empty").textContent=onlyFav&&!query?"چیزی رو لایک نکردی 🤍 هر نوشیدنی که دوست داری رو لایک کن تا اینجا جمع بشه":"همچین چیزی تو منو نداریم ☕ یه اسم دیگه امتحان کن";
+  $("#empty").textContent=onlyFav&&!query?"هنوز قلبی نزدی 🤍 روی نوشیدنی‌هایی که دوست داری بزن تا اینجا جمع بشن":"همچین چیزی تو منو نداریم ☕ یه اسم دیگه امتحان کن";
   $("#empty").style.display=items.length?"none":"block";
   $("#grid").style.display=view==="grid"?"grid":"none";
   $("#list").style.display=view==="list"?"block":"none";
@@ -433,7 +433,7 @@ document.addEventListener("click",e=>{
     const n=nav.dataset.nav;if(n!=="gallery")setNav(n);
     if(n==="home"||n==="all"){onlyFav=false;cat="all";query="";$("#q").value="";$("#searchBox").classList.remove("show");render();window.scrollTo({top:0,behavior:"smooth"})}
     if(n==="search"){$("#searchBox").classList.add("show");$("#q").focus()}
-    if(n==="fav"){onlyFav=true;cat="all";render();window.scrollTo({top:0,behavior:"smooth"});if(!favs.size)toast("چیزی رو لایک نکردی 🤍 هر نوشیدنی که دوست داری رو لایک کن تا اینجا جمع بشه")}
+    if(n==="fav"){onlyFav=true;cat="all";render();window.scrollTo({top:0,behavior:"smooth"});if(!favs.size)toast("هنوز قلبی نزدی 🤍 روی نوشیدنی‌هایی که دوست داری بزن تا اینجا جمع بشن")}
     if(n==="gallery")openGallery();
     if(n==="info")openInfo();
   }
