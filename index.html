@@ -194,10 +194,10 @@ nav.bottom button.on .navav{border-color:var(--fg)}
     <button class="on" data-view="grid" aria-label="نمای شبکه‌ای"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></button>
     <button data-view="list" aria-label="نمای لیستی"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="8" rx="1"/><rect x="3" y="13" width="18" height="8" rx="1"/></svg></button>
   </div>
-  <div class="search" id="searchBox"><input id="q" type="search" placeholder="جستجو در منو…"></div>
+  <div class="search" id="searchBox"><input id="q" type="search" placeholder="دنبال چی می‌گردی؟"></div>
   <div class="grid" id="grid"></div>
   <div class="list" id="list"></div>
-  <div class="empty" id="empty">آیتمی پیدا نشد 🫥</div>
+  <div class="empty" id="empty">همچین چیزی تو منو نداریم ☕ یه اسم دیگه امتحان کن</div>
   <p style="text-align:center;color:var(--mut);font-size:11.5px;padding:18px 0 4px">Made By AI: <a href="https://kurd.cc" style="color:inherit">An Idiot</a></p>
 </main>
 
@@ -354,6 +354,7 @@ function render(){
      <div class="bar"><button class="heart ${favs.has(i.id)?"on":""}" data-fav="${i.id}" aria-label="پسندیدن">${heartSvg}</button><span class="sp"></span></div>
      <div class="cap"><div class="rw"><b>${i.n}</b><span class="price">${price(i.p)}</span></div>${i.d?`<div class="dsc">${i.d}</div>`:""}</div>
    </article>`).join("");
+  $("#empty").textContent=onlyFav&&!query?"هنوز قلبی نزدی 🤍 روی نوشیدنی‌هایی که دوست داری بزن تا اینجا جمع بشن":"همچین چیزی تو منو نداریم ☕ یه اسم دیگه امتحان کن";
   $("#empty").style.display=items.length?"none":"block";
   $("#grid").style.display=view==="grid"?"grid":"none";
   $("#list").style.display=view==="list"?"block":"none";
@@ -427,7 +428,7 @@ document.addEventListener("click",e=>{
     const n=nav.dataset.nav;if(n!=="gallery")setNav(n);
     if(n==="home"||n==="all"){onlyFav=false;cat="all";query="";$("#q").value="";$("#searchBox").classList.remove("show");render();window.scrollTo({top:0,behavior:"smooth"})}
     if(n==="search"){$("#searchBox").classList.add("show");$("#q").focus()}
-    if(n==="fav"){onlyFav=true;cat="all";render();window.scrollTo({top:0,behavior:"smooth"});if(!favs.size)toast("هنوز چیزی را نپسندیده‌اید ❤️")}
+    if(n==="fav"){onlyFav=true;cat="all";render();window.scrollTo({top:0,behavior:"smooth"});if(!favs.size)toast("هنوز قلبی نزدی 🤍 روی نوشیدنی‌هایی که دوست داری بزن تا اینجا جمع بشن")}
     if(n==="gallery")openGallery();
     if(n==="info")openInfo();
   }
