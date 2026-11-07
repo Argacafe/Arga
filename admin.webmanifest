@@ -1,0 +1,19 @@
+{
+  "id": "admin",
+  "name": "مدیریت منوی ئارگا",
+  "short_name": "مدیریت ئارگا",
+  "description": "تغییر قیمت، آیتم‌ها و عکس‌های منوی کافه",
+  "lang": "fa",
+  "dir": "rtl",
+  "start_url": "admin.html",
+  "scope": "admin.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#2b2118",
+  "theme_color": "#2b2118",
+  "icons": [
+    {"src": "images/admin-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "images/admin-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+    {"src": "images/admin-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ]
+}
