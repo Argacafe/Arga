@@ -68,6 +68,10 @@ button{font:inherit;cursor:pointer}
 label.chk{display:flex;gap:8px;align-items:center;font-size:13px;margin:8px 0}
 label.chk input{width:auto}
 #err{color:var(--bad);font-size:13px;min-height:20px;margin:6px 0}
+.crop{display:block;width:280px;height:280px;margin:0 auto 10px;border:1px solid var(--line);border-radius:8px;touch-action:none;cursor:grab;background:#fff}
+.crop:active{cursor:grabbing}
+#cropDlg{max-width:340px}
+#cropDlg input[type=range]{padding:0;border:0;width:100%;margin:4px 0 10px}
 .hide{display:none!important}
 dialog{border:0;border-radius:12px;padding:16px;max-width:330px;width:90%}
 dialog::backdrop{background:rgba(0,0,0,.45)}
@@ -107,7 +111,7 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
       <h2>لوگو</h2>
       <div class="row"><img class="logo" id="logoPrev" alt="">
         <div><button class="btn sec sm" id="pickLogo">تغییر لوگو</button>
-        <label class="chk"><input type="checkbox" id="logoFit"> کامل نمایش داده شود (بدون برش)</label></div></div>
+        </div></div>
       <p class="mut" style="margin:8px 0 0">لوگوی جدید بهتر است مربع و حداقل ۵۱۲ پیکسل باشد. آیکن نصب‌شده روی گوشی‌ها بعد از حذف و نصب دوباره عوض می‌شود.</p>
       <input type="file" id="logoFile" accept="image/*" class="hide">
     </div>
@@ -126,6 +130,14 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
 
 <div class="bar hide" id="bar"><span id="cnt"></span><button class="btn" id="save" disabled>ذخیره و انتشار</button></div>
 <input type="file" id="photoFile" accept="image/*" class="hide">
+<dialog id="cropDlg">
+  <p id="cropMsg" style="margin:0 0 4px;font-size:14px">تنظیم عکس</p>
+  <p class="mut" style="margin:0 0 8px">عکس را بکشید تا جابه‌جا شود و با نوار پایین بزرگ و کوچکش کنید. هرچه داخل کادر باشد روی سایت دیده می‌شود.</p>
+  <canvas id="cropCv" class="crop"></canvas>
+  <input type="range" id="cropZoom" step="0.001" aria-label="اندازه">
+  <div class="row" style="margin-bottom:10px"><button class="btn sec sm" id="cropFill" style="flex:1">پر کردن کادر</button><button class="btn sec sm" id="cropFit" style="flex:1">نمایش کامل</button></div>
+  <div class="row"><button class="btn sec" id="cropNo" style="flex:1">انصراف</button><button class="btn" id="cropYes" style="flex:1">تأیید</button></div>
+</dialog>
 <dialog id="dlg"><p id="dlgMsg" style="margin-top:0"></p><div class="row"><button class="btn sec" id="dlgNo" style="flex:1">خیر</button><button class="btn" id="dlgYes" style="flex:1">بله</button></div></dialog>
 
 <script>
@@ -229,13 +241,56 @@ let tt;function toast(m,k){clearTimeout(tt);let t=$(".toast");if(!t){t=document.
 function ask(msg){return new Promise(r=>{$("#dlgMsg").textContent=msg;const d=$("#dlg");d.showModal();$("#dlgYes").onclick=()=>{d.close();r(true)};$("#dlgNo").onclick=()=>{d.close();r(false)}})}
 
 function loadImg(file){return new Promise(res=>{const u=URL.createObjectURL(file),im=new Image();im.onload=()=>{URL.revokeObjectURL(u);res(im)};im.onerror=()=>res(null);im.src=u})}
-function drawSquare(im,S,mode,bg,inset){
-  const c=document.createElement("canvas");c.width=c.height=S;const x=c.getContext("2d");
+const CROP={img:null,k:1,ox:0,oy:0,F:280,logo:false,pt:null};
+function cropFill(){const c=CROP,k=Math.max(c.F/c.img.width,c.F/c.img.height);setCrop(k,(c.F-c.img.width*k)/2,(c.F-c.img.height*k)/2)}
+function cropFitAll(){const c=CROP,k=Math.min(c.F/c.img.width,c.F/c.img.height);setCrop(k,(c.F-c.img.width*k)/2,(c.F-c.img.height*k)/2)}
+function setCrop(k,ox,oy){CROP.k=k;CROP.ox=ox;CROP.oy=oy;$("#cropZoom").value=k;paintPreview()}
+function paintTo(x,S,bg,inset,guide){
+  const c=CROP,A=S*(inset||1),pad=(S-A)/2;
   if(bg){x.fillStyle=bg;x.fillRect(0,0,S,S)}
-  const A=S*(inset||1),k=mode==="fit"?Math.min(A/im.width,A/im.height):Math.max(A/im.width,A/im.height),w=im.width*k,h=im.height*k;
-  x.save();x.beginPath();x.rect((S-A)/2,(S-A)/2,A,A);x.clip();x.drawImage(im,(S-w)/2,(S-h)/2,w,h);x.restore();return c;
+  x.save();x.beginPath();x.rect(pad,pad,A,A);x.clip();x.translate(pad,pad);x.scale(A/c.F,A/c.F);
+  x.drawImage(c.img,c.ox,c.oy,c.img.width*c.k,c.img.height*c.k);x.restore();
+  if(guide){x.save();x.strokeStyle="rgba(255,255,255,.95)";x.lineWidth=2;x.setLineDash([6,5]);x.beginPath();x.arc(S/2,S/2,S/2-2,0,Math.PI*2);x.stroke();
+    x.strokeStyle="rgba(0,0,0,.45)";x.lineDashOffset=5.5;x.stroke();x.restore()}
 }
-async function squareJpeg(file,mode){const im=await loadImg(file);return im?drawSquare(im,800,mode,"#fff").toDataURL("image/jpeg",.85):null}
+function paintPreview(){
+  const cv=$("#cropCv"),x=cv.getContext("2d"),d=cv.width/CROP.F;
+  x.setTransform(1,0,0,1,0,0);x.clearRect(0,0,cv.width,cv.height);
+  x.fillStyle="#fff";x.fillRect(0,0,cv.width,cv.height);
+  if(CROP.logo){x.fillStyle="#eee";for(let i=0;i<cv.width;i+=16)for(let j=0;j<cv.height;j+=16)if((i/16+j/16)%2===0)x.fillRect(i,j,16,16)}
+  paintTo(x,cv.width,null,1,CROP.logo);
+}
+function cropImage(file,logo,title){
+  return loadImg(file).then(im=>{
+    if(!im)return null;
+    const cv=$("#cropCv"),d=Math.min(window.devicePixelRatio||1,2);cv.width=CROP.F*d;cv.height=CROP.F*d;
+    CROP.img=im;CROP.logo=!!logo;$("#cropMsg").textContent=title||"تنظیم عکس";
+    const fill=Math.max(CROP.F/im.width,CROP.F/im.height),fit=Math.min(CROP.F/im.width,CROP.F/im.height),z=$("#cropZoom");
+    z.min=fit*0.5;z.max=fill*3;cropFill();
+    const dlg=$("#cropDlg");dlg.showModal();
+    return new Promise(res=>{
+      $("#cropYes").onclick=()=>{dlg.close();res({k:CROP.k,ox:CROP.ox,oy:CROP.oy,img:im})};
+      $("#cropNo").onclick=()=>{dlg.close();res(null)};
+      dlg.oncancel=()=>res(null);
+    });
+  });
+}
+function renderCrop(S,bg,inset,type,q){
+  const c=document.createElement("canvas");c.width=c.height=S;paintTo(c.getContext("2d"),S,bg,inset,false);
+  return c.toDataURL(type,q);
+}
+$("#cropFill").onclick=cropFill;$("#cropFit").onclick=cropFitAll;
+$("#cropZoom").addEventListener("input",e=>{
+  const c=CROP,k=parseFloat(e.target.value),mid=c.F/2,px=(mid-c.ox)/c.k,py=(mid-c.oy)/c.k;
+  c.k=k;c.ox=mid-px*k;c.oy=mid-py*k;paintPreview();
+});
+(function(){
+  const cv=$("#cropCv");
+  cv.addEventListener("pointerdown",e=>{cv.setPointerCapture(e.pointerId);CROP.pt={x:e.clientX,y:e.clientY,ox:CROP.ox,oy:CROP.oy}});
+  cv.addEventListener("pointermove",e=>{if(!CROP.pt)return;CROP.ox=CROP.pt.ox+(e.clientX-CROP.pt.x);CROP.oy=CROP.pt.oy+(e.clientY-CROP.pt.y);paintPreview()});
+  const end=()=>{CROP.pt=null};cv.addEventListener("pointerup",end);cv.addEventListener("pointercancel",end);
+  cv.addEventListener("wheel",e=>{e.preventDefault();const z=$("#cropZoom"),k=Math.min(+z.max,Math.max(+z.min,CROP.k*(e.deltaY<0?1.06:.94)));z.value=k;z.dispatchEvent(new Event("input"))},{passive:false});
+})();
 async function wideJpeg(file){
   const im=await loadImg(file);if(!im)return null;const k=Math.min(1,1400/Math.max(im.width,im.height)),c=document.createElement("canvas");
   c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext("2d").drawImage(im,0,0,c.width,c.height);return c.toDataURL("image/jpeg",.85);
@@ -284,9 +339,10 @@ $("#cats").addEventListener("click",async e=>{
 });
 $("#photoFile").addEventListener("change",async e=>{
   const f=e.target.files[0];e.target.value="";if(!f||!photoTarget)return;
-  const fit=await ask("عکس کامل و با حاشیه‌ی سفید نمایش داده شود؟ (در غیر این صورت وسط عکس به شکل مربع بریده می‌شود)");
-  const d=await squareJpeg(f,fit?"fit":"cover");if(!d){toast("فایل انتخاب‌شده عکس نیست.","err");return}
-  const p=newPath("item");PENDING[p]=d;photoTarget.photo=p;photoTarget=null;render();
+  const t=photoTarget;
+  const r=await cropImage(f,false,"تنظیم عکس آیتم");
+  if(r===null){toast("عکس انتخاب نشد یا فایل عکس نبود.","err");photoTarget=null;return}
+  const p=newPath("item");PENDING[p]=renderCrop(800,"#fff",1,"image/jpeg",.85);t.photo=p;photoTarget=null;render();
 });
 $("#search").addEventListener("input",render);
 $("#addCat").onclick=()=>{
@@ -321,10 +377,10 @@ $("#infoView").addEventListener("input",e=>{
 $("#pickLogo").onclick=()=>$("#logoFile").click();
 $("#logoFile").addEventListener("change",async e=>{
   const f=e.target.files[0];e.target.value="";if(!f)return;
-  const im=await loadImg(f);if(!im){toast("فایل انتخاب‌شده عکس نیست.","err");return}
-  const mode=$("#logoFit").checked?"fit":"cover";
-  for(const l of LOGOS)PENDING[l[0]]=drawSquare(im,l[1],mode,null,1).toDataURL("image/png");
-  for(const l of MASKABLE)PENDING[l[0]]=drawSquare(im,l[1],"fit","#2b2118",.74).toDataURL("image/png");
+  const r=await cropImage(f,true,"تنظیم لوگو");
+  if(r===null){toast("لوگو انتخاب نشد یا فایل عکس نبود.","err");return}
+  for(const l of LOGOS)PENDING[l[0]]=renderCrop(l[1],null,1,"image/png");
+  for(const l of MASKABLE)PENDING[l[0]]=renderCrop(l[1],"#2b2118",.74,"image/png");
   LOGOVER++;renderInfo();
 });
 
