@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#2b2118">
+<title>مدیریت منو – کافه ئارگا</title>
+<link rel="icon" href="images/favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#faf6f0;--card:#fff;--ink:#2b2118;--mut:#8a7a6a;--line:#eadfce;--acc:#8a5a3b;--acc2:#b9855f;--ok:#2f8f5b;--bad:#c0392b}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 Vazirmatn,Tahoma,sans-serif;padding-bottom:96px}
+header{background:#2b2118;color:#f6e9d7;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:5}
+header h1{font-size:17px;margin:0;font-weight:800}
+header button{background:none;border:1px solid #6b5846;color:#e9d9c3;border-radius:8px;padding:4px 10px;font:inherit;font-size:13px}
+main{max-width:640px;margin:0 auto;padding:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px}
+h2{font-size:16px;margin:0 0 8px}
+p{margin:6px 0}
+.mut{color:var(--mut);font-size:13px}
+ol{padding-inline-start:20px;margin:8px 0}
+li{margin:4px 0}
+input,textarea{font:inherit;color:inherit;background:#fff;border:1px solid var(--line);border-radius:10px;padding:9px 10px;width:100%}
+input:focus{outline:2px solid var(--acc2);border-color:transparent}
+button{font:inherit;cursor:pointer}
+.btn{background:var(--acc);color:#fff;border:0;border-radius:10px;padding:10px 16px;font-weight:600}
+.btn.sec{background:#efe4d3;color:var(--ink)}
+.btn.bad{background:#fbe9e6;color:var(--bad)}
+.btn:disabled{opacity:.45}
+.tabs{display:flex;gap:8px;margin-bottom:12px}
+.tabs button{flex:1;padding:10px;border-radius:10px;border:1px solid var(--line);background:#fff;font-weight:600}
+.tabs button.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.cat>summary{list-style:none;display:flex;align-items:center;gap:8px;font-weight:800;cursor:pointer;padding:2px 0}
+.cat>summary::-webkit-details-marker{display:none}
+.cat>summary .n{margin-inline-start:auto;font-weight:400;color:var(--mut);font-size:13px}
+.cat>summary::after{content:"▾";color:var(--mut)}
+.cat[open]>summary::after{content:"▴"}
+.it{border-top:1px solid var(--line);padding:10px 0}
+.row{display:flex;gap:8px;align-items:center}
+.th{width:52px;height:52px;border-radius:12px;background:#f3e9da;flex:none;display:grid;place-items:center;font-size:24px;overflow:hidden;border:1px solid var(--line);padding:0;position:relative}
+.th img{width:100%;height:100%;object-fit:cover}
+.th i{position:absolute;bottom:0;inset-inline:0;background:rgba(43,33,24,.65);color:#fff;font-size:10px;font-style:normal;text-align:center;line-height:14px}
+.pr{width:96px;flex:none;text-align:center;direction:ltr}
+.unit{font-size:11px;color:var(--mut);flex:none}
+.more{background:none;border:0;font-size:20px;color:var(--mut);padding:0 4px;flex:none}
+.det{margin-top:10px;display:grid;gap:8px}
+.det .row>*{flex:1}
+.det .row button{flex:none}
+.sm{padding:7px 11px;font-size:13px}
+.add{width:100%;margin-top:6px;background:#f6efe4;border:1px dashed var(--acc2);color:var(--acc);border-radius:10px;padding:9px;font-weight:600}
+.bar{position:fixed;inset-inline:0;bottom:0;background:#fff;border-top:1px solid var(--line);padding:10px 14px calc(10px + env(safe-area-inset-bottom));display:flex;gap:10px;align-items:center;z-index:6}
+.bar .btn{flex:1;padding:13px}
+.bar span{font-size:13px;color:var(--mut)}
+.gal{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.gal div{position:relative;aspect-ratio:1;border-radius:10px;overflow:hidden;border:1px solid var(--line)}
+.gal img{width:100%;height:100%;object-fit:cover}
+.gal button{position:absolute;top:4px;inset-inline-start:4px;background:rgba(0,0,0,.6);color:#fff;border:0;border-radius:50%;width:26px;height:26px;line-height:26px;padding:0}
+.toast{position:fixed;inset-inline:14px;bottom:84px;background:#2b2118;color:#fff;padding:12px 14px;border-radius:12px;z-index:9;text-align:center;font-size:14px}
+.toast.ok{background:var(--ok)}.toast.err{background:var(--bad)}
+.lbl{font-size:12px;color:var(--mut);margin-bottom:2px}
+label.chk{display:flex;gap:8px;align-items:center;font-size:13px}
+label.chk input{width:auto}
+#err{color:var(--bad);font-size:13px;white-space:pre-wrap}
+.hide{display:none!important}
+dialog{border:0;border-radius:14px;padding:16px;max-width:340px;width:90%}
+dialog::backdrop{background:rgba(0,0,0,.45)}
+</style>
+</head>
+<body>
+<header><h1>☕ مدیریت منوی ئارگا</h1><button id="logout" class="hide">خروج</button></header>
+<main>
+
+<section id="login" class="hide">
+  <div class="card">
+    <h2>ورود (فقط بار اول)</h2>
+    <p class="mut">برای اینکه این صفحه بتونه منو رو تغییر بده، یه «کلید دسترسی» از GitHub لازمه. فقط یک‌بار می‌سازی و روی همین گوشی یا کامپیوتر ذخیره میشه.</p>
+    <ol>
+      <li>وارد github.com بشو (با اکانت صاحب سایت) و برو به <b>Settings</b> ← <b>Developer settings</b> ← <b>Personal access tokens</b> ← <b>Fine-grained tokens</b> ← <b>Generate new token</b>.</li>
+      <li>اسم: <b>menu</b> — مدت اعتبار (Expiration): بیشترین مقدار.</li>
+      <li><b>Repository access</b> ← <b>Only select repositories</b> ← فقط <b>Arga</b> رو انتخاب کن.</li>
+      <li><b>Permissions</b> ← <b>Repository permissions</b> ← <b>Contents</b> رو روی <b>Read and write</b> بذار.</li>
+      <li>دکمهٔ <b>Generate token</b> رو بزن و کلید (که با <code>github_pat_</code> شروع میشه) رو اینجا بچسبون.</li>
+    </ol>
+    <input id="tok" type="password" dir="ltr" placeholder="github_pat_..." autocomplete="off">
+    <p id="err"></p>
+    <button id="go" class="btn" style="width:100%;margin-top:8px">ورود</button>
+    <p class="mut">⚠️ این کلید مثل رمز عبوره؛ به کسی نده. اگه گم شد یا لو رفت، از همون صفحهٔ GitHub پاکش کن و یکی جدید بساز.</p>
+  </div>
+</section>
+
+<section id="app" class="hide">
+  <div class="tabs"><button id="tabMenu" class="on">منو</button><button id="tabGal">گالری</button></div>
+  <div id="menuView">
+    <input id="search" placeholder="🔍 جستجوی آیتم..." style="margin-bottom:12px">
+    <div id="cats"></div>
+  </div>
+  <div id="galView" class="hide">
+    <div class="card"><h2>عکس‌های گالری</h2><div class="gal" id="gal"></div>
+      <button class="add" id="addGal">＋ افزودن عکس به گالری</button>
+      <input type="file" id="galFile" accept="image/*" multiple class="hide"></div>
+  </div>
+</section>
+</main>
+
+<div class="bar hide" id="bar"><span id="cnt"></span><button class="btn" id="save" disabled>ذخیره و انتشار</button></div>
+<input type="file" id="photoFile" accept="image/*" class="hide">
+<dialog id="dlg"><p id="dlgMsg"></p><div class="row" style="margin-top:12px"><button class="btn sec" id="dlgNo" style="flex:1">نه</button><button class="btn" id="dlgYes" style="flex:1">بله</button></div></dialog>
+
+<script>
+"use strict";
+const OWNER="werya1992w",REPO="Arga",BR="gh-pages";
+const API=`https://api.github.com/repos/${OWNER}/${REPO}`;
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const clean=s=>String(s).replace(/[<>]/g,"");
+const enDigits=s=>String(s).replace(/[۰-۹]/g,d=>"۰۱۲۳۴۵۶۷۸۹".indexOf(d)).replace(/[٠-٩]/g,d=>"٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/٫/g,".");
+const fa=n=>String(n).replace(/\d/g,d=>"۰۱۲۳۴۵۶۷۸۹"[d]);
+
+let TOKEN="";try{TOKEN=localStorage.getItem("arga_admin_token")||""}catch(e){}
+let SRC="",SW="",HEAD="";             // متن فایل‌ها و آخرین کامیت
+let CATS=[],GALLERY=[],EXTRA_LOCAL={};  // داده‌ی قابل ویرایش
+let PENDING={};                        // عکس‌های جدید که هنوز آپلود نشده‌اند (مسیر ← dataURL)
+let BASE="";                           // وضعیت سریالایز شده‌ی اولیه برای تشخیص تغییر
+let photoTarget=null;
+
+/* ---------- GitHub ---------- */
+async function gh(path,opt={}){
+  const r=await fetch(API+path,{cache:"no-store",...opt,headers:{Authorization:"Bearer "+TOKEN,Accept:"application/vnd.github+json","X-GitHub-Api-Version":"2022-11-28",...(opt.headers||{})}});
+  if(!r.ok){const t=await r.text();const e=new Error(r.status+" "+t.slice(0,160));e.status=r.status;throw e}
+  return r;
+}
+const getText=async p=>(await gh(`/contents/${p}?ref=${BR}`,{headers:{Accept:"application/vnd.github.raw+json"}})).text();
+const post=(p,b)=>gh(p,{method:"POST",body:JSON.stringify(b)}).then(r=>r.json());
+
+/* ---------- خواندن و نوشتن داده ---------- */
+function parse(src){
+  const m=src.match(/const MENU=(\[[\s\S]*?\n\]);/),l=src.match(/const LOCAL=(\{.*\});/),g=src.match(/const GALLERY=(\[.*?\]);/);
+  if(!m||!l||!g)throw new Error("ساختار فایل index.html عوض شده و این صفحه نمی‌تونه بخونتش.");
+  const menu=new Function("return "+m[1])(),local=new Function("return "+l[1])();
+  GALLERY=new Function("return "+g[1])();
+  const names=new Set();
+  CATS=menu.map(c=>({id:c.id,t:c.t,e:c.e,g:c.g,items:c.items.map(([n,p,d,e])=>{names.add(n);return{n,p,d:d||"",e:e||"",photo:local[n]||""}})}));
+  EXTRA_LOCAL={};for(const k in local)if(!names.has(k))EXTRA_LOCAL[k]=local[k];
+}
+const q=s=>JSON.stringify(s);
+function serMenu(){
+  return "const MENU=[\n"+CATS.map(c=>` {id:${q(c.id)},t:${q(c.t)},e:${q(c.e)},g:[${c.g.map(q).join(", ")}],items:[\n`+
+    c.items.map(i=>"  ["+[q(i.n),i.p,q(i.d)].concat(i.e?[q(i.e)]:[]).join(", ")+"]").join(",\n")+"]}").join(",\n")+"\n];";
+}
+function serLocal(){
+  const o={};CATS.forEach(c=>c.items.forEach(i=>{if(i.photo)o[i.n]=i.photo}));
+  for(const k in EXTRA_LOCAL)if(!(k in o))o[k]=EXTRA_LOCAL[k];
+  return "const LOCAL="+JSON.stringify(o)+";";
+}
+const serGal=()=>"const GALLERY="+JSON.stringify(GALLERY)+";";
+const state=()=>serMenu()+serLocal()+serGal()+Object.keys(PENDING).join();
+const dirty=()=>state()!==BASE;
+
+/* ---------- نمایش ---------- */
+const src_=p=>PENDING[p]||p;
+function render(){
+  const f=$("#search").value.trim();
+  $("#cats").innerHTML=CATS.map((c,ci)=>{
+    const items=c.items.map((i,ii)=>({i,ii})).filter(({i})=>!f||(i.n+i.d).includes(f));
+    if(f&&!items.length)return"";
+    return `<details class="card cat" ${f||c._open?"open":""} data-c="${ci}"><summary><span>${esc(c.e)}</span><span>${esc(c.t)}</span><span class="n">${fa(c.items.length)} آیتم</span></summary>
+    ${items.map(({i,ii})=>itemHtml(ci,ii,i)).join("")}
+    <button class="add" data-add="${ci}">＋ آیتم جدید در «${esc(c.t)}»</button></details>`}).join("");
+  bar();
+}
+function itemHtml(ci,ii,i){
+  const c=CATS[ci];
+  return `<div class="it" data-c="${ci}" data-i="${ii}">
+   <div class="row">
+     <button class="th" data-photo title="تغییر عکس">${i.photo?`<img src="${esc(src_(i.photo))}" alt=""><i>تغییر</i>`:esc(i.e||c.e)}</button>
+     <input data-f="n" value="${esc(i.n)}" placeholder="اسم">
+     <input data-f="p" class="pr" inputmode="decimal" value="${esc(i.p)}"><span class="unit">هزار<br>تومان</span>
+     <button class="more" data-more>${i._open?"▴":"⋯"}</button>
+   </div>
+   ${i._open?`<div class="det">
+     <div><div class="lbl">توضیحات (اختیاری)</div><input data-f="d" value="${esc(i.d)}" placeholder="مثلاً: اسپرسو، شیر، یخ"></div>
+     <div class="row"><div><div class="lbl">ایموجی (اختیاری)</div><input data-f="e" value="${esc(i.e)}" placeholder="${esc(c.e)}"></div></div>
+     <div class="row">
+       <button class="btn sec sm" data-up>▲ بالا</button><button class="btn sec sm" data-down>▼ پایین</button>
+       ${i.photo?`<button class="btn sec sm" data-rmphoto>حذف عکس</button>`:""}
+       <button class="btn bad sm" data-del>🗑 حذف آیتم</button>
+     </div></div>`:""}
+  </div>`;
+}
+function bar(){
+  const d=dirty();$("#save").disabled=!d;
+  $("#cnt").textContent=d?"تغییرات ذخیره نشده":"همه‌چیز ذخیره‌ست";
+}
+function renderGal(){
+  $("#gal").innerHTML=GALLERY.map((p,i)=>`<div><img src="${esc(src_(p))}" alt=""><button data-g="${i}" aria-label="حذف">✕</button></div>`).join("")||`<p class="mut" style="grid-column:1/-1">هنوز عکسی نیست.</p>`;
+  bar();
+}
+let tt;function toast(m,k=""){clearTimeout(tt);let t=$(".toast");if(!t){t=document.createElement("div");document.body.appendChild(t)}t.className="toast "+k;t.textContent=m;tt=setTimeout(()=>t.remove(),k==="err"?7000:4000)}
+function ask(msg){return new Promise(r=>{$("#dlgMsg").textContent=msg;const d=$("#dlg");d.showModal();$("#dlgYes").onclick=()=>{d.close();r(true)};$("#dlgNo").onclick=()=>{d.close();r(false)}})}
+
+/* ---------- عکس ---------- */
+function loadImg(file){return new Promise(res=>{const u=URL.createObjectURL(file),im=new Image();im.onload=()=>{URL.revokeObjectURL(u);res(im)};im.onerror=()=>res(null);im.src=u})}
+async function squareJpeg(file,mode){
+  const im=await loadImg(file);if(!im)return null;const S=800,c=document.createElement("canvas");c.width=c.height=S;
+  const x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,S,S);
+  const s=mode==="fit"?Math.min(S/im.width,S/im.height):Math.max(S/im.width,S/im.height),w=im.width*s,h=im.height*s;
+  x.drawImage(im,(S-w)/2,(S-h)/2,w,h);return c.toDataURL("image/jpeg",.85);
+}
+async function wideJpeg(file){
+  const im=await loadImg(file);if(!im)return null;const M=1400,s=Math.min(1,M/Math.max(im.width,im.height)),c=document.createElement("canvas");
+  c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);c.getContext("2d").drawImage(im,0,0,c.width,c.height);return c.toDataURL("image/jpeg",.85);
+}
+const newPath=p=>`images/${p}-${Date.now().toString(36)}${Math.random().toString(36).slice(2,5)}.jpg`;
+
+/* ---------- رویدادها ---------- */
+$("#cats").addEventListener("input",e=>{
+  const row=e.target.closest(".it");if(!row||!e.target.dataset.f)return;
+  const i=CATS[+row.dataset.c].items[+row.dataset.i],f=e.target.dataset.f;
+  if(f==="p"){const v=parseFloat(enDigits(e.target.value));i.p=isNaN(v)?"":v}
+  else i[f]=clean(e.target.value);
+  bar();
+});
+$("#cats").addEventListener("toggle",e=>{const d=e.target.closest(".cat");if(d)CATS[+d.dataset.c]._open=d.open},true);
+$("#cats").addEventListener("click",async e=>{
+  const b=e.target.closest("button");if(!b)return;
+  if(b.dataset.add!==undefined){const c=CATS[+b.dataset.add];c._open=true;c.items.push({n:"",p:"",d:"",e:"",photo:"",_open:true});render();
+    const ins=document.querySelectorAll(`.it[data-c="${b.dataset.add}"] input[data-f="n"]`);ins[ins.length-1]?.focus();return}
+  const row=b.closest(".it");if(!row)return;
+  const c=CATS[+row.dataset.c],idx=+row.dataset.i,i=c.items[idx];
+  if(b.hasAttribute("data-more")){i._open=!i._open;render()}
+  else if(b.hasAttribute("data-photo")){photoTarget=i;$("#photoFile").click()}
+  else if(b.hasAttribute("data-rmphoto")){i.photo="";render()}
+  else if(b.hasAttribute("data-up")&&idx>0){[c.items[idx-1],c.items[idx]]=[c.items[idx],c.items[idx-1]];render()}
+  else if(b.hasAttribute("data-down")&&idx<c.items.length-1){[c.items[idx+1],c.items[idx]]=[c.items[idx],c.items[idx+1]];render()}
+  else if(b.hasAttribute("data-del")){if(await ask(`«${i.n||"آیتم بدون اسم"}» حذف بشه؟`)){c.items.splice(idx,1);render()}}
+});
+$("#photoFile").addEventListener("change",async e=>{
+  const f=e.target.files[0];e.target.value="";if(!f||!photoTarget)return;
+  const fit=await ask("عکس کامل و بدون برش نمایش داده بشه (با حاشیهٔ سفید)؟\n«نه» = وسطش به‌صورت مربع بریده میشه.");
+  const d=await squareJpeg(f,fit?"fit":"cover");if(!d){toast("این فایل عکس نیست","err");return}
+  const p=newPath("item");PENDING[p]=d;photoTarget.photo=p;photoTarget=null;render();
+});
+$("#search").addEventListener("input",render);
+$("#tabMenu").onclick=()=>tab(true);$("#tabGal").onclick=()=>tab(false);
+function tab(m){$("#tabMenu").classList.toggle("on",m);$("#tabGal").classList.toggle("on",!m);$("#menuView").classList.toggle("hide",!m);$("#galView").classList.toggle("hide",m);if(!m)renderGal()}
+$("#addGal").onclick=()=>$("#galFile").click();
+$("#galFile").addEventListener("change",async e=>{
+  for(const f of e.target.files){const d=await wideJpeg(f);if(d){const p=newPath("gallery");PENDING[p]=d;GALLERY.push(p)}}
+  e.target.value="";renderGal();
+});
+$("#gal").addEventListener("click",async e=>{const b=e.target.closest("button");if(!b)return;if(await ask("این عکس از گالری حذف بشه؟")){GALLERY.splice(+b.dataset.g,1);renderGal()}});
+window.addEventListener("beforeunload",e=>{if(TOKEN&&CATS.length&&dirty()){e.preventDefault();e.returnValue=""}});
+
+/* ---------- ذخیره ---------- */
+function validate(){
+  const seen=new Set();
+  for(const c of CATS)for(const i of c.items){
+    i.n=i.n.trim();i.d=i.d.trim();i.e=i.e.trim();
+    if(!i.n)return"یکی از آیتم‌ها اسم نداره.";
+    if(seen.has(i.n))return`اسم «${i.n}» دوبار تکرار شده؛ اسم‌ها باید فرق داشته باشن.`;seen.add(i.n);
+    if(typeof i.p!=="number"||!(i.p>=0))return`قیمت «${i.n}» درست نیست.`;
+  }
+}
+$("#save").onclick=async()=>{
+  const bad=validate();if(bad){toast(bad,"err");render();return}
+  const btn=$("#save");btn.disabled=true;btn.textContent="در حال ذخیره...";
+  try{
+    const ref=await gh(`/git/ref/heads/${BR}`).then(r=>r.json());
+    if(ref.object.sha!==HEAD){toast("در این فاصله سایت جای دیگه‌ای تغییر کرده. صفحه رو دوباره باز کن (تغییراتت از دست میره).","err");return}
+    const baseCommit=await gh(`/git/commits/${HEAD}`).then(r=>r.json());
+    let out=SRC.replace(/const MENU=\[[\s\S]*?\n\];/,()=>serMenu()).replace(/const LOCAL=\{.*\};/,()=>serLocal()).replace(/const GALLERY=\[.*?\];/,()=>serGal());
+    const used=new Set([...GALLERY,...CATS.flatMap(c=>c.items.map(i=>i.photo))]);
+    const tree=[];
+    for(const p of Object.keys(PENDING)){if(!used.has(p))continue;
+      const b=await post("/git/blobs",{content:PENDING[p].split(",")[1],encoding:"base64"});tree.push({path:p,mode:"100644",type:"blob",sha:b.sha})}
+    const bi=await post("/git/blobs",{content:out,encoding:"utf-8"});tree.push({path:"index.html",mode:"100644",type:"blob",sha:bi.sha});
+    const sw=SW.replace(/const V = "arga-v(\d+)"/,(m,n)=>`const V = "arga-v${+n+1}"`);
+    if(sw!==SW){const bs=await post("/git/blobs",{content:sw,encoding:"utf-8"});tree.push({path:"sw.js",mode:"100644",type:"blob",sha:bs.sha})}
+    const nt=await post("/git/trees",{base_tree:baseCommit.tree.sha,tree});
+    const nc=await post("/git/commits",{message:"Update menu from admin panel",tree:nt.sha,parents:[HEAD]});
+    await gh(`/git/refs/heads/${BR}`,{method:"PATCH",body:JSON.stringify({sha:nc.sha})});
+    HEAD=nc.sha;SRC=out;SW=sw;PENDING_SAVED();
+    toast("ذخیره شد ✅ تا ۱–۲ دقیقه دیگه روی سایت میاد.","ok");
+  }catch(err){
+    toast(err.status===401||err.status===403||err.status===404?"دسترسی کلید مشکل داره (منقضی شده یا Contents روی Read and write نیست). خروج بزن و کلید جدید بساز.":"ذخیره نشد: "+err.message,"err");
+  }finally{btn.textContent="ذخیره و انتشار";bar()}
+};
+function PENDING_SAVED(){PENDING={};BASE=state()}
+
+/* ---------- شروع ---------- */
+async function load(){
+  $("#login").classList.add("hide");$("#app").classList.add("hide");$("#bar").classList.add("hide");
+  const repo=await gh("").then(r=>r.json());
+  if(!repo.permissions||!repo.permissions.push)throw Object.assign(new Error("این کلید اجازهٔ نوشتن روی ریپو رو نداره."),{status:403});
+  [SRC,SW]=await Promise.all([getText("index.html"),getText("sw.js")]);
+  HEAD=(await gh(`/git/ref/heads/${BR}`).then(r=>r.json())).object.sha;
+  parse(SRC);BASE=state();
+  CATS[0]._open=true;
+  $("#app").classList.remove("hide");$("#bar").classList.remove("hide");$("#logout").classList.remove("hide");
+  render();
+}
+function showLogin(msg){$("#err").textContent=msg||"";$("#login").classList.remove("hide");$("#logout").classList.add("hide");$("#app").classList.add("hide");$("#bar").classList.add("hide")}
+$("#go").onclick=async()=>{
+  const t=$("#tok").value.trim();if(!t){$("#err").textContent="کلید رو بچسبون.";return}
+  TOKEN=t;$("#go").disabled=true;$("#go").textContent="در حال بررسی...";
+  try{await load();try{localStorage.setItem("arga_admin_token",TOKEN)}catch(e){}$("#tok").value=""}
+  catch(e){TOKEN="";showLogin(e.status===401?"کلید اشتباهه یا منقضی شده.":e.status===404?"کلید به ریپوی Arga دسترسی نداره (Only select repositories ← Arga).":e.message)}
+  finally{$("#go").disabled=false;$("#go").textContent="ورود"}
+};
+$("#logout").onclick=async()=>{if(dirty()&&!(await ask("تغییرات ذخیره‌نشده از بین میره. خارج بشی؟")))return;try{localStorage.removeItem("arga_admin_token")}catch(e){}TOKEN="";CATS=[];showLogin()};
+if(TOKEN)load().catch(e=>{if(e.status===401||e.status===403||e.status===404){try{localStorage.removeItem("arga_admin_token")}catch(_){}TOKEN="";showLogin("کلید قبلی دیگه کار نمی‌کنه؛ کلید جدید بچسبون.")}else{showLogin("اتصال برقرار نشد: "+e.message)}});
+else showLogin();
+</script>
+</body>
+</html>
