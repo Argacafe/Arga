@@ -140,7 +140,7 @@ const fa=n=>String(n).replace(/\d/g,d=>"۰۱۲۳۴۵۶۷۸۹"[d]);
 
 let TOKEN="";try{TOKEN=localStorage.getItem("arga_admin_token")||""}catch(e){}
 let SRC="",SW="",HEAD="";
-let CATS=[],GALLERY=[],INFO={},EXTRA_LOCAL={};
+let CATS=[],GALLERY=[],INFO={},ORIG={},EXTRA_LOCAL={};
 let PENDING={},LOGOVER=0;
 let BASE="",photoTarget=null;
 
@@ -339,9 +339,10 @@ function normalizeInfo(){
 function validate(){
   normalizeInfo();
   if(!INFO.name)return"نام کافه خالی است.";
-  if(INFO.map&&!/^https?:\/\//i.test(INFO.map))return"لینک نقشه باید با https:// شروع شود.";
-  if(INFO.phone&&!/^\+?[\d\s\-]{7,}$/.test(INFO.phone))return"شماره تلفن درست نیست.";
-  if(!/^[A-Za-z0-9._]+$/.test(INFO.instagram))return"آیدی اینستاگرام درست نیست.";
+  const changed=k=>INFO[k]!==ORIG[k];
+  if(changed("map")&&INFO.map&&!/^https?:\/\//i.test(INFO.map))return"لینک نقشه باید با https:// شروع شود.";
+  if(changed("phone")&&INFO.phone&&INFO.phone.replace(/\D/g,"").length<5)return"شماره تلفن کوتاه است.";
+  if(changed("instagram")&&!/^[A-Za-z0-9._]+$/.test(INFO.instagram))return"آیدی اینستاگرام درست نیست.";
   for(const c of CATS){
     c.t=c.t.trim();c.e=c.e.trim()||"🍽️";
     if(!c.t)return"یکی از دسته‌ها نام ندارد.";
@@ -379,7 +380,7 @@ $("#save").onclick=async()=>{
     const nt=await post("/git/trees",{base_tree:base.tree.sha,tree:tree});
     const nc=await post("/git/commits",{message:"Update menu and cafe info",tree:nt.sha,parents:[HEAD]});
     await gh("/git/refs/heads/"+BR,{method:"PATCH",body:JSON.stringify({sha:nc.sha})});
-    HEAD=nc.sha;SRC=out;SW=sw;PENDING={};BASE=state();
+    HEAD=nc.sha;SRC=out;SW=sw;PENDING={};ORIG=Object.assign({},INFO);BASE=state();
     toast("ذخیره شد. تا یکی دو دقیقه‌ی دیگر روی سایت دیده می‌شود.","ok");
   }catch(err){
     toast(err.status===401||err.status===403||err.status===404?"دسترسی کلید کافی نیست یا منقضی شده است. خارج شوید و کلید جدید وارد کنید.":"ذخیره نشد: "+err.message,"err");
@@ -391,7 +392,7 @@ async function load(){
   if(!repo.permissions||!repo.permissions.push){const e=new Error("این کلید اجازه‌ی نوشتن روی مخزن را ندارد.");e.status=403;throw e}
   const files=await Promise.all([getText("index.html"),getText("sw.js")]);SRC=files[0];SW=files[1];
   HEAD=(await gh("/git/ref/heads/"+BR).then(r=>r.json())).object.sha;
-  parse(SRC);BASE=state();CATS[0]._open=true;
+  parse(SRC);ORIG=Object.assign({},INFO);BASE=state();CATS[0]._open=true;
   $("#login").classList.add("hide");
   $("#app").classList.remove("hide");$("#bar").classList.remove("hide");$("#logout").classList.remove("hide");
   tab("menu");render();
