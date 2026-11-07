@@ -116,6 +116,13 @@ nav.bottom button.on svg{stroke-width:2.6}
 @media(prefers-reduced-motion:reduce){.cd,.ice-glow,.ice-flash{animation:none}.ice-glow{opacity:.8}.ice-flash{display:none}}
 .toast{position:fixed;bottom:90px;right:50%;transform:translateX(50%);background:#262626;color:#fff;padding:9px 18px;border-radius:20px;font-size:13px;opacity:0;pointer-events:none;transition:.3s;z-index:60}
 .toast.show{opacity:1}
+.inst{position:fixed;right:50%;bottom:calc(84px + env(safe-area-inset-bottom));transform:translate(50%,30px);width:calc(100% - 24px);max-width:520px;background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.22);padding:12px;display:flex;align-items:center;gap:12px;z-index:70;opacity:0;pointer-events:none;transition:opacity .3s,transform .3s}
+.inst.show{opacity:1;transform:translate(50%,0);pointer-events:auto}
+.inst img{width:46px;height:46px;border-radius:50%;flex:none}
+.inst .tx{flex:1;min-width:0;line-height:1.5}.inst b{display:block;font-size:14px}.inst span{font-size:12px;color:var(--mut)}
+.inst button{font:inherit;font-size:13px;border-radius:10px;padding:7px 14px;border:0;flex:none}
+.inst .go{background:var(--accent);color:#fff;font-weight:700}.inst .no{background:none;color:var(--mut);padding:7px 8px}
+@media(prefers-reduced-motion:reduce){.inst{transition:none}}
 .info{padding:16px;line-height:2;font-size:14px}
 .info h2{font-size:16px;margin:8px 0}
 .info .row{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--line)}
@@ -231,6 +238,7 @@ nav.bottom button.on .navav{border-color:var(--fg)}
 
 <div class="modal" id="modal"><div class="card" id="card"></div></div>
 <div class="gal-view" id="galView"><button data-closeGal>✕</button><img id="galImg" alt=""></div>
+<div class="inst" id="inst" role="dialog" aria-label="نصب اپلیکیشن"><img src="images/logo-96.png" alt=""><div class="tx"><b>نصب اپلیکیشن</b><span>منو را مستقیم از صفحه‌ی گوشی‌تان باز کنید.</span></div><button class="go" id="instGo">نصب</button><button class="no" id="instNo">بعداً</button></div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -654,6 +662,22 @@ $("#btnShare").onclick=async()=>{
   btn.addEventListener("pointermove",e=>{if(active&&Math.hypot(e.clientX-sx,e.clientY-sy)>14)stop()});
   ["pointerup","pointercancel","pointerleave"].forEach(ev=>btn.addEventListener(ev,stop));
   btn.addEventListener("contextmenu",e=>e.preventDefault());
+})();
+(function(){
+  if(INSTALLED)return;
+  const ua=navigator.userAgent,ios=/iphone|ipad|ipod/i.test(ua),android=/android/i.test(ua);
+  if(!ios&&!android)return;
+  if(ios&&/crios|fxios|edgios|instagram|fban|fbav|line\//i.test(ua))return;
+  try{if(localStorage.getItem("arga_install_seen"))return}catch(e){}
+  const box=document.getElementById("inst");
+  const done=()=>{box.classList.remove("show");try{localStorage.setItem("arga_install_seen","1")}catch(e){}};
+  document.getElementById("instNo").onclick=done;
+  document.getElementById("instGo").onclick=()=>{done();installApp()};
+  const show=()=>{if(!INSTALLED)box.classList.add("show")};
+  setTimeout(()=>{
+    if(ios||deferredPrompt)show();
+    else addEventListener("beforeinstallprompt",()=>setTimeout(show,300),{once:true});
+  },3000);
 })();
 render();
 </script>
