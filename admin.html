@@ -129,13 +129,12 @@ const enDigits=s=>String(s).replace(/[۰-۹]/g,d=>"۰۱۲۳۴۵۶۷۸۹".indexOf
 const fa=n=>String(n).replace(/\d/g,d=>"۰۱۲۳۴۵۶۷۸۹"[d]);
 
 let TOKEN="";try{TOKEN=localStorage.getItem("arga_admin_token")||""}catch(e){}
-let SRC="",SW="",HEAD="";             // متن فایل‌ها و آخرین کامیت
-let CATS=[],GALLERY=[],EXTRA_LOCAL={};  // داده‌ی قابل ویرایش
-let PENDING={};                        // عکس‌های جدید که هنوز آپلود نشده‌اند (مسیر ← dataURL)
-let BASE="";                           // وضعیت سریالایز شده‌ی اولیه برای تشخیص تغییر
+let SRC="",SW="",HEAD="";
+let CATS=[],GALLERY=[],EXTRA_LOCAL={};
+let PENDING={};
+let BASE="";
 let photoTarget=null;
 
-/* ---------- GitHub ---------- */
 async function gh(path,opt={}){
   const r=await fetch(API+path,{cache:"no-store",...opt,headers:{Authorization:"Bearer "+TOKEN,Accept:"application/vnd.github+json","X-GitHub-Api-Version":"2022-11-28",...(opt.headers||{})}});
   if(!r.ok){const t=await r.text();const e=new Error(r.status+" "+t.slice(0,160));e.status=r.status;throw e}
@@ -144,7 +143,6 @@ async function gh(path,opt={}){
 const getText=async p=>(await gh(`/contents/${p}?ref=${BR}`,{headers:{Accept:"application/vnd.github.raw+json"}})).text();
 const post=(p,b)=>gh(p,{method:"POST",body:JSON.stringify(b)}).then(r=>r.json());
 
-/* ---------- خواندن و نوشتن داده ---------- */
 function parse(src){
   const m=src.match(/const MENU=(\[[\s\S]*?\n\]);/),l=src.match(/const LOCAL=(\{.*\});/),g=src.match(/const GALLERY=(\[.*?\]);/);
   if(!m||!l||!g)throw new Error("ساختار فایل index.html عوض شده و این صفحه نمی‌تونه بخونتش.");
@@ -168,7 +166,6 @@ const serGal=()=>"const GALLERY="+JSON.stringify(GALLERY)+";";
 const state=()=>serMenu()+serLocal()+serGal()+Object.keys(PENDING).join();
 const dirty=()=>state()!==BASE;
 
-/* ---------- نمایش ---------- */
 const PAL=[["#3b2316","#9a6a47"],["#a9794f","#f0d3a8"],["#d6456f","#f8a5b8"],["#1f8fb3","#7fe0d4"],["#c9702a","#f6c27a"],["#5b8f3a","#d6e59a"],["#6b4aa0","#c9b3ee"],["#7a6a5a","#d9cbb8"]];
 const src_=p=>PENDING[p]||p;
 function render(){
@@ -219,7 +216,6 @@ function renderGal(){
 let tt;function toast(m,k=""){clearTimeout(tt);let t=$(".toast");if(!t){t=document.createElement("div");document.body.appendChild(t)}t.className="toast "+k;t.textContent=m;tt=setTimeout(()=>t.remove(),k==="err"?7000:4000)}
 function ask(msg){return new Promise(r=>{$("#dlgMsg").textContent=msg;const d=$("#dlg");d.showModal();$("#dlgYes").onclick=()=>{d.close();r(true)};$("#dlgNo").onclick=()=>{d.close();r(false)}})}
 
-/* ---------- عکس ---------- */
 function loadImg(file){return new Promise(res=>{const u=URL.createObjectURL(file),im=new Image();im.onload=()=>{URL.revokeObjectURL(u);res(im)};im.onerror=()=>res(null);im.src=u})}
 async function squareJpeg(file,mode){
   const im=await loadImg(file);if(!im)return null;const S=800,c=document.createElement("canvas");c.width=c.height=S;
@@ -233,7 +229,6 @@ async function wideJpeg(file){
 }
 const newPath=p=>`images/${p}-${Date.now().toString(36)}${Math.random().toString(36).slice(2,5)}.jpg`;
 
-/* ---------- رویدادها ---------- */
 $("#cats").addEventListener("input",e=>{
   if(e.target.dataset.cf){const c=CATS[+e.target.closest(".cat").dataset.c];c[e.target.dataset.cf]=clean(e.target.value);
     const sm=e.target.closest(".cat").querySelector("summary");sm.children[0].textContent=c.e;sm.children[1].textContent=c.t;bar();return}
@@ -287,7 +282,6 @@ $("#galFile").addEventListener("change",async e=>{
 $("#gal").addEventListener("click",async e=>{const b=e.target.closest("button");if(!b)return;if(await ask("این عکس از گالری حذف بشه؟")){GALLERY.splice(+b.dataset.g,1);renderGal()}});
 window.addEventListener("beforeunload",e=>{if(TOKEN&&CATS.length&&dirty()){e.preventDefault();e.returnValue=""}});
 
-/* ---------- ذخیره ---------- */
 function validate(){
   const seen=new Set();
   for(const c of CATS){c.t=c.t.trim();c.e=c.e.trim()||"🍽️";if(!c.t)return"یکی از دسته‌ها اسم نداره.";if(!c.items.length)return`دستهٔ «${c.t}» آیتم نداره؛ آیتم اضافه کن یا حذفش کن.`}
@@ -324,7 +318,6 @@ $("#save").onclick=async()=>{
 };
 function PENDING_SAVED(){PENDING={};BASE=state()}
 
-/* ---------- شروع ---------- */
 async function load(){
   $("#login").classList.add("hide");$("#app").classList.add("hide");$("#bar").classList.add("hide");
   const repo=await gh("").then(r=>r.json());

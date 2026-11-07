@@ -92,7 +92,6 @@ nav.bottom button.on svg{stroke-width:2.6}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;z-index:50;padding:16px}
 .modal.show{display:flex}
 .modal .card{background:var(--bg);width:100%;max-width:420px;border-radius:14px;overflow:hidden;max-height:92vh;overflow-y:auto}
-/* متن نیونی بنفش پایین صفحه */
 .neon-foot{display:table;margin:22px auto 10px;padding:4px 10px;font-size:12px;font-weight:300;color:#5a14b8;
   text-shadow:0 0 4px rgba(176,76,255,.8),0 0 10px rgba(150,60,255,.6),0 0 22px rgba(122,44,255,.45);animation:neonFoot 2.6s ease-in-out infinite alternate}
 @media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .neon-foot{color:#f3e6ff}}
@@ -100,7 +99,6 @@ nav.bottom button.on svg{stroke-width:2.6}
 .neon-foot a{color:inherit;text-decoration:none}
 @keyframes neonFoot{from{text-shadow:0 0 3px rgba(176,76,255,.7),0 0 8px rgba(150,60,255,.45),0 0 16px rgba(122,44,255,.3)}to{text-shadow:0 0 6px rgba(200,110,255,.95),0 0 14px rgba(160,70,255,.8),0 0 30px rgba(122,44,255,.65),0 0 48px rgba(122,44,255,.35)}}
 @media(prefers-reduced-motion:reduce){.neon-foot{animation:none}}
-/* نگه داشتن ۳ ثانیه روی قلب پایین: شمارش معکوس + یخ‌زدن صفحه، بعد شکستن شیشه با صدا، پخش کلمه‌ها و باز شدن kurd.cc */
 [data-nav="fav"]{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;touch-action:none;-webkit-tap-highlight-color:transparent}
 [data-nav="fav"].hold svg{animation:heartHold 3s linear forwards;transform-origin:center}
 @keyframes heartHold{0%{transform:scale(1);filter:drop-shadow(0 0 0 #7fd8ff)}100%{transform:scale(1.45);filter:drop-shadow(0 0 8px #7fd8ff) drop-shadow(0 0 16px #38b6ff)}}
@@ -130,7 +128,6 @@ nav.bottom button.on svg{stroke-width:2.6}
 .gal-view img{max-width:100%;max-height:100%;object-fit:contain}
 .gal-view button{position:absolute;top:16px;left:16px;color:#fff;font-size:26px}
 
-/* ===== پیش‌نمایش: ظاهر آخرین نسخه‌ی اینستاگرام ===== */
 header.top{display:grid!important;grid-template-columns:1fr auto 1fr;border-bottom:0!important}
 header.top .ic{justify-self:end;gap:14px}
 .uname{display:flex;align-items:center;gap:5px;font-weight:800;font-size:18px;letter-spacing:.2px}
@@ -158,7 +155,6 @@ nav.bottom button.on svg{stroke-width:2.6;fill:currentColor}
 .navav{width:27px;height:27px;border-radius:50%;display:block;border:1.5px solid transparent}
 nav.bottom button.on .navav{border-color:var(--fg)}
 
-/* ===== انیمیشن‌ها (الهام‌گرفته از transitions.dev): مودال، لایت‌باکس، جابه‌جایی دسته‌ها ===== */
 :root{--t-ease:cubic-bezier(.22,1,.36,1)}
 @keyframes t-fade-in{from{opacity:0}to{opacity:1}}
 @keyframes t-fade-out{from{opacity:1}to{opacity:0}}
@@ -311,7 +307,6 @@ const CATS=[{id:"all",t:"همه",e:"🍽️"},...MENU.map(m=>({id:m.id,t:m.t,e:m
 const ITEMS=[];let _id=0;
 MENU.forEach(m=>m.items.forEach(([n,p,d,e])=>ITEMS.push({id:++_id,c:m.id,n,p,d:d||"",e:e||m.e,g:m.g})));
 
-/* Made By AI (An Idiot 😎) (لایسنس آزاد) با نام آیتم؛ بقیه تصویر گرافیکی دارند. */
 const PHOTOS={
  "آمریکانو":"photo-1583577012061-d69d2dbc900a",
  "کاپوچینو":"photo-1670899604825-5b25fd14b4db",
@@ -319,12 +314,10 @@ const PHOTOS={
  "شیک شکلات":"photo-1648775948447-78c34dd56090",
  "لیموناد":"photo-1623157980612-da2c2cdb4c0b"
 };
-/* عکس‌های خود کافه (از منوی argacafe.ir) */
 const LOCAL={"آمریکانو":"images/americano-cup.jpg","لته":"images/latte-swan.jpg","کاپوچینو":"images/latte-cup.jpg","موکا":"images/mocha-cup.jpg","لته با سیروپ دلخواه":"images/syrup-latte-swan.jpg","آیس لته":"images/ice-latte.jpg","آیس لته (سیروپ دلخواه)":"images/ice-syrup-trio.jpg","آیس موکا":"images/ice-mocha-new.jpg","آیس تونیک آمریکانو":"images/tonic-americano.jpg","فراپاچینو":"images/frappuccino.jpg","فراپاچینو لوتوس":"images/frappuccino-lotus.jpg","فراپه کره بیسکویت":"images/frappe-biscuit-butter.jpg","فراپاچینو موز و نوتلا":"images/frappuccino-banana-nutella.jpg","شیک شکلات":"images/shake-chocolate.jpg","شیک نوتلا":"images/shake-nutella.jpg","شیک بادام زمینی":"images/shake-peanut.jpg","شیک بادام زمینی نوتلا":"images/shake-peanut-nutella.jpg","شیک توت فرنگی":"images/shake-strawberry.jpg","شیک لوتوس":"images/shake-lotus.jpg","شیک پسته":"images/shake-pistachio.jpg","شیک موز":"images/shake-banana.jpg","شیک موز و نوتلا":"images/shake-nutella-banana.jpg","شیک موز شکلات":"images/shake-banana-choc.jpg","تروپیکال":"images/tropical.jpg","فرش پیچ":"images/fresh-peach.jpg","آلبالو نمکی":"images/albaloo.jpg","رد موهیتو":"images/red-mojito.jpg","آرگارین":"images/argarin.jpg","آیس تی":"images/ice-tea.jpg","شربت مجنون":"images/sharbat-majnoon.jpg","شربت شیراز":"images/sharbat-shiraz.jpg","سان ست":"images/sunset.jpg","چای زعفران":"images/tea.jpg","چای":"images/tea.jpg","ماسالا":"images/white-cup.jpg","وایت چاکلت":"images/white-cup.jpg","شیر توت فرنگی":"images/strawberry-shake.jpg","سیروپ":"images/syrups.jpg"};
 ITEMS.forEach(i=>{if(LOCAL[i.n])i.img=LOCAL[i.n]});
 const E=ITEMS.find(i=>i.n==="اسپرسو");if(E){E.img="images/espresso.png";E.cut=true}
 ITEMS.forEach(i=>{const k=PHOTOS[i.n];if(k&&!LOCAL[i.n]&&!(i.c==="shake"&&i.n!=="شیک شکلات"))i.img="https://images.unsplash.com/"+k+"?w=600&q=70&auto=format&fit=crop"});
-/* عکس‌های عریض کامل نمایش داده می‌شوند (بریده نشوند) */
 const FIT=new Set(["images/latte-cup.jpg","images/americano-cup.jpg","images/white-cup.jpg","images/latte-swan.jpg","images/syrup-latte-swan.jpg","images/mocha-cup.jpg","images/ice-mocha-new.jpg","images/ice-syrup-trio.jpg","images/syrups.jpg","images/tea.jpg"]);
 ITEMS.forEach(i=>{if(FIT.has(i.img))i.fit=true});
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
@@ -338,7 +331,6 @@ const bg=i=>`background:linear-gradient(135deg,${i.g[0]},${i.g[1]})`;
 const imgTag=(i,cls)=>i.img?`<img class="${[cls,i.cut?"cut":"",i.fit?"fit":""].join(" ").trim()}" src="${i.img}" alt="${i.n}" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">`:"";
 const heartSvg='<svg class="i" viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 5 6.3 5c2 0 3.8 1.2 5.7 3.3C13.9 6.2 15.7 5 17.7 5 21 5 23.1 8.4 21.6 11.8 19.5 16.4 12 21 12 21z"/></svg>';
 
-/* باز و بسته کردن لایه‌ها با انیمیشن (کلاس closing تا پایان انیمیشن خروج) */
 function openLayer(el){clearTimeout(el._ct);el.classList.remove("closing");el.classList.add("show")}
 function closeLayer(el){
   if(!el.classList.contains("show"))return;
@@ -346,7 +338,7 @@ function closeLayer(el){
   clearTimeout(el._ct);el._ct=setTimeout(()=>el.classList.remove("closing"),200);
 }
 const openModal=()=>openLayer($("#modal"));
-let animDir=null; /* جهت (px) برای انیمیشن جابه‌جایی محتوای منو؛ null یعنی بدون انیمیشن */
+let animDir=null; 
 function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),1800)}
 
 function filtered(){
@@ -403,7 +395,6 @@ function openItem(id){
    </div>`;
   openModal();
 }
-/* گالری عکس‌های فضای کافه؛ هر آیتم فقط مسیر عکس است */
 const GALLERY=["images/gallery-1.webp"];
 function openGallery(){
   $("#card").innerHTML=`<div class="gal-hd"><button data-close>✕</button><h2>گالری کافه</h2><span style="width:22px"></span></div>
@@ -437,7 +428,6 @@ document.addEventListener("click",e=>{
   const t=e.target;
   const s=t.closest("[data-cat]");if(s){
     const oi=CATS.findIndex(c=>c.id===cat),ni=CATS.findIndex(c=>c.id===s.dataset.cat);
-    /* در حالت راست‌به‌چپ، دسته‌ی بعدی سمت چپ است: محتوا از چپ وارد می‌شود */
     animDir=ni===oi&&!onlyFav?null:(ni>oi?-28:28);
     cat=s.dataset.cat;onlyFav=false;render();setNav("home");return}
   if(t.closest("#btnInstall,#btnPlus")){installApp();return}
@@ -457,7 +447,6 @@ document.addEventListener("click",e=>{
     if(n==="info")openInfo();
   }
 });
-/* شمارنده‌ی بازدید: سرویس رایگان Abacus؛ هر مرورگر روزی یک بار شمرده می‌شود */
 const INSTALLED=matchMedia("(display-mode: fullscreen), (display-mode: standalone)").matches||navigator.standalone===true;
 let deferredPrompt=null;
 addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredPrompt=e});
@@ -504,7 +493,7 @@ const FONTS=[
  ["هارماتان","Harmattan:wght@400;700","Harmattan"],
  ["نوتو سنس","Noto+Sans+Arabic:wght@400;600;800","Noto Sans Arabic"]
 ];
-let fi=0; /* همیشه با وزیرمتن شروع می‌شود */
+let fi=0; 
 function applyFont(i,say){
   const [nm,q,fam]=FONTS[i];
   if(!document.getElementById("gf-"+i)){const l=document.createElement("link");l.id="gf-"+i;l.rel="stylesheet";l.href="https://fonts.googleapis.com/css2?family="+q+"&display=swap";document.head.appendChild(l)}
@@ -528,7 +517,6 @@ $("#q").addEventListener("input",e=>{query=e.target.value.trim();render()});
 $("#btnShare").onclick=async()=>{
   try{if(navigator.share){await navigator.share({title:"کافه Arga",url:location.href})}else{await navigator.clipboard.writeText(location.href);toast("لینک کپی شد")}}catch(e){}
 };
-/* نگه داشتن ۳ ثانیه روی قلب پایین: شمارش معکوس 3-2-1 (انگلیسی)، یخ‌زدن صفحه، بعد شکستن شیشه با صدا، پخش کلمه‌ها و باز شدن kurd.cc */
 (()=>{
   const WORDS=["Made","By","AI:","An","Idiot"],URL_="https://kurd.cc",HOLD=3000;
   const reduce=()=>matchMedia("(prefers-reduced-motion:reduce)").matches;
@@ -543,7 +531,6 @@ $("#btnShare").onclick=async()=>{
     }
     try{navigator.vibrate&&navigator.vibrate([40,40,80])}catch(e){}
   }
-  /* صدا: صدای شکستن شیشه با WebAudio (بدون فایل). مرورگر فقط بعد از یک تماس قبلی کاربر با صفحه اجازه‌ی صدا می‌دهد */
   let AC=null,pendingSound=false;
   function unlock(){
     try{
@@ -559,14 +546,12 @@ $("#btnShare").onclick=async()=>{
       if(AC.state!=="running"){pendingSound=true;return}
       pendingSound=false;
       const t=AC.currentTime,out=AC.createGain();out.gain.value=.9;out.connect(AC.destination);
-      // ضربه‌ی اول: نویز کوتاه و تیز (ترک خوردن)
       const len=Math.floor(AC.sampleRate*.35),buf=AC.createBuffer(1,len,AC.sampleRate),d=buf.getChannelData(0);
       for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,3);
       const ns=AC.createBufferSource();ns.buffer=buf;
       const bp=AC.createBiquadFilter();bp.type="bandpass";bp.frequency.value=4200;bp.Q.value=.6;
       const ng=AC.createGain();ng.gain.setValueAtTime(1,t);ng.gain.exponentialRampToValueAtTime(.001,t+.3);
       ns.connect(bp);bp.connect(ng);ng.connect(out);ns.start(t);
-      // تکه‌های شیشه: کلی صدای ریز و بلند که پشت‌سرهم می‌ریزند
       for(let i=0;i<34;i++){
         const st=t+.02+Math.pow(Math.random(),1.6)*1.1,f=2200+Math.random()*7500;
         const o=AC.createOscillator();o.type=Math.random()<.5?"sine":"triangle";o.frequency.value=f;
@@ -576,7 +561,6 @@ $("#btnShare").onclick=async()=>{
       }
     }catch(e){}
   }
-  /* یخ: بلورهای یخی که از لبه‌ها به داخل صفحه رشد می‌کنند */
   let ice=null;
   function startIce(){
     const cv=document.createElement("canvas");cv.className="ice";
@@ -611,7 +595,7 @@ $("#btnShare").onclick=async()=>{
       raf=requestAnimationFrame(frame);
     }
     raf=requestAnimationFrame(frame);
-    ice={cv,glow,shatter(cx,cy){ // ترک‌های شکسته از جای قلب
+    ice={cv,glow,shatter(cx,cy){
       alive=false;cancelAnimationFrame(raf);
       const flash=document.createElement("div");flash.className="ice-flash";document.body.appendChild(flash);setTimeout(()=>flash.remove(),400);
       ctx.strokeStyle="rgba(255,255,255,.95)";ctx.shadowColor="#7fd8ff";ctx.shadowBlur=8;
@@ -652,7 +636,6 @@ $("#btnShare").onclick=async()=>{
       setTimeout(()=>{openSite();setTimeout(stopIce,1000)},1300);
     },HOLD));
   });
-  // اگر صدا هنوز قفل بود، با برداشتن انگشت پخش می‌شود
   document.addEventListener("pointerup",()=>{if(pendingSound)setTimeout(playShatter,30)},{passive:true});
   btn.addEventListener("pointermove",e=>{if(active&&Math.hypot(e.clientX-sx,e.clientY-sy)>14)stop()});
   ["pointerup","pointercancel","pointerleave"].forEach(ev=>btn.addEventListener(ev,stop));
