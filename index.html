@@ -409,7 +409,7 @@ function openItem(id){
    </div>`;
   openModal();
 }
-const GALLERY=["images/gallery-1.webp"];
+const GALLERY=["images/gallery-1.webp","images/gallery-mw68owilkl0.jpg"];
 function openGallery(){
   $("#card").innerHTML=`<div class="gal-hd"><button data-close>✕</button><h2>گالری کافه</h2><span style="width:22px"></span></div>
    <div class="gal-grid">${GALLERY.map((src,idx)=>`<img src="${src}" alt="عکس کافه Arga" loading="lazy" data-gal="${idx}">`).join("")}</div>`;
