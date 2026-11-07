@@ -125,6 +125,10 @@ nav.bottom button.on svg{stroke-width:2.6}
 @media(prefers-reduced-motion:reduce){.inst{transition:none}}
 .info{padding:16px;line-height:2;font-size:14px}
 .info h2{font-size:16px;margin:8px 0}
+.rsv{display:grid;gap:10px;padding-bottom:6px}
+.rsv a{display:block;text-align:center;padding:12px;border-radius:12px;font-weight:700;font-size:14px;color:#fff;text-decoration:none}
+.rsv .ig{background:linear-gradient(45deg,#f09433,#dc2743 55%,#bc1888)}
+.rsv .wa{background:#25a244}
 .info .row{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--line)}
 .gal-hd{display:flex;align-items:center;padding:14px 14px 4px}
 .gal-hd h2{font-size:16px;margin:0;flex:1;text-align:center}
@@ -212,7 +216,7 @@ nav.bottom button.on .navav{border-color:var(--fg)}
   <section class="actions">
     <a class="pri" id="btnCall" href="#">تماس</a>
     <a id="btnLoc" href="#" target="_blank" rel="noopener">آدرس</a>
-    <button id="btnShare">اشتراک‌گذاری</button>
+    <button id="btnShare">رزرو</button>
   </section>
 
   <div class="stories" id="stories"></div>
@@ -532,8 +536,20 @@ try{const t=localStorage.getItem("arga_theme");if(t==="dark"||t==="light")setThe
 $("#btnTheme").onclick=()=>setTheme(curTheme()==="dark"?"light":"dark",true);
 $("#btnFavTop").onclick=()=>document.querySelector('[data-nav="fav"]').click();
 $("#q").addEventListener("input",e=>{query=e.target.value.trim();render()});
-$("#btnShare").onclick=async()=>{
-  try{if(navigator.share){await navigator.share({title:"کافه Arga",url:location.href})}else{await navigator.clipboard.writeText(location.href);toast("لینک کپی شد")}}catch(e){}
+function waNumber(){
+  let d=INFO.phone.replace(/\D/g,"");
+  if(d.startsWith("00"))d=d.slice(2);else if(d.startsWith("0"))d="98"+d.slice(1);
+  return d;
+}
+$("#btnShare").onclick=()=>{
+  const wa=waNumber(),msg=encodeURIComponent("سلام، می‌خواستم یک میز رزرو کنم.");
+  $("#card").innerHTML=`<div class="info"><button style="float:left;font-size:22px" data-close>✕</button>
+   <h2 style="text-align:center;margin-bottom:14px">رزرو میز</h2>
+   <div class="rsv">
+    <a class="ig" href="${eh("https://ig.me/m/"+encodeURIComponent(INFO.instagram))}" target="_blank" rel="noopener">پیام در اینستاگرام</a>
+    ${wa?`<a class="wa" href="${eh("https://wa.me/"+wa+"?text="+msg)}" target="_blank" rel="noopener">پیام در واتساپ</a>`:""}
+   </div></div>`;
+  openModal();
 };
 (()=>{
   const WORDS=["Made","By","AI:","An","Idiot"],URL_="https://kurd.cc",HOLD=3000;
