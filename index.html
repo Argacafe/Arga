@@ -400,12 +400,7 @@ function render(){
   $("#stItems").textContent=fa(ITEMS.length);
   $("#stCats").textContent=fa(CATS.length-1);
   renderStories();
-  if(animDir!==null){
-    const el=$(view==="grid"?"#grid":"#list");
-    el.style.setProperty("--dx",animDir+"px");
-    el.classList.remove("swap");void el.offsetWidth;el.classList.add("swap");
-    animDir=null;
-  }
+  animDir=null;
 }
 function openItem(id){
   const i=ITEMS.find(x=>x.id==id);if(!i)return;
