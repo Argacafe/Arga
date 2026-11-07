@@ -42,6 +42,10 @@ button{font:inherit;cursor:pointer}
 .cat>summary .n{margin-inline-start:auto;font-weight:400;color:var(--mut);font-size:13px}
 .cat>summary::after{content:"▾";color:var(--mut)}
 .cat[open]>summary::after{content:"▴"}
+.cp{background:#f6efe4;border-radius:12px;padding:12px;margin:8px 0;display:grid;gap:8px}
+.sw{display:flex;gap:8px;flex-wrap:wrap}
+.sw button{width:38px;height:38px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 1px var(--line);padding:0}
+.sw button.on{box-shadow:0 0 0 3px var(--acc)}
 .it{border-top:1px solid var(--line);padding:10px 0}
 .row{display:flex;gap:8px;align-items:center}
 .th{width:52px;height:52px;border-radius:12px;background:#f3e9da;flex:none;display:grid;place-items:center;font-size:24px;overflow:hidden;border:1px solid var(--line);padding:0;position:relative}
@@ -100,6 +104,7 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
   <div id="menuView">
     <input id="search" placeholder="🔍 جستجوی آیتم..." style="margin-bottom:12px">
     <div id="cats"></div>
+    <button class="btn" id="addCat" style="width:100%">＋ دستهٔ جدید</button>
   </div>
   <div id="galView" class="hide">
     <div class="card"><h2>عکس‌های گالری</h2><div class="gal" id="gal"></div>
@@ -164,6 +169,7 @@ const state=()=>serMenu()+serLocal()+serGal()+Object.keys(PENDING).join();
 const dirty=()=>state()!==BASE;
 
 /* ---------- نمایش ---------- */
+const PAL=[["#3b2316","#9a6a47"],["#a9794f","#f0d3a8"],["#d6456f","#f8a5b8"],["#1f8fb3","#7fe0d4"],["#c9702a","#f6c27a"],["#5b8f3a","#d6e59a"],["#6b4aa0","#c9b3ee"],["#7a6a5a","#d9cbb8"]];
 const src_=p=>PENDING[p]||p;
 function render(){
   const f=$("#search").value.trim();
@@ -171,9 +177,17 @@ function render(){
     const items=c.items.map((i,ii)=>({i,ii})).filter(({i})=>!f||(i.n+i.d).includes(f));
     if(f&&!items.length)return"";
     return `<details class="card cat" ${f||c._open?"open":""} data-c="${ci}"><summary><span>${esc(c.e)}</span><span>${esc(c.t)}</span><span class="n">${fa(c.items.length)} آیتم</span></summary>
+    ${catPanel(ci,c)}
     ${items.map(({i,ii})=>itemHtml(ci,ii,i)).join("")}
     <button class="add" data-add="${ci}">＋ آیتم جدید در «${esc(c.t)}»</button></details>`}).join("");
   bar();
+}
+function catPanel(ci,c){
+  return `<div style="margin:6px 0"><button class="btn sec sm" data-cedit>${c._edit?"▴ بستن تنظیمات دسته":"⚙ تنظیمات دسته"}</button></div>`+(c._edit?`<div class="cp">
+    <div class="row"><div style="flex:none;width:70px"><div class="lbl">ایموجی</div><input data-cf="e" value="${esc(c.e)}" style="text-align:center"></div>
+      <div><div class="lbl">اسم دسته</div><input data-cf="t" value="${esc(c.t)}" placeholder="مثلاً: دسرها"></div></div>
+    <div><div class="lbl">رنگ دسته</div><div class="sw">${PAL.map((g,k)=>`<button data-cg="${k}" class="${JSON.stringify(g)===JSON.stringify(c.g)?"on":""}" style="background:linear-gradient(135deg,${g[0]},${g[1]})" aria-label="رنگ ${k+1}"></button>`).join("")}</div></div>
+    <div class="row"><button class="btn sec sm" data-cup>▲ بالا</button><button class="btn sec sm" data-cdown>▼ پایین</button><button class="btn bad sm" data-cdel>🗑 حذف کل دسته</button></div></div>`:"");
 }
 function itemHtml(ci,ii,i){
   const c=CATS[ci];
@@ -221,6 +235,8 @@ const newPath=p=>`images/${p}-${Date.now().toString(36)}${Math.random().toString
 
 /* ---------- رویدادها ---------- */
 $("#cats").addEventListener("input",e=>{
+  if(e.target.dataset.cf){const c=CATS[+e.target.closest(".cat").dataset.c];c[e.target.dataset.cf]=clean(e.target.value);
+    const sm=e.target.closest(".cat").querySelector("summary");sm.children[0].textContent=c.e;sm.children[1].textContent=c.t;bar();return}
   const row=e.target.closest(".it");if(!row||!e.target.dataset.f)return;
   const i=CATS[+row.dataset.c].items[+row.dataset.i],f=e.target.dataset.f;
   if(f==="p"){const v=parseFloat(enDigits(e.target.value));i.p=isNaN(v)?"":v}
@@ -230,6 +246,17 @@ $("#cats").addEventListener("input",e=>{
 $("#cats").addEventListener("toggle",e=>{const d=e.target.closest(".cat");if(d)CATS[+d.dataset.c]._open=d.open},true);
 $("#cats").addEventListener("click",async e=>{
   const b=e.target.closest("button");if(!b)return;
+  const cd=b.closest(".cat");
+  if(cd&&(b.hasAttribute("data-cedit")||b.dataset.cg!==undefined||b.hasAttribute("data-cup")||b.hasAttribute("data-cdown")||b.hasAttribute("data-cdel"))){
+    const k=+cd.dataset.c,c=CATS[k];c._open=true;
+    if(b.hasAttribute("data-cedit"))c._edit=!c._edit;
+    else if(b.dataset.cg!==undefined)c.g=PAL[+b.dataset.cg].slice();
+    else if(b.hasAttribute("data-cup")&&k>0)[CATS[k-1],CATS[k]]=[CATS[k],CATS[k-1]];
+    else if(b.hasAttribute("data-cdown")&&k<CATS.length-1)[CATS[k+1],CATS[k]]=[CATS[k],CATS[k+1]];
+    else if(b.hasAttribute("data-cdel")){
+      if(CATS.length<2){toast("حداقل یک دسته باید بمونه","err");return}
+      if(await ask(`کل دستهٔ «${c.t||"بدون اسم"}» با ${fa(c.items.length)} آیتمش حذف بشه؟`))CATS.splice(k,1);else return}
+    render();return}
   if(b.dataset.add!==undefined){const c=CATS[+b.dataset.add];c._open=true;c.items.push({n:"",p:"",d:"",e:"",photo:"",_open:true});render();
     const ins=document.querySelectorAll(`.it[data-c="${b.dataset.add}"] input[data-f="n"]`);ins[ins.length-1]?.focus();return}
   const row=b.closest(".it");if(!row)return;
@@ -248,6 +275,8 @@ $("#photoFile").addEventListener("change",async e=>{
   const p=newPath("item");PENDING[p]=d;photoTarget.photo=p;photoTarget=null;render();
 });
 $("#search").addEventListener("input",render);
+$("#addCat").onclick=()=>{CATS.push({id:"c"+Date.now().toString(36),t:"",e:"🍽️",g:PAL[CATS.length%PAL.length].slice(),items:[],_open:true,_edit:true});$("#search").value="";render();
+  const t=[...document.querySelectorAll('input[data-cf="t"]')].pop();if(t){t.scrollIntoView({block:"center"});t.focus()}};
 $("#tabMenu").onclick=()=>tab(true);$("#tabGal").onclick=()=>tab(false);
 function tab(m){$("#tabMenu").classList.toggle("on",m);$("#tabGal").classList.toggle("on",!m);$("#menuView").classList.toggle("hide",!m);$("#galView").classList.toggle("hide",m);if(!m)renderGal()}
 $("#addGal").onclick=()=>$("#galFile").click();
@@ -261,6 +290,7 @@ window.addEventListener("beforeunload",e=>{if(TOKEN&&CATS.length&&dirty()){e.pre
 /* ---------- ذخیره ---------- */
 function validate(){
   const seen=new Set();
+  for(const c of CATS){c.t=c.t.trim();c.e=c.e.trim()||"🍽️";if(!c.t)return"یکی از دسته‌ها اسم نداره.";if(!c.items.length)return`دستهٔ «${c.t}» آیتم نداره؛ آیتم اضافه کن یا حذفش کن.`}
   for(const c of CATS)for(const i of c.items){
     i.n=i.n.trim();i.d=i.d.trim();i.e=i.e.trim();
     if(!i.n)return"یکی از آیتم‌ها اسم نداره.";
