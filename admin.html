@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
 <meta name="theme-color" content="#2b2118">
-<title>مدیریت منو – کافه ئارگا</title>
+<title>مدیریت منو</title>
 <link rel="icon" href="images/admin-192.png">
 <link rel="manifest" href="admin.webmanifest">
 <link rel="apple-touch-icon" href="images/admin-512.png">
@@ -14,114 +14,124 @@
 <meta name="apple-mobile-web-app-title" content="مدیریت ئارگا">
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#faf6f0;--card:#fff;--ink:#2b2118;--mut:#8a7a6a;--line:#eadfce;--acc:#8a5a3b;--acc2:#b9855f;--ok:#2f8f5b;--bad:#c0392b}
+:root{--bg:#f7f3ee;--card:#fff;--ink:#2b2118;--mut:#85766a;--line:#e6dccf;--acc:#7a4f33;--soft:#efe5d7;--ok:#2f7d55;--bad:#b8372b}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 Vazirmatn,Tahoma,sans-serif;padding-bottom:96px}
-header{background:#2b2118;color:#f6e9d7;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:5}
-header h1{font-size:17px;margin:0;font-weight:800}
-header button{background:none;border:1px solid #6b5846;color:#e9d9c3;border-radius:8px;padding:4px 10px;font:inherit;font-size:13px}
-main{max-width:640px;margin:0 auto;padding:14px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px}
-h2{font-size:16px;margin:0 0 8px}
-p{margin:6px 0}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.7 Vazirmatn,Tahoma,sans-serif;padding-bottom:92px}
+header{background:#2b2118;color:#f3e7d6;padding:13px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:5}
+header h1{font-size:16px;margin:0;font-weight:600}
+header button{background:none;border:1px solid #5f4e3e;color:#d9c9b4;border-radius:8px;padding:3px 12px;font:inherit;font-size:13px}
+main{max-width:620px;margin:0 auto;padding:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px}
+h2{font-size:15px;margin:0 0 10px}
 .mut{color:var(--mut);font-size:13px}
-ol{padding-inline-start:20px;margin:8px 0}
-li{margin:4px 0}
-input,textarea{font:inherit;color:inherit;background:#fff;border:1px solid var(--line);border-radius:10px;padding:9px 10px;width:100%}
-input:focus{outline:2px solid var(--acc2);border-color:transparent}
+input{font:inherit;color:inherit;background:#fff;border:1px solid var(--line);border-radius:8px;padding:8px 10px;width:100%}
+input:focus{outline:2px solid #c8a98c;border-color:transparent}
 button{font:inherit;cursor:pointer}
-.btn{background:var(--acc);color:#fff;border:0;border-radius:10px;padding:10px 16px;font-weight:600}
-.btn.sec{background:#efe4d3;color:var(--ink)}
-.btn.bad{background:#fbe9e6;color:var(--bad)}
+.btn{background:var(--acc);color:#fff;border:0;border-radius:8px;padding:9px 16px}
+.btn.sec{background:var(--soft);color:var(--ink)}
+.btn.bad{background:#f8e6e3;color:var(--bad)}
 .btn:disabled{opacity:.45}
-.tabs{display:flex;gap:8px;margin-bottom:12px}
-.tabs button{flex:1;padding:10px;border-radius:10px;border:1px solid var(--line);background:#fff;font-weight:600}
+.tabs{display:flex;gap:6px;margin-bottom:12px}
+.tabs button{flex:1;padding:9px 4px;border-radius:8px;border:1px solid var(--line);background:#fff;font-size:14px}
 .tabs button.on{background:var(--acc);color:#fff;border-color:var(--acc)}
-.cat>summary{list-style:none;display:flex;align-items:center;gap:8px;font-weight:800;cursor:pointer;padding:2px 0}
+.cat>summary{list-style:none;display:flex;align-items:center;gap:8px;font-weight:600;cursor:pointer}
 .cat>summary::-webkit-details-marker{display:none}
 .cat>summary .n{margin-inline-start:auto;font-weight:400;color:var(--mut);font-size:13px}
-.cat>summary::after{content:"▾";color:var(--mut)}
-.cat[open]>summary::after{content:"▴"}
-.cp{background:#f6efe4;border-radius:12px;padding:12px;margin:8px 0;display:grid;gap:8px}
-.sw{display:flex;gap:8px;flex-wrap:wrap}
-.sw button{width:38px;height:38px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 1px var(--line);padding:0}
-.sw button.on{box-shadow:0 0 0 3px var(--acc)}
+.cat>summary::after{content:"\25BE";color:var(--mut)}
+.cat[open]>summary::after{content:"\25B4"}
 .it{border-top:1px solid var(--line);padding:10px 0}
 .row{display:flex;gap:8px;align-items:center}
-.th{width:52px;height:52px;border-radius:12px;background:#f3e9da;flex:none;display:grid;place-items:center;font-size:24px;overflow:hidden;border:1px solid var(--line);padding:0;position:relative}
+.th{width:50px;height:50px;border-radius:10px;background:var(--soft);flex:none;display:grid;place-items:center;font-size:22px;overflow:hidden;border:1px solid var(--line);padding:0}
 .th img{width:100%;height:100%;object-fit:cover}
-.th i{position:absolute;bottom:0;inset-inline:0;background:rgba(43,33,24,.65);color:#fff;font-size:10px;font-style:normal;text-align:center;line-height:14px}
-.pr{width:96px;flex:none;text-align:center;direction:ltr}
-.unit{font-size:11px;color:var(--mut);flex:none}
-.more{background:none;border:0;font-size:20px;color:var(--mut);padding:0 4px;flex:none}
+.pr{width:90px;flex:none;text-align:center;direction:ltr}
+.unit{font-size:11px;color:var(--mut);flex:none;line-height:1.3}
+.more{background:none;border:0;font-size:13px;color:var(--mut);padding:4px;flex:none}
 .det{margin-top:10px;display:grid;gap:8px}
-.det .row>*{flex:1}
-.det .row button{flex:none}
-.sm{padding:7px 11px;font-size:13px}
-.add{width:100%;margin-top:6px;background:#f6efe4;border:1px dashed var(--acc2);color:var(--acc);border-radius:10px;padding:9px;font-weight:600}
-.bar{position:fixed;inset-inline:0;bottom:0;background:#fff;border-top:1px solid var(--line);padding:10px 14px calc(10px + env(safe-area-inset-bottom));display:flex;gap:10px;align-items:center;z-index:6}
-.bar .btn{flex:1;padding:13px}
+.sm{padding:6px 11px;font-size:13px}
+.add{width:100%;margin-top:6px;background:none;border:1px dashed #bfa68c;color:var(--acc);border-radius:8px;padding:8px}
+.cp{background:#f6f0e8;border-radius:10px;padding:12px;margin:8px 0;display:grid;gap:8px}
+.sw{display:flex;gap:8px;flex-wrap:wrap}
+.sw button{width:34px;height:34px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 1px var(--line);padding:0}
+.sw button.on{box-shadow:0 0 0 2px var(--acc)}
+.bar{position:fixed;inset-inline:0;bottom:0;background:#fff;border-top:1px solid var(--line);padding:10px 14px calc(10px + env(safe-area-inset-bottom));display:flex;gap:12px;align-items:center;z-index:6}
+.bar .btn{flex:1;padding:12px}
 .bar span{font-size:13px;color:var(--mut)}
 .gal{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.gal div{position:relative;aspect-ratio:1;border-radius:10px;overflow:hidden;border:1px solid var(--line)}
+.gal div{position:relative;aspect-ratio:1;border-radius:8px;overflow:hidden;border:1px solid var(--line)}
 .gal img{width:100%;height:100%;object-fit:cover}
-.gal button{position:absolute;top:4px;inset-inline-start:4px;background:rgba(0,0,0,.6);color:#fff;border:0;border-radius:50%;width:26px;height:26px;line-height:26px;padding:0}
-.toast{position:fixed;inset-inline:14px;bottom:84px;background:#2b2118;color:#fff;padding:12px 14px;border-radius:12px;z-index:9;text-align:center;font-size:14px}
+.gal button{position:absolute;top:4px;inset-inline-start:4px;background:rgba(0,0,0,.6);color:#fff;border:0;border-radius:50%;width:24px;height:24px;line-height:22px;padding:0;font-size:12px}
+.toast{position:fixed;inset-inline:14px;bottom:82px;background:#2b2118;color:#fff;padding:11px 14px;border-radius:10px;z-index:9;text-align:center;font-size:14px}
 .toast.ok{background:var(--ok)}.toast.err{background:var(--bad)}
 .lbl{font-size:12px;color:var(--mut);margin-bottom:2px}
-label.chk{display:flex;gap:8px;align-items:center;font-size:13px}
+.fld{margin-bottom:12px}
+.logo{width:84px;height:84px;border-radius:50%;object-fit:cover;border:1px solid var(--line);background:var(--soft)}
+label.chk{display:flex;gap:8px;align-items:center;font-size:13px;margin:8px 0}
 label.chk input{width:auto}
-#err{color:var(--bad);font-size:13px;white-space:pre-wrap}
+#err{color:var(--bad);font-size:13px;min-height:20px;margin:6px 0}
 .hide{display:none!important}
-dialog{border:0;border-radius:14px;padding:16px;max-width:340px;width:90%}
+dialog{border:0;border-radius:12px;padding:16px;max-width:330px;width:90%}
 dialog::backdrop{background:rgba(0,0,0,.45)}
 </style>
 </head>
 <body>
-<header><h1>☕ مدیریت منوی ئارگا</h1><button id="logout" class="hide">خروج</button></header>
+<header><h1>مدیریت منوی ئارگا</h1><button id="logout" class="hide">خروج</button></header>
 <main>
 
 <section id="login" class="hide">
   <div class="card">
-    <h2>ورود (فقط بار اول)</h2>
-    <p class="mut">برای اینکه این صفحه بتونه منو رو تغییر بده، یه «کلید دسترسی» از GitHub لازمه. فقط یک‌بار می‌سازی و روی همین گوشی یا کامپیوتر ذخیره میشه.</p>
-    <ol>
-      <li>وارد github.com بشو (با اکانت صاحب سایت) و برو به <b>Settings</b> ← <b>Developer settings</b> ← <b>Personal access tokens</b> ← <b>Fine-grained tokens</b> ← <b>Generate new token</b>.</li>
-      <li>اسم: <b>menu</b> — مدت اعتبار (Expiration): بیشترین مقدار.</li>
-      <li><b>Repository access</b> ← <b>Only select repositories</b> ← فقط <b>Arga</b> رو انتخاب کن.</li>
-      <li><b>Permissions</b> ← <b>Repository permissions</b> ← <b>Contents</b> رو روی <b>Read and write</b> بذار.</li>
-      <li>دکمهٔ <b>Generate token</b> رو بزن و کلید (که با <code>github_pat_</code> شروع میشه) رو اینجا بچسبون.</li>
-    </ol>
+    <h2>ورود</h2>
+    <p class="mut">کلید دسترسی GitHub را وارد کنید.</p>
     <input id="tok" type="password" dir="ltr" placeholder="github_pat_..." autocomplete="off">
     <p id="err"></p>
-    <button id="go" class="btn" style="width:100%;margin-top:8px">ورود</button>
-    <p class="mut">⚠️ این کلید مثل رمز عبوره؛ به کسی نده. اگه گم شد یا لو رفت، از همون صفحهٔ GitHub پاکش کن و یکی جدید بساز.</p>
+    <button id="go" class="btn" style="width:100%">ورود</button>
   </div>
 </section>
 
 <section id="app" class="hide">
-  <div class="tabs"><button id="tabMenu" class="on">منو</button><button id="tabGal">گالری</button></div>
+  <div class="tabs"><button id="tabMenu" class="on">منو</button><button id="tabGal">گالری</button><button id="tabInfo">اطلاعات کافه</button></div>
+
   <div id="menuView">
-    <input id="search" placeholder="🔍 جستجوی آیتم..." style="margin-bottom:12px">
+    <input id="search" placeholder="جستجوی آیتم" style="margin-bottom:12px">
     <div id="cats"></div>
-    <button class="btn" id="addCat" style="width:100%">＋ دستهٔ جدید</button>
+    <button class="btn" id="addCat" style="width:100%">دسته‌ی جدید</button>
   </div>
+
   <div id="galView" class="hide">
     <div class="card"><h2>عکس‌های گالری</h2><div class="gal" id="gal"></div>
-      <button class="add" id="addGal">＋ افزودن عکس به گالری</button>
+      <button class="add" id="addGal">افزودن عکس</button>
       <input type="file" id="galFile" accept="image/*" multiple class="hide"></div>
+  </div>
+
+  <div id="infoView" class="hide">
+    <div class="card">
+      <h2>لوگو</h2>
+      <div class="row"><img class="logo" id="logoPrev" alt="">
+        <div><button class="btn sec sm" id="pickLogo">تغییر لوگو</button>
+        <label class="chk"><input type="checkbox" id="logoFit"> کامل نمایش داده شود (بدون برش)</label></div></div>
+      <p class="mut" style="margin:8px 0 0">لوگوی جدید بهتر است مربع و حداقل ۵۱۲ پیکسل باشد. آیکن نصب‌شده روی گوشی‌ها بعد از حذف و نصب دوباره عوض می‌شود.</p>
+      <input type="file" id="logoFile" accept="image/*" class="hide">
+    </div>
+    <div class="card">
+      <h2>اطلاعات تماس</h2>
+      <div class="fld"><div class="lbl">نام کافه</div><input data-i="name"></div>
+      <div class="fld"><div class="lbl">ساعت کاری</div><input data-i="hours"></div>
+      <div class="fld"><div class="lbl">آدرس</div><input data-i="address"></div>
+      <div class="fld"><div class="lbl">لینک نقشه (Google Maps یا نشان)</div><input data-i="map" dir="ltr"></div>
+      <div class="fld"><div class="lbl">شماره تلفن</div><input data-i="phone" dir="ltr" inputmode="tel"></div>
+      <div class="fld" style="margin:0"><div class="lbl">آیدی اینستاگرام (بدون @)</div><input data-i="instagram" dir="ltr"></div>
+    </div>
   </div>
 </section>
 </main>
 
 <div class="bar hide" id="bar"><span id="cnt"></span><button class="btn" id="save" disabled>ذخیره و انتشار</button></div>
 <input type="file" id="photoFile" accept="image/*" class="hide">
-<dialog id="dlg"><p id="dlgMsg"></p><div class="row" style="margin-top:12px"><button class="btn sec" id="dlgNo" style="flex:1">نه</button><button class="btn" id="dlgYes" style="flex:1">بله</button></div></dialog>
+<dialog id="dlg"><p id="dlgMsg" style="margin-top:0"></p><div class="row"><button class="btn sec" id="dlgNo" style="flex:1">خیر</button><button class="btn" id="dlgYes" style="flex:1">بله</button></div></dialog>
 
 <script>
 "use strict";
 const OWNER="werya1992w",REPO="Arga",BR="gh-pages";
-const API=`https://api.github.com/repos/${OWNER}/${REPO}`;
+const API="https://api.github.com/repos/"+OWNER+"/"+REPO;
 const $=s=>document.querySelector(s);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const clean=s=>String(s).replace(/[<>]/g,"");
@@ -130,31 +140,36 @@ const fa=n=>String(n).replace(/\d/g,d=>"۰۱۲۳۴۵۶۷۸۹"[d]);
 
 let TOKEN="";try{TOKEN=localStorage.getItem("arga_admin_token")||""}catch(e){}
 let SRC="",SW="",HEAD="";
-let CATS=[],GALLERY=[],EXTRA_LOCAL={};
-let PENDING={};
-let BASE="";
-let photoTarget=null;
+let CATS=[],GALLERY=[],INFO={},EXTRA_LOCAL={};
+let PENDING={},LOGOVER=0;
+let BASE="",photoTarget=null;
 
-async function gh(path,opt={}){
-  const r=await fetch(API+path,{cache:"no-store",...opt,headers:{Authorization:"Bearer "+TOKEN,Accept:"application/vnd.github+json","X-GitHub-Api-Version":"2022-11-28",...(opt.headers||{})}});
+const PAL=[["#3b2316","#9a6a47"],["#a9794f","#f0d3a8"],["#d6456f","#f8a5b8"],["#1f8fb3","#7fe0d4"],["#c9702a","#f6c27a"],["#5b8f3a","#d6e59a"],["#6b4aa0","#c9b3ee"],["#7a6a5a","#d9cbb8"]];
+const LOGOS=[["images/logo-96.png",96],["images/logo-192.png",192],["images/logo-512.png",512],["images/apple-touch-icon.png",180],["images/favicon.png",64],["images/icon-192.png",192],["images/icon-512.png",512]];
+const MASKABLE=[["images/icon-maskable-192.png",192],["images/icon-maskable-512.png",512]];
+
+async function gh(path,opt){
+  opt=opt||{};
+  const r=await fetch(API+path,{cache:"no-store",method:opt.method,body:opt.body,headers:Object.assign({Authorization:"Bearer "+TOKEN,Accept:"application/vnd.github+json","X-GitHub-Api-Version":"2022-11-28"},opt.headers||{})});
   if(!r.ok){const t=await r.text();const e=new Error(r.status+" "+t.slice(0,160));e.status=r.status;throw e}
   return r;
 }
-const getText=async p=>(await gh(`/contents/${p}?ref=${BR}`,{headers:{Accept:"application/vnd.github.raw+json"}})).text();
+const getText=async p=>(await gh("/contents/"+p+"?ref="+BR,{headers:{Accept:"application/vnd.github.raw+json"}})).text();
 const post=(p,b)=>gh(p,{method:"POST",body:JSON.stringify(b)}).then(r=>r.json());
 
 function parse(src){
-  const m=src.match(/const MENU=(\[[\s\S]*?\n\]);/),l=src.match(/const LOCAL=(\{.*\});/),g=src.match(/const GALLERY=(\[.*?\]);/);
-  if(!m||!l||!g)throw new Error("ساختار فایل index.html عوض شده و این صفحه نمی‌تونه بخونتش.");
+  const m=src.match(/const MENU=(\[[\s\S]*?\n\]);/),l=src.match(/const LOCAL=(\{.*\});/),g=src.match(/const GALLERY=(\[.*?\]);/),n=src.match(/const INFO=(\{.*\});/);
+  if(!m||!l||!g||!n)throw new Error("ساختار فایل index.html تغییر کرده و خوانده نشد.");
   const menu=new Function("return "+m[1])(),local=new Function("return "+l[1])();
   GALLERY=new Function("return "+g[1])();
+  INFO=new Function("return "+n[1])();
   const names=new Set();
-  CATS=menu.map(c=>({id:c.id,t:c.t,e:c.e,g:c.g,items:c.items.map(([n,p,d,e])=>{names.add(n);return{n,p,d:d||"",e:e||"",photo:local[n]||""}})}));
+  CATS=menu.map(c=>({id:c.id,t:c.t,e:c.e,g:c.g,items:c.items.map(a=>{names.add(a[0]);return{n:a[0],p:a[1],d:a[2]||"",e:a[3]||"",photo:local[a[0]]||""}})}));
   EXTRA_LOCAL={};for(const k in local)if(!names.has(k))EXTRA_LOCAL[k]=local[k];
 }
 const q=s=>JSON.stringify(s);
 function serMenu(){
-  return "const MENU=[\n"+CATS.map(c=>` {id:${q(c.id)},t:${q(c.t)},e:${q(c.e)},g:[${c.g.map(q).join(", ")}],items:[\n`+
+  return "const MENU=[\n"+CATS.map(c=>" {id:"+q(c.id)+",t:"+q(c.t)+",e:"+q(c.e)+",g:["+c.g.map(q).join(", ")+"],items:[\n"+
     c.items.map(i=>"  ["+[q(i.n),i.p,q(i.d)].concat(i.e?[q(i.e)]:[]).join(", ")+"]").join(",\n")+"]}").join(",\n")+"\n];";
 }
 function serLocal(){
@@ -163,182 +178,244 @@ function serLocal(){
   return "const LOCAL="+JSON.stringify(o)+";";
 }
 const serGal=()=>"const GALLERY="+JSON.stringify(GALLERY)+";";
-const state=()=>serMenu()+serLocal()+serGal()+Object.keys(PENDING).join();
+const serInfo=()=>"const INFO="+JSON.stringify(INFO)+";";
+const state=()=>serMenu()+serLocal()+serGal()+serInfo()+Object.keys(PENDING).join()+LOGOVER;
 const dirty=()=>state()!==BASE;
 
-const PAL=[["#3b2316","#9a6a47"],["#a9794f","#f0d3a8"],["#d6456f","#f8a5b8"],["#1f8fb3","#7fe0d4"],["#c9702a","#f6c27a"],["#5b8f3a","#d6e59a"],["#6b4aa0","#c9b3ee"],["#7a6a5a","#d9cbb8"]];
 const src_=p=>PENDING[p]||p;
 function render(){
   const f=$("#search").value.trim();
   $("#cats").innerHTML=CATS.map((c,ci)=>{
-    const items=c.items.map((i,ii)=>({i,ii})).filter(({i})=>!f||(i.n+i.d).includes(f));
+    const items=c.items.map((i,ii)=>({i:i,ii:ii})).filter(x=>!f||(x.i.n+x.i.d).includes(f));
     if(f&&!items.length)return"";
-    return `<details class="card cat" ${f||c._open?"open":""} data-c="${ci}"><summary><span>${esc(c.e)}</span><span>${esc(c.t)}</span><span class="n">${fa(c.items.length)} آیتم</span></summary>
-    ${catPanel(ci,c)}
-    ${items.map(({i,ii})=>itemHtml(ci,ii,i)).join("")}
-    <button class="add" data-add="${ci}">＋ آیتم جدید در «${esc(c.t)}»</button></details>`}).join("");
+    return '<details class="card cat" '+(f||c._open?"open":"")+' data-c="'+ci+'"><summary><span>'+esc(c.e)+'</span><span>'+esc(c.t)+'</span><span class="n">'+fa(c.items.length)+' آیتم</span></summary>'+
+      catPanel(c)+items.map(x=>itemHtml(ci,x.ii,x.i)).join("")+
+      '<button class="add" data-add="'+ci+'">آیتم جدید</button></details>'}).join("");
   bar();
 }
-function catPanel(ci,c){
-  return `<div style="margin:6px 0"><button class="btn sec sm" data-cedit>${c._edit?"▴ بستن تنظیمات دسته":"⚙ تنظیمات دسته"}</button></div>`+(c._edit?`<div class="cp">
-    <div class="row"><div style="flex:none;width:70px"><div class="lbl">ایموجی</div><input data-cf="e" value="${esc(c.e)}" style="text-align:center"></div>
-      <div><div class="lbl">اسم دسته</div><input data-cf="t" value="${esc(c.t)}" placeholder="مثلاً: دسرها"></div></div>
-    <div><div class="lbl">رنگ دسته</div><div class="sw">${PAL.map((g,k)=>`<button data-cg="${k}" class="${JSON.stringify(g)===JSON.stringify(c.g)?"on":""}" style="background:linear-gradient(135deg,${g[0]},${g[1]})" aria-label="رنگ ${k+1}"></button>`).join("")}</div></div>
-    <div class="row"><button class="btn sec sm" data-cup>▲ بالا</button><button class="btn sec sm" data-cdown>▼ پایین</button><button class="btn bad sm" data-cdel>🗑 حذف کل دسته</button></div></div>`:"");
+function catPanel(c){
+  return '<div style="margin:8px 0"><button class="btn sec sm" data-cedit>'+(c._edit?"بستن تنظیمات دسته":"تنظیمات دسته")+'</button></div>'+(c._edit?
+   '<div class="cp"><div class="row"><div style="flex:none;width:64px"><div class="lbl">ایموجی</div><input data-cf="e" value="'+esc(c.e)+'" style="text-align:center"></div>'+
+   '<div style="flex:1"><div class="lbl">نام دسته</div><input data-cf="t" value="'+esc(c.t)+'"></div></div>'+
+   '<div><div class="lbl">رنگ</div><div class="sw">'+PAL.map((g,k)=>'<button data-cg="'+k+'" class="'+(JSON.stringify(g)===JSON.stringify(c.g)?"on":"")+'" style="background:linear-gradient(135deg,'+g[0]+','+g[1]+')" aria-label="رنگ '+(k+1)+'"></button>').join("")+'</div></div>'+
+   '<div class="row"><button class="btn sec sm" data-cup>بالاتر</button><button class="btn sec sm" data-cdown>پایین‌تر</button><button class="btn bad sm" data-cdel>حذف دسته</button></div></div>':"");
 }
 function itemHtml(ci,ii,i){
   const c=CATS[ci];
-  return `<div class="it" data-c="${ci}" data-i="${ii}">
-   <div class="row">
-     <button class="th" data-photo title="تغییر عکس">${i.photo?`<img src="${esc(src_(i.photo))}" alt=""><i>تغییر</i>`:esc(i.e||c.e)}</button>
-     <input data-f="n" value="${esc(i.n)}" placeholder="اسم">
-     <input data-f="p" class="pr" inputmode="decimal" value="${esc(i.p)}"><span class="unit">هزار<br>تومان</span>
-     <button class="more" data-more>${i._open?"▴":"⋯"}</button>
-   </div>
-   ${i._open?`<div class="det">
-     <div><div class="lbl">توضیحات (اختیاری)</div><input data-f="d" value="${esc(i.d)}" placeholder="مثلاً: اسپرسو، شیر، یخ"></div>
-     <div class="row"><div><div class="lbl">ایموجی (اختیاری)</div><input data-f="e" value="${esc(i.e)}" placeholder="${esc(c.e)}"></div></div>
-     <div class="row">
-       <button class="btn sec sm" data-up>▲ بالا</button><button class="btn sec sm" data-down>▼ پایین</button>
-       ${i.photo?`<button class="btn sec sm" data-rmphoto>حذف عکس</button>`:""}
-       <button class="btn bad sm" data-del>🗑 حذف آیتم</button>
-     </div></div>`:""}
-  </div>`;
+  return '<div class="it" data-c="'+ci+'" data-i="'+ii+'"><div class="row">'+
+   '<button class="th" data-photo>'+(i.photo?'<img src="'+esc(src_(i.photo))+'" alt="">':esc(i.e||c.e))+'</button>'+
+   '<input data-f="n" value="'+esc(i.n)+'" placeholder="نام">'+
+   '<input data-f="p" class="pr" inputmode="decimal" value="'+esc(i.p)+'"><span class="unit">هزار<br>تومان</span>'+
+   '<button class="more" data-more>'+(i._open?"کمتر":"بیشتر")+'</button></div>'+
+   (i._open?'<div class="det"><div><div class="lbl">توضیحات</div><input data-f="d" value="'+esc(i.d)+'"></div>'+
+   '<div style="width:90px"><div class="lbl">ایموجی</div><input data-f="e" value="'+esc(i.e)+'" placeholder="'+esc(c.e)+'" style="text-align:center"></div>'+
+   '<div class="row"><button class="btn sec sm" data-photo>'+(i.photo?"تغییر عکس":"افزودن عکس")+'</button>'+(i.photo?'<button class="btn sec sm" data-rmphoto>حذف عکس</button>':"")+
+   '<button class="btn sec sm" data-up>بالاتر</button><button class="btn sec sm" data-down>پایین‌تر</button><button class="btn bad sm" data-del>حذف</button></div></div>':"")+'</div>';
 }
 function bar(){
   const d=dirty();$("#save").disabled=!d;
-  $("#cnt").textContent=d?"تغییرات ذخیره نشده":"همه‌چیز ذخیره‌ست";
+  $("#cnt").textContent=d?"تغییرات ذخیره نشده":"ذخیره شده";
 }
 function renderGal(){
-  $("#gal").innerHTML=GALLERY.map((p,i)=>`<div><img src="${esc(src_(p))}" alt=""><button data-g="${i}" aria-label="حذف">✕</button></div>`).join("")||`<p class="mut" style="grid-column:1/-1">هنوز عکسی نیست.</p>`;
+  $("#gal").innerHTML=GALLERY.map((p,i)=>'<div><img src="'+esc(src_(p))+'" alt=""><button data-g="'+i+'" aria-label="حذف">✕</button></div>').join("")||'<p class="mut" style="grid-column:1/-1;margin:0">عکسی وجود ندارد.</p>';
   bar();
 }
-let tt;function toast(m,k=""){clearTimeout(tt);let t=$(".toast");if(!t){t=document.createElement("div");document.body.appendChild(t)}t.className="toast "+k;t.textContent=m;tt=setTimeout(()=>t.remove(),k==="err"?7000:4000)}
+function renderInfo(){
+  document.querySelectorAll("[data-i]").forEach(el=>{el.value=INFO[el.dataset.i]||""});
+  $("#logoPrev").src=src_("images/logo-192.png")+(PENDING["images/logo-192.png"]?"":"?v="+Date.now());
+  bar();
+}
+let tt;function toast(m,k){clearTimeout(tt);let t=$(".toast");if(!t){t=document.createElement("div");document.body.appendChild(t)}t.className="toast "+(k||"");t.textContent=m;tt=setTimeout(()=>t.remove(),k==="err"?7000:4000)}
 function ask(msg){return new Promise(r=>{$("#dlgMsg").textContent=msg;const d=$("#dlg");d.showModal();$("#dlgYes").onclick=()=>{d.close();r(true)};$("#dlgNo").onclick=()=>{d.close();r(false)}})}
 
 function loadImg(file){return new Promise(res=>{const u=URL.createObjectURL(file),im=new Image();im.onload=()=>{URL.revokeObjectURL(u);res(im)};im.onerror=()=>res(null);im.src=u})}
-async function squareJpeg(file,mode){
-  const im=await loadImg(file);if(!im)return null;const S=800,c=document.createElement("canvas");c.width=c.height=S;
-  const x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,S,S);
-  const s=mode==="fit"?Math.min(S/im.width,S/im.height):Math.max(S/im.width,S/im.height),w=im.width*s,h=im.height*s;
-  x.drawImage(im,(S-w)/2,(S-h)/2,w,h);return c.toDataURL("image/jpeg",.85);
+function drawSquare(im,S,mode,bg,inset){
+  const c=document.createElement("canvas");c.width=c.height=S;const x=c.getContext("2d");
+  if(bg){x.fillStyle=bg;x.fillRect(0,0,S,S)}
+  const A=S*(inset||1),k=mode==="fit"?Math.min(A/im.width,A/im.height):Math.max(A/im.width,A/im.height),w=im.width*k,h=im.height*k;
+  x.save();x.beginPath();x.rect((S-A)/2,(S-A)/2,A,A);x.clip();x.drawImage(im,(S-w)/2,(S-h)/2,w,h);x.restore();return c;
 }
+async function squareJpeg(file,mode){const im=await loadImg(file);return im?drawSquare(im,800,mode,"#fff").toDataURL("image/jpeg",.85):null}
 async function wideJpeg(file){
-  const im=await loadImg(file);if(!im)return null;const M=1400,s=Math.min(1,M/Math.max(im.width,im.height)),c=document.createElement("canvas");
-  c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);c.getContext("2d").drawImage(im,0,0,c.width,c.height);return c.toDataURL("image/jpeg",.85);
+  const im=await loadImg(file);if(!im)return null;const k=Math.min(1,1400/Math.max(im.width,im.height)),c=document.createElement("canvas");
+  c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext("2d").drawImage(im,0,0,c.width,c.height);return c.toDataURL("image/jpeg",.85);
 }
-const newPath=p=>`images/${p}-${Date.now().toString(36)}${Math.random().toString(36).slice(2,5)}.jpg`;
+const newPath=p=>"images/"+p+"-"+Date.now().toString(36)+Math.random().toString(36).slice(2,5)+".jpg";
 
 $("#cats").addEventListener("input",e=>{
-  if(e.target.dataset.cf){const c=CATS[+e.target.closest(".cat").dataset.c];c[e.target.dataset.cf]=clean(e.target.value);
-    const sm=e.target.closest(".cat").querySelector("summary");sm.children[0].textContent=c.e;sm.children[1].textContent=c.t;bar();return}
+  if(e.target.dataset.cf){
+    const box=e.target.closest(".cat"),c=CATS[+box.dataset.c];c[e.target.dataset.cf]=clean(e.target.value);
+    const sm=box.querySelector("summary");sm.children[0].textContent=c.e;sm.children[1].textContent=c.t;bar();return;
+  }
   const row=e.target.closest(".it");if(!row||!e.target.dataset.f)return;
   const i=CATS[+row.dataset.c].items[+row.dataset.i],f=e.target.dataset.f;
-  if(f==="p"){const v=parseFloat(enDigits(e.target.value));i.p=isNaN(v)?"":v}
-  else i[f]=clean(e.target.value);
+  if(f==="p"){const v=parseFloat(enDigits(e.target.value));i.p=isNaN(v)?"":v}else i[f]=clean(e.target.value);
   bar();
 });
 $("#cats").addEventListener("toggle",e=>{const d=e.target.closest(".cat");if(d)CATS[+d.dataset.c]._open=d.open},true);
 $("#cats").addEventListener("click",async e=>{
   const b=e.target.closest("button");if(!b)return;
-  const cd=b.closest(".cat");
-  if(cd&&(b.hasAttribute("data-cedit")||b.dataset.cg!==undefined||b.hasAttribute("data-cup")||b.hasAttribute("data-cdown")||b.hasAttribute("data-cdel"))){
+  const cd=b.closest(".cat"),isCat=b.hasAttribute("data-cedit")||b.dataset.cg!==undefined||b.hasAttribute("data-cup")||b.hasAttribute("data-cdown")||b.hasAttribute("data-cdel");
+  if(cd&&isCat){
     const k=+cd.dataset.c,c=CATS[k];c._open=true;
     if(b.hasAttribute("data-cedit"))c._edit=!c._edit;
     else if(b.dataset.cg!==undefined)c.g=PAL[+b.dataset.cg].slice();
-    else if(b.hasAttribute("data-cup")&&k>0)[CATS[k-1],CATS[k]]=[CATS[k],CATS[k-1]];
-    else if(b.hasAttribute("data-cdown")&&k<CATS.length-1)[CATS[k+1],CATS[k]]=[CATS[k],CATS[k+1]];
+    else if(b.hasAttribute("data-cup")&&k>0){const t=CATS[k-1];CATS[k-1]=CATS[k];CATS[k]=t}
+    else if(b.hasAttribute("data-cdown")&&k<CATS.length-1){const t=CATS[k+1];CATS[k+1]=CATS[k];CATS[k]=t}
     else if(b.hasAttribute("data-cdel")){
-      if(CATS.length<2){toast("حداقل یک دسته باید بمونه","err");return}
-      if(await ask(`کل دستهٔ «${c.t||"بدون اسم"}» با ${fa(c.items.length)} آیتمش حذف بشه؟`))CATS.splice(k,1);else return}
-    render();return}
-  if(b.dataset.add!==undefined){const c=CATS[+b.dataset.add];c._open=true;c.items.push({n:"",p:"",d:"",e:"",photo:"",_open:true});render();
-    const ins=document.querySelectorAll(`.it[data-c="${b.dataset.add}"] input[data-f="n"]`);ins[ins.length-1]?.focus();return}
+      if(CATS.length<2){toast("حداقل یک دسته باید باقی بماند.","err");return}
+      if(!(await ask("دسته‌ی «"+(c.t||"بدون نام")+"» با "+fa(c.items.length)+" آیتمش حذف شود؟")))return;
+      CATS.splice(k,1);
+    }
+    render();return;
+  }
+  if(b.dataset.add!==undefined){
+    const c=CATS[+b.dataset.add];c._open=true;c.items.push({n:"",p:"",d:"",e:"",photo:"",_open:true});render();
+    const ins=document.querySelectorAll('.it[data-c="'+b.dataset.add+'"] input[data-f="n"]');if(ins.length)ins[ins.length-1].focus();return;
+  }
   const row=b.closest(".it");if(!row)return;
   const c=CATS[+row.dataset.c],idx=+row.dataset.i,i=c.items[idx];
   if(b.hasAttribute("data-more")){i._open=!i._open;render()}
   else if(b.hasAttribute("data-photo")){photoTarget=i;$("#photoFile").click()}
   else if(b.hasAttribute("data-rmphoto")){i.photo="";render()}
-  else if(b.hasAttribute("data-up")&&idx>0){[c.items[idx-1],c.items[idx]]=[c.items[idx],c.items[idx-1]];render()}
-  else if(b.hasAttribute("data-down")&&idx<c.items.length-1){[c.items[idx+1],c.items[idx]]=[c.items[idx],c.items[idx+1]];render()}
-  else if(b.hasAttribute("data-del")){if(await ask(`«${i.n||"آیتم بدون اسم"}» حذف بشه؟`)){c.items.splice(idx,1);render()}}
+  else if(b.hasAttribute("data-up")&&idx>0){const t=c.items[idx-1];c.items[idx-1]=i;c.items[idx]=t;render()}
+  else if(b.hasAttribute("data-down")&&idx<c.items.length-1){const t=c.items[idx+1];c.items[idx+1]=i;c.items[idx]=t;render()}
+  else if(b.hasAttribute("data-del")){if(await ask("«"+(i.n||"آیتم بدون نام")+"» حذف شود؟")){c.items.splice(idx,1);render()}}
 });
 $("#photoFile").addEventListener("change",async e=>{
   const f=e.target.files[0];e.target.value="";if(!f||!photoTarget)return;
-  const fit=await ask("عکس کامل و بدون برش نمایش داده بشه (با حاشیهٔ سفید)؟\n«نه» = وسطش به‌صورت مربع بریده میشه.");
-  const d=await squareJpeg(f,fit?"fit":"cover");if(!d){toast("این فایل عکس نیست","err");return}
+  const fit=await ask("عکس کامل و با حاشیه‌ی سفید نمایش داده شود؟ (در غیر این صورت وسط عکس به شکل مربع بریده می‌شود)");
+  const d=await squareJpeg(f,fit?"fit":"cover");if(!d){toast("فایل انتخاب‌شده عکس نیست.","err");return}
   const p=newPath("item");PENDING[p]=d;photoTarget.photo=p;photoTarget=null;render();
 });
 $("#search").addEventListener("input",render);
-$("#addCat").onclick=()=>{CATS.push({id:"c"+Date.now().toString(36),t:"",e:"🍽️",g:PAL[CATS.length%PAL.length].slice(),items:[],_open:true,_edit:true});$("#search").value="";render();
-  const t=[...document.querySelectorAll('input[data-cf="t"]')].pop();if(t){t.scrollIntoView({block:"center"});t.focus()}};
-$("#tabMenu").onclick=()=>tab(true);$("#tabGal").onclick=()=>tab(false);
-function tab(m){$("#tabMenu").classList.toggle("on",m);$("#tabGal").classList.toggle("on",!m);$("#menuView").classList.toggle("hide",!m);$("#galView").classList.toggle("hide",m);if(!m)renderGal()}
+$("#addCat").onclick=()=>{
+  CATS.push({id:"c"+Date.now().toString(36),t:"",e:"🍽️",g:PAL[CATS.length%PAL.length].slice(),items:[],_open:true,_edit:true});
+  $("#search").value="";render();
+  const t=[].slice.call(document.querySelectorAll('input[data-cf="t"]')).pop();if(t){t.scrollIntoView({block:"center"});t.focus()}
+};
+
+const TABS={menu:["#tabMenu","#menuView"],gal:["#tabGal","#galView"],info:["#tabInfo","#infoView"]};
+function tab(k){
+  for(const n in TABS){$(TABS[n][0]).classList.toggle("on",n===k);$(TABS[n][1]).classList.toggle("hide",n!==k)}
+  if(k==="gal")renderGal();if(k==="info")renderInfo();
+}
+$("#tabMenu").onclick=()=>tab("menu");$("#tabGal").onclick=()=>tab("gal");$("#tabInfo").onclick=()=>tab("info");
+
 $("#addGal").onclick=()=>$("#galFile").click();
 $("#galFile").addEventListener("change",async e=>{
   for(const f of e.target.files){const d=await wideJpeg(f);if(d){const p=newPath("gallery");PENDING[p]=d;GALLERY.push(p)}}
   e.target.value="";renderGal();
 });
-$("#gal").addEventListener("click",async e=>{const b=e.target.closest("button");if(!b)return;if(await ask("این عکس از گالری حذف بشه؟")){GALLERY.splice(+b.dataset.g,1);renderGal()}});
+$("#gal").addEventListener("click",async e=>{
+  const b=e.target.closest("button");if(!b)return;
+  if(await ask("این عکس از گالری حذف شود؟")){GALLERY.splice(+b.dataset.g,1);renderGal()}
+});
+
+$("#infoView").addEventListener("input",e=>{
+  const k=e.target.dataset.i;if(!k)return;
+  let v=clean(e.target.value);
+  if(k==="phone")v=enDigits(v);
+  INFO[k]=v;bar();
+});
+$("#pickLogo").onclick=()=>$("#logoFile").click();
+$("#logoFile").addEventListener("change",async e=>{
+  const f=e.target.files[0];e.target.value="";if(!f)return;
+  const im=await loadImg(f);if(!im){toast("فایل انتخاب‌شده عکس نیست.","err");return}
+  const mode=$("#logoFit").checked?"fit":"cover";
+  for(const l of LOGOS)PENDING[l[0]]=drawSquare(im,l[1],mode,null,1).toDataURL("image/png");
+  for(const l of MASKABLE)PENDING[l[0]]=drawSquare(im,l[1],"fit","#2b2118",.74).toDataURL("image/png");
+  LOGOVER++;renderInfo();
+});
+
 window.addEventListener("beforeunload",e=>{if(TOKEN&&CATS.length&&dirty()){e.preventDefault();e.returnValue=""}});
 
+function normalizeInfo(){
+  INFO.name=(INFO.name||"").trim();INFO.hours=(INFO.hours||"").trim();INFO.address=(INFO.address||"").trim();
+  INFO.map=(INFO.map||"").trim();INFO.phone=(INFO.phone||"").trim();
+  let ig=(INFO.instagram||"").trim();ig=ig.replace(/^https?:\/\/(www\.)?instagram\.com\//i,"").replace(/[\/?#].*$/,"").replace(/^@/,"");
+  INFO.instagram=ig;
+}
 function validate(){
+  normalizeInfo();
+  if(!INFO.name)return"نام کافه خالی است.";
+  if(INFO.map&&!/^https?:\/\//i.test(INFO.map))return"لینک نقشه باید با https:// شروع شود.";
+  if(INFO.phone&&!/^\+?[\d\s\-]{7,}$/.test(INFO.phone))return"شماره تلفن درست نیست.";
+  if(!/^[A-Za-z0-9._]+$/.test(INFO.instagram))return"آیدی اینستاگرام درست نیست.";
+  for(const c of CATS){
+    c.t=c.t.trim();c.e=c.e.trim()||"🍽️";
+    if(!c.t)return"یکی از دسته‌ها نام ندارد.";
+    if(!c.items.length)return"دسته‌ی «"+c.t+"» آیتمی ندارد. آیتم اضافه کنید یا دسته را حذف کنید.";
+  }
   const seen=new Set();
-  for(const c of CATS){c.t=c.t.trim();c.e=c.e.trim()||"🍽️";if(!c.t)return"یکی از دسته‌ها اسم نداره.";if(!c.items.length)return`دستهٔ «${c.t}» آیتم نداره؛ آیتم اضافه کن یا حذفش کن.`}
   for(const c of CATS)for(const i of c.items){
     i.n=i.n.trim();i.d=i.d.trim();i.e=i.e.trim();
-    if(!i.n)return"یکی از آیتم‌ها اسم نداره.";
-    if(seen.has(i.n))return`اسم «${i.n}» دوبار تکرار شده؛ اسم‌ها باید فرق داشته باشن.`;seen.add(i.n);
-    if(typeof i.p!=="number"||!(i.p>=0))return`قیمت «${i.n}» درست نیست.`;
+    if(!i.n)return"یکی از آیتم‌ها نام ندارد.";
+    if(seen.has(i.n))return"نام «"+i.n+"» تکراری است.";
+    seen.add(i.n);
+    if(typeof i.p!=="number"||!(i.p>=0))return"قیمت «"+i.n+"» درست نیست.";
   }
 }
 $("#save").onclick=async()=>{
   const bad=validate();if(bad){toast(bad,"err");render();return}
   const btn=$("#save");btn.disabled=true;btn.textContent="در حال ذخیره...";
   try{
-    const ref=await gh(`/git/ref/heads/${BR}`).then(r=>r.json());
-    if(ref.object.sha!==HEAD){toast("در این فاصله سایت جای دیگه‌ای تغییر کرده. صفحه رو دوباره باز کن (تغییراتت از دست میره).","err");return}
-    const baseCommit=await gh(`/git/commits/${HEAD}`).then(r=>r.json());
-    let out=SRC.replace(/const MENU=\[[\s\S]*?\n\];/,()=>serMenu()).replace(/const LOCAL=\{.*\};/,()=>serLocal()).replace(/const GALLERY=\[.*?\];/,()=>serGal());
-    const used=new Set([...GALLERY,...CATS.flatMap(c=>c.items.map(i=>i.photo))]);
+    const ref=await gh("/git/ref/heads/"+BR).then(r=>r.json());
+    if(ref.object.sha!==HEAD){toast("سایت در این فاصله از جای دیگری تغییر کرده است. صفحه را دوباره باز کنید.","err");return}
+    const base=await gh("/git/commits/"+HEAD).then(r=>r.json());
+    const out=SRC.replace(/const MENU=\[[\s\S]*?\n\];/,()=>serMenu()).replace(/const LOCAL=\{.*\};/,()=>serLocal())
+      .replace(/const GALLERY=\[.*?\];/,()=>serGal()).replace(/const INFO=\{.*\};/,()=>serInfo());
+    const used=new Set(GALLERY.concat(CATS.reduce((a,c)=>a.concat(c.items.map(i=>i.photo)),[])));
+    LOGOS.concat(MASKABLE).forEach(l=>used.add(l[0]));
     const tree=[];
-    for(const p of Object.keys(PENDING)){if(!used.has(p))continue;
-      const b=await post("/git/blobs",{content:PENDING[p].split(",")[1],encoding:"base64"});tree.push({path:p,mode:"100644",type:"blob",sha:b.sha})}
+    for(const p of Object.keys(PENDING)){
+      if(!used.has(p))continue;
+      const b=await post("/git/blobs",{content:PENDING[p].split(",")[1],encoding:"base64"});
+      tree.push({path:p,mode:"100644",type:"blob",sha:b.sha});
+    }
     const bi=await post("/git/blobs",{content:out,encoding:"utf-8"});tree.push({path:"index.html",mode:"100644",type:"blob",sha:bi.sha});
-    const sw=SW.replace(/const V = "arga-v(\d+)"/,(m,n)=>`const V = "arga-v${+n+1}"`);
+    const sw=SW.replace(/const V = "arga-v(\d+)"/,(m,n)=>'const V = "arga-v'+(+n+1)+'"');
     if(sw!==SW){const bs=await post("/git/blobs",{content:sw,encoding:"utf-8"});tree.push({path:"sw.js",mode:"100644",type:"blob",sha:bs.sha})}
-    const nt=await post("/git/trees",{base_tree:baseCommit.tree.sha,tree});
-    const nc=await post("/git/commits",{message:"Update menu from admin panel",tree:nt.sha,parents:[HEAD]});
-    await gh(`/git/refs/heads/${BR}`,{method:"PATCH",body:JSON.stringify({sha:nc.sha})});
-    HEAD=nc.sha;SRC=out;SW=sw;PENDING_SAVED();
-    toast("ذخیره شد ✅ تا ۱–۲ دقیقه دیگه روی سایت میاد.","ok");
+    const nt=await post("/git/trees",{base_tree:base.tree.sha,tree:tree});
+    const nc=await post("/git/commits",{message:"Update menu and cafe info",tree:nt.sha,parents:[HEAD]});
+    await gh("/git/refs/heads/"+BR,{method:"PATCH",body:JSON.stringify({sha:nc.sha})});
+    HEAD=nc.sha;SRC=out;SW=sw;PENDING={};BASE=state();
+    toast("ذخیره شد. تا یکی دو دقیقه‌ی دیگر روی سایت دیده می‌شود.","ok");
   }catch(err){
-    toast(err.status===401||err.status===403||err.status===404?"دسترسی کلید مشکل داره (منقضی شده یا Contents روی Read and write نیست). خروج بزن و کلید جدید بساز.":"ذخیره نشد: "+err.message,"err");
+    toast(err.status===401||err.status===403||err.status===404?"دسترسی کلید کافی نیست یا منقضی شده است. خارج شوید و کلید جدید وارد کنید.":"ذخیره نشد: "+err.message,"err");
   }finally{btn.textContent="ذخیره و انتشار";bar()}
 };
-function PENDING_SAVED(){PENDING={};BASE=state()}
 
 async function load(){
-  $("#login").classList.add("hide");$("#app").classList.add("hide");$("#bar").classList.add("hide");
   const repo=await gh("").then(r=>r.json());
-  if(!repo.permissions||!repo.permissions.push)throw Object.assign(new Error("این کلید اجازهٔ نوشتن روی ریپو رو نداره."),{status:403});
-  [SRC,SW]=await Promise.all([getText("index.html"),getText("sw.js")]);
-  HEAD=(await gh(`/git/ref/heads/${BR}`).then(r=>r.json())).object.sha;
-  parse(SRC);BASE=state();
-  CATS[0]._open=true;
+  if(!repo.permissions||!repo.permissions.push){const e=new Error("این کلید اجازه‌ی نوشتن روی مخزن را ندارد.");e.status=403;throw e}
+  const files=await Promise.all([getText("index.html"),getText("sw.js")]);SRC=files[0];SW=files[1];
+  HEAD=(await gh("/git/ref/heads/"+BR).then(r=>r.json())).object.sha;
+  parse(SRC);BASE=state();CATS[0]._open=true;
+  $("#login").classList.add("hide");
   $("#app").classList.remove("hide");$("#bar").classList.remove("hide");$("#logout").classList.remove("hide");
-  render();
+  tab("menu");render();
 }
-function showLogin(msg){$("#err").textContent=msg||"";$("#login").classList.remove("hide");$("#logout").classList.add("hide");$("#app").classList.add("hide");$("#bar").classList.add("hide")}
+function showLogin(msg){
+  $("#err").textContent=msg||"";$("#login").classList.remove("hide");
+  $("#logout").classList.add("hide");$("#app").classList.add("hide");$("#bar").classList.add("hide");
+}
 $("#go").onclick=async()=>{
-  const t=$("#tok").value.trim();if(!t){$("#err").textContent="کلید رو بچسبون.";return}
+  const t=$("#tok").value.trim();if(!t){$("#err").textContent="کلید را وارد کنید.";return}
   TOKEN=t;$("#go").disabled=true;$("#go").textContent="در حال بررسی...";
   try{await load();try{localStorage.setItem("arga_admin_token",TOKEN)}catch(e){}$("#tok").value=""}
-  catch(e){TOKEN="";showLogin(e.status===401?"کلید اشتباهه یا منقضی شده.":e.status===404?"کلید به ریپوی Arga دسترسی نداره (Only select repositories ← Arga).":e.message)}
+  catch(e){TOKEN="";showLogin(e.status===401?"کلید اشتباه است یا منقضی شده.":e.status===404?"این کلید به مخزن دسترسی ندارد.":e.message)}
   finally{$("#go").disabled=false;$("#go").textContent="ورود"}
 };
-$("#logout").onclick=async()=>{if(dirty()&&!(await ask("تغییرات ذخیره‌نشده از بین میره. خارج بشی؟")))return;try{localStorage.removeItem("arga_admin_token")}catch(e){}TOKEN="";CATS=[];showLogin()};
-if(TOKEN)load().catch(e=>{if(e.status===401||e.status===403||e.status===404){try{localStorage.removeItem("arga_admin_token")}catch(_){}TOKEN="";showLogin("کلید قبلی دیگه کار نمی‌کنه؛ کلید جدید بچسبون.")}else{showLogin("اتصال برقرار نشد: "+e.message)}});
+$("#logout").onclick=async()=>{
+  if(dirty()&&!(await ask("تغییرات ذخیره‌نشده از بین می‌رود. خارج شوید؟")))return;
+  try{localStorage.removeItem("arga_admin_token")}catch(e){}
+  TOKEN="";CATS=[];showLogin();
+};
+if(TOKEN)load().catch(e=>{
+  if(e.status===401||e.status===403||e.status===404){try{localStorage.removeItem("arga_admin_token")}catch(_){}TOKEN="";showLogin("کلید قبلی دیگر معتبر نیست.")}
+  else showLogin("اتصال برقرار نشد: "+e.message);
+});
 else showLogin();
 </script>
 </body>

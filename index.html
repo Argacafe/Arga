@@ -181,7 +181,7 @@ nav.bottom button.on .navav{border-color:var(--fg)}
 <body>
 
 <header class="top">
-  <button id="btnPlus" aria-label="نصب اپلیکیشن" title="نصب اپلیکیشن" style="justify-self:start"><svg class="i" viewBox="0 0 24 24" style="width:27px;height:27px"><rect x="3" y="3" width="18" height="18" rx="5"/><path d="M12 8v8M8 12h8"/></svg></button><div class="uname">Argacafe<svg class="i" viewBox="0 0 24 24" style="width:16px;height:16px;stroke-width:2.6"><path d="M6 9l6 6 6-6"/></svg></div>
+  <button id="btnPlus" aria-label="نصب اپلیکیشن" title="نصب اپلیکیشن" style="justify-self:start"><svg class="i" viewBox="0 0 24 24" style="width:27px;height:27px"><rect x="3" y="3" width="18" height="18" rx="5"/><path d="M12 8v8M8 12h8"/></svg></button><div class="uname"><span id="unameTxt">Argacafe</span><svg class="i" viewBox="0 0 24 24" style="width:16px;height:16px;stroke-width:2.6"><path d="M6 9l6 6 6-6"/></svg></div>
   <div class="ic">
     <button id="btnFont" aria-label="تغییر فونت" title="تغییر فونت"><svg class="i" viewBox="0 0 24 24" style="width:21px;height:21px"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M20 20l-4.8-4.8"/><text x="10.5" y="13.6" font-size="8.5" text-anchor="middle" fill="currentColor" stroke="none" font-family="sans-serif" font-weight="700">ف</text></svg></button>
     <button id="btnTheme" aria-label="حالت تاریک / روشن" title="حالت تاریک / روشن"><svg class="i ic-moon" viewBox="0 0 24 24"><path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a6.8 6.8 0 0 0 9.8 9.8z"/></svg><svg class="i ic-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"/></svg></button>
@@ -191,7 +191,7 @@ nav.bottom button.on .navav{border-color:var(--fg)}
 
 <main id="home">
   <section class="profile">
-    <a class="avatar" href="https://instagram.com/Argacafe" target="_blank" rel="noopener" aria-label="اینستاگرام Argacafe" style="display:block"><img src="images/logo-192.png" alt="لوگوی کافه Arga"></a>
+    <a class="avatar" id="avLink" href="https://instagram.com/Argacafe" target="_blank" rel="noopener" aria-label="اینستاگرام" style="display:block"><img src="images/logo-192.png" alt="لوگوی کافه Arga"></a>
     <div class="stats">
       <div><b id="stItems">0</b><span>آیتم</span></div>
       <div><b id="stCats">0</b><span>دسته‌بندی</span></div>
@@ -199,12 +199,12 @@ nav.bottom button.on .navav{border-color:var(--fg)}
     </div>
   </section>
   <section class="bio">
-    <div class="cat">کافه خونه ئارگا</div>
-    <div>📍 مریوان، چهارراه اصلی، خیابان باهنر<br>هر روز ۱۰ صبح تا ۱۰ شب</div>
+    <div class="cat" id="bioName"></div>
+    <div id="bioLine"></div>
   </section>
   <section class="actions">
-    <a class="pri" href="tel:093676199xx">تماس</a>
-    <a id="btnLoc" href="https://maps.app.goo.gl/nutpnMqZqy9oqxxEA?g_st=ac" target="_blank" rel="noopener">آدرس</a>
+    <a class="pri" id="btnCall" href="#">تماس</a>
+    <a id="btnLoc" href="#" target="_blank" rel="noopener">آدرس</a>
     <button id="btnShare">اشتراک‌گذاری</button>
   </section>
 
@@ -234,6 +234,20 @@ nav.bottom button.on .navav{border-color:var(--fg)}
 <div class="toast" id="toast"></div>
 
 <script>
+const INFO={"name":"کافه خونه ئارگا","hours":"هر روز ۱۰ صبح تا ۱۰ شب","address":"مریوان، چهارراه اصلی، خیابان باهنر","map":"https://maps.app.goo.gl/nutpnMqZqy9oqxxEA?g_st=ac","phone":"093676199xx","instagram":"Argacafe"};
+const eh=t=>String(t).replace(/[&<>"']/g,c=>"&#"+c.charCodeAt(0)+";");
+const safeUrl=u=>/^https?:\/\//i.test(u)?u:"#";
+const telHref=()=>"tel:"+INFO.phone.replace(/[^\d+]/g,"");
+const igUrl=()=>"https://instagram.com/"+encodeURIComponent(INFO.instagram);
+(function(){
+  const g=id=>document.getElementById(id);
+  const a=g("avLink");a.href=igUrl();a.setAttribute("aria-label","اینستاگرام "+INFO.instagram);
+  g("bioName").textContent=INFO.name;
+  g("bioLine").innerHTML="📍 "+eh(INFO.address)+"<br>"+eh(INFO.hours);
+  g("unameTxt").textContent=INFO.instagram;
+  g("btnCall").href=telHref();
+  g("btnLoc").href=safeUrl(INFO.map);
+})();
 /* ===== منوی کافه Arga =====
    قیمت‌ها به هزار تومان‌اند (۲۰۰ = ۲۰۰,۰۰۰ تومان).
    هر آیتم: [نام، قیمت، توضیح/ترکیبات، (اختیاری) ایموجی]
@@ -365,7 +379,7 @@ function render(){
   $("#grid").innerHTML=items.map(i=>`<div class="tile${i.cut?" cutbg":""}" data-id="${i.id}" style="${bg(i)}">${imgTag(i)}<span class="em">${i.e}</span><span class="nm"><span class="nn">${i.n}</span><span class="np">${price(i.p)}</span></span></div>`).join("");
   $("#list").innerHTML=items.map(i=>`
    <article class="post">
-     <div class="hd"><div class="av"></div><div>Argacafe<div style="font-weight:400;color:var(--mut);font-size:12px">${CATS.find(c=>c.id===i.c).t}</div></div></div>
+     <div class="hd"><div class="av"></div><div>${eh(INFO.instagram)}<div style="font-weight:400;color:var(--mut);font-size:12px">${CATS.find(c=>c.id===i.c).t}</div></div></div>
      <div class="media${i.cut?" cutbg":""}" style="${bg(i)}" data-id="${i.id}">${imgTag(i,"ph")}<span class="em">${i.e}</span></div>
      <div class="bar"><button class="heart ${favs.has(i.id)?"on":""}" data-fav="${i.id}" aria-label="پسندیدن">${heartSvg}</button><span class="sp"></span></div>
      <div class="cap"><div class="rw"><b>${i.n}</b><span class="price">${price(i.p)}</span></div>${i.d?`<div class="dsc">${i.d}</div>`:""}</div>
@@ -388,7 +402,7 @@ function openItem(id){
   const i=ITEMS.find(x=>x.id==id);if(!i)return;
   $("#card").innerHTML=`
    <div class="post" style="border:0;margin:0">
-    <div class="hd"><div class="av"></div><div>Argacafe</div><button style="margin-right:auto;font-size:22px" data-close>✕</button></div>
+    <div class="hd"><div class="av"></div><div>${eh(INFO.instagram)}</div><button style="margin-right:auto;font-size:22px" data-close>✕</button></div>
     <div class="media${i.cut?" cutbg":""}" style="${bg(i)}">${imgTag(i,"ph")}<span class="em">${i.e}</span></div>
     <div class="bar"><button class="heart ${favs.has(i.id)?"on":""}" data-fav="${i.id}">${heartSvg}</button><span class="sp"></span></div>
     <div class="cap"><div class="rw"><b>${i.n}</b><span class="price">${price(i.p)}</span></div>${i.d?`<div class="dsc">${i.d}</div>`:""}</div>
@@ -403,13 +417,13 @@ function openGallery(){
 }
 function openInfo(){
   $("#card").innerHTML=`<div class="info"><button style="float:left;font-size:22px" data-close>✕</button>
-   <img src="images/logo-192.png" alt="" width="84" height="84" style="display:block;margin:6px auto;border-radius:50%"><h2 style="text-align:center">درباره‌ی کافه Arga</h2>
-   <div class="row">🕗 <div>هر روز ۱۰ صبح تا ۱۰ شب</div></div>
-   <div class="row">📍 <div><a href="https://maps.app.goo.gl/nutpnMqZqy9oqxxEA?g_st=ac" target="_blank" rel="noopener" style="color:inherit">مریوان، چهارراه اصلی، خیابان باهنر</a></div></div>
-   <div class="row">📞 <div><a href="tel:093676199xx" dir="ltr" style="color:inherit">093676199xx</a></div></div>
+   <img src="images/logo-192.png" alt="" width="84" height="84" style="display:block;margin:6px auto;border-radius:50%"><h2 style="text-align:center">درباره‌ی ${eh(INFO.name)}</h2>
+   <div class="row">🕗 <div>${eh(INFO.hours)}</div></div>
+   <div class="row">📍 <div><a href="${eh(safeUrl(INFO.map))}" target="_blank" rel="noopener" style="color:inherit">${eh(INFO.address)}</a></div></div>
+   <div class="row">📞 <div><a href="${eh(telHref())}" dir="ltr" style="color:inherit">${eh(INFO.phone)}</a></div></div>
    <div class="row">👁 <div>بازدید: <b id="visitNum">${VISITS===null?"…":VISITS===false?"—":fa(VISITS.toLocaleString("en"))}</b></div></div>
    ${INSTALLED?"":`<div class="row">📲 <div><button id="btnInstall" style="font:inherit;font-weight:700;text-decoration:underline">نصب اپلیکیشن روی گوشی</button></div></div>`}
-   <div class="row">📸 <div><a href="https://instagram.com/Argacafe" target="_blank" rel="noopener" style="color:inherit" dir="ltr">@Argacafe</a></div></div></div>`;
+   <div class="row">📸 <div><a href="${eh(igUrl())}" target="_blank" rel="noopener" style="color:inherit" dir="ltr">@${eh(INFO.instagram)}</a></div></div></div>`;
   openModal();
 }
 function setNav(n){
