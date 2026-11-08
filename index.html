@@ -62,7 +62,8 @@ svg.i{width:26px;height:26px;stroke:currentColor;fill:none;stroke-width:1.8;stro
 .search input{width:100%;background:var(--chip);border:0;border-radius:10px;padding:10px 14px;font:inherit;color:var(--fg);outline:0}
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
 .tile{position:relative;aspect-ratio:1;overflow:hidden;display:grid;place-items:center;cursor:pointer;color:#fff}
-.tile .em{font-size:44px;filter:drop-shadow(0 3px 6px rgba(0,0,0,.35))}
+.tile .em{display:none}
+.tile.noimg .nm{background:none;color:#2b2118}
 .tile img,.post img.ph{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .tile .nm{display:block;position:absolute;bottom:0;right:0;left:0;padding:14px 6px 5px;font-size:11.5px;font-weight:600;text-align:center;background:linear-gradient(transparent,rgba(0,0,0,.6))}
 .tile img.cut,.post img.ph.cut{object-fit:contain;padding:9% 7%;filter:drop-shadow(0 10px 12px rgba(40,20,5,.45))}
@@ -78,7 +79,7 @@ svg.i{width:26px;height:26px;stroke:currentColor;fill:none;stroke-width:1.8;stro
 .post .hd{display:flex;align-items:center;gap:10px;padding:10px 14px;font-size:13.5px;font-weight:600}
 .post .hd .av{width:32px;height:32px;border-radius:50%;background:url(images/logo-96.png) center/cover}
 .post .media{position:relative;aspect-ratio:1;display:grid;place-items:center;overflow:hidden;color:#fff}
-.post .media .em{font-size:110px;filter:drop-shadow(0 6px 10px rgba(0,0,0,.35))}
+.post .media .em{display:none}
 .post .bar{display:flex;align-items:center;padding:10px 14px 4px;gap:14px}
 .post .bar .sp{flex:1}
 .heart.on svg{fill:#ed4956;stroke:#ed4956}
@@ -354,7 +355,7 @@ let cat="all",view="grid",onlyFav=false,query="";
 let favs=new Set();
 try{favs=new Set(JSON.parse(localStorage.getItem("arga_favs")||"[]"))}catch(e){}
 const saveFavs=()=>{try{localStorage.setItem("arga_favs",JSON.stringify([...favs]))}catch(e){}};
-const bg=i=>`background:linear-gradient(135deg,${i.g[0]},${i.g[1]})`;
+const bg=i=>"background:#fff";
 const imgTag=(i,cls)=>i.img?`<img class="${[cls,i.cut?"cut":"",i.fit?"fit":""].join(" ").trim()}" src="${i.img}" alt="${i.n}" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">`:"";
 const heartSvg='<svg class="i" viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 5 6.3 5c2 0 3.8 1.2 5.7 3.3C13.9 6.2 15.7 5 17.7 5 21 5 23.1 8.4 21.6 11.8 19.5 16.4 12 21 12 21z"/></svg>';
 
@@ -389,7 +390,7 @@ function renderStories(){
 }
 function render(){
   const items=filtered();
-  $("#grid").innerHTML=items.map(i=>`<div class="tile${i.cut?" cutbg":""}" data-id="${i.id}" style="${bg(i)}">${imgTag(i)}<span class="em">${i.e}</span><span class="nm"><span class="nn">${i.n}</span><span class="np">${price(i.p)}</span></span></div>`).join("");
+  $("#grid").innerHTML=items.map(i=>`<div class="tile${i.cut?" cutbg":""}${i.img?"":" noimg"}" data-id="${i.id}" style="${bg(i)}">${imgTag(i)}<span class="em">${i.e}</span><span class="nm"><span class="nn">${i.n}</span><span class="np">${price(i.p)}</span></span></div>`).join("");
   $("#list").innerHTML=items.map(i=>`
    <article class="post">
      <div class="hd"><div class="av"></div><div>${eh(INFO.instagram)}<div style="font-weight:400;color:var(--mut);font-size:12px">${CATS.find(c=>c.id===i.c).t}</div></div></div>
