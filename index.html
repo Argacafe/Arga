@@ -235,7 +235,7 @@ nav.bottom button.on .navav{border-color:var(--fg)}
   <div class="search" id="searchBox"><input id="q" type="search" placeholder="دنبال چی می‌گردی؟"></div>
   <div class="grid" id="grid"></div>
   <div class="list" id="list"></div>
-  <div class="empty" id="empty">همچین چیزی تو منو نداریم ☕ یه اسم دیگه امتحان کن</div>
+  <div class="empty" id="empty">این همه آیتم خوب داریم، ول کن اینو</div>
   <p class="neon-foot">Made By AI: <a href="https://kurd.cc">An Idiot</a></p>
 </main>
 
@@ -404,7 +404,7 @@ function render(){
      <div class="bar"><button class="heart ${favs.has(i.id)?"on":""}" data-fav="${i.id}" aria-label="پسندیدن">${heartSvg}</button><span class="sp"></span></div>
      <div class="cap"><div class="rw"><b>${i.n}</b><span class="price">${price(i.p)}</span></div>${i.d?`<div class="dsc">${i.d}</div>`:""}</div>
    </article>`).join("");
-  $("#empty").textContent=onlyFav&&!query?"آیتم‌هایی که دوست داری لایک کن":"همچین چیزی تو منو نداریم ☕ یه اسم دیگه امتحان کن";
+  $("#empty").textContent=onlyFav&&!query?"آیتم‌هایی که دوست داری لایک کن":"این همه آیتم خوب داریم، ول کن اینو";
   $("#empty").style.display=items.length?"none":"block";
   $("#grid").style.display=view==="grid"?"grid":"none";
   $("#list").style.display=view==="list"?"block":"none";
