@@ -119,7 +119,6 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
         <div><div class="lbl">نوع تغییر</div><select id="bkDir"><option value="1">افزایش</option><option value="-1">کاهش</option></select></div></div>
         <div class="g2"><div><div class="lbl">مقدار</div><input id="bkVal" inputmode="decimal" dir="ltr" placeholder="مثلاً ۱۰"></div>
         <div><div class="lbl">واحد</div><select id="bkMode"><option value="pct">درصد</option><option value="abs">هزار تومان</option></select></div></div>
-        <div><div class="lbl">گرد کردن قیمت جدید</div><select id="bkRound"><option value="1">نزدیک‌ترین ۱ هزار تومان</option><option value="5">نزدیک‌ترین ۵ هزار تومان</option><option value="0">بدون گرد کردن</option></select></div>
         <p class="mut" id="bkPrev" style="margin:0"></p>
         <button class="btn" id="bkGo">اعمال روی آیتم‌ها</button>
       </div>
@@ -424,9 +423,9 @@ $("#storyFile").addEventListener("change",async e=>{
 $("#search").addEventListener("input",render);
 
 function bulkCalc(){
-  const sc=$("#bkScope").value,v=parseFloat(enDigits($("#bkVal").value)),dir=+$("#bkDir").value,mode=$("#bkMode").value,rd=+$("#bkRound").value;
+  const sc=$("#bkScope").value,v=parseFloat(enDigits($("#bkVal").value)),dir=+$("#bkDir").value,mode=$("#bkMode").value;
   const list=[];CATS.forEach((c,k)=>{if(sc==="all"||+sc===k)c.items.forEach(i=>{if(typeof i.p==="number"&&i.p>0)list.push(i)})});
-  const calc=i=>{let n=mode==="pct"?i.p*(1+dir*v/100):i.p+dir*v;if(rd)n=Math.round(n/rd)*rd;else n=Math.round(n*100)/100;return Math.max(0,n)};
+  const calc=i=>{let n=mode==="pct"?i.p*(1+dir*v/100):i.p+dir*v;n=Math.round(n*100)/100;return Math.max(0,n)};
   return{list:list,calc:calc,ok:!isNaN(v)&&v>0};
 }
 function bulkPrev(){
@@ -435,7 +434,7 @@ function bulkPrev(){
   const ex=b.list.slice(0,3).map(i=>(i.n||"بدون نام")+": "+fa(i.p)+" ← "+fa(b.calc(i))).join("، ");
   el.textContent=fa(b.list.length)+" آیتم تغییر می‌کند. "+(ex?"مثلاً "+ex:"");
 }
-["#bkScope","#bkDir","#bkMode","#bkRound"].forEach(k=>$(k).addEventListener("change",bulkPrev));
+["#bkScope","#bkDir","#bkMode"].forEach(k=>$(k).addEventListener("change",bulkPrev));
 $("#bkVal").addEventListener("input",bulkPrev);
 $("#bkGo").onclick=async()=>{
   const b=bulkCalc();
