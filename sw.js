@@ -1,7 +1,7 @@
 /* Service worker: اجازه‌ی نصب + باز شدن سایت بدون اینترنت.
    صفحه‌ی اصلی اول از اینترنت گرفته می‌شود (تا تغییرات جدید زود دیده شود) و اگر نبود از حافظه. */
-const V = "arga-v55";
-const SHELL = ["./", "index.html", "manifest.webmanifest", "images/logo-96.png", "images/logo-192.png", "images/favicon.png"];
+const V = "arga-v56";
+const SHELL = ["./", "index.html", "manifest.webmanifest", "images/logo-96.png", "images/logo-192.png", "images/favicon.png", "fonts/Vazirmatn-VF.woff2"];
 
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(V).then(c => c.addAll(SHELL)).then(() => self.skipWaiting()));
