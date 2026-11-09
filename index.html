@@ -14,9 +14,15 @@
 <link rel="icon" type="image/png" href="images/favicon.png">
 <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
 <meta property="og:image" content="images/logo-512.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;800&display=swap" rel="stylesheet">
 <style>
+@font-face{font-family:"Vazirmatn";src:url(fonts/Vazirmatn-VF.woff2) format("woff2");font-weight:100 900;font-display:swap}
+@font-face{font-family:"Shabnam";src:url(fonts/Shabnam.woff2) format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"Shabnam";src:url(fonts/Shabnam-Bold.woff2) format("woff2");font-weight:700;font-display:swap}
+@font-face{font-family:"Gandom";src:url(fonts/Gandom.woff2) format("woff2");font-weight:400;font-display:swap}
+.fnts{display:grid;gap:8px;padding:6px 0 10px}
+.fnts button{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--chip);color:var(--fg);font-size:16px;text-align:right}
+.fnts button.on{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.fnts button span{font-size:13px;color:var(--mut)}
 :root{--bg:#fff;--fg:#1c1c1c;--mut:#737373;--line:#e6e6e6;--chip:#f3f3f3;--font:Vazirmatn,system-ui,sans-serif;--grad:linear-gradient(45deg,#e0a766,#b87333,#7a4a26);--accent:#b87333;--ring:#dbdbdb;--navbg:rgba(255,255,255,.92)}
 @media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#000;--fg:#f5f5f5;--mut:#a3a3a3;--line:#262626;--chip:#1a1a1a;--ring:#3a3a3a;--navbg:rgba(0,0,0,.85)}}
 :root[data-theme="dark"]{--bg:#000;--fg:#f5f5f5;--mut:#a3a3a3;--line:#262626;--chip:#1a1a1a;--ring:#3a3a3a;--navbg:rgba(0,0,0,.85)}
@@ -195,7 +201,7 @@ nav.bottom button.on .navav{border-color:var(--fg)}
 <header class="top">
   <button id="btnPlus" aria-label="نصب اپلیکیشن" title="نصب اپلیکیشن" style="justify-self:start"><svg class="i" viewBox="0 0 24 24" style="width:27px;height:27px"><rect x="3" y="3" width="18" height="18" rx="5"/><path d="M12 8v8M8 12h8"/></svg></button><div class="uname"><span id="unameTxt">Argacafe</span><svg class="i" viewBox="0 0 24 24" style="width:16px;height:16px;stroke-width:2.6"><path d="M6 9l6 6 6-6"/></svg></div>
   <div class="ic">
-    <button id="btnFont" aria-label="تغییر فونت" title="تغییر فونت"><svg class="i" viewBox="0 0 24 24" style="width:21px;height:21px"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M20 20l-4.8-4.8"/><text x="10.5" y="13.6" font-size="8.5" text-anchor="middle" fill="currentColor" stroke="none" font-family="sans-serif" font-weight="700">ف</text></svg></button>
+    <button id="btnFont" aria-label="تغییر فونت" title="تغییر فونت"><svg class="i" viewBox="0 0 24 24"><path d="M2.5 19L8 5l5.5 14M4.6 14h6.8"/><circle cx="17.3" cy="15.9" r="3.1"/><path d="M20.4 12.8V19"/></svg></button>
     <button id="btnTheme" aria-label="حالت تاریک / روشن" title="حالت تاریک / روشن"><svg class="i ic-moon" viewBox="0 0 24 24"><path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a6.8 6.8 0 0 0 9.8 9.8z"/></svg><svg class="i ic-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"/></svg></button>
     <button id="btnFavTop" aria-label="علاقه‌مندی‌ها"><svg class="i" viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 5 6.3 5c2 0 3.8 1.2 5.7 3.3C13.900 6.200 15.700 5 17.700 5 21 5 23.100 8.400 21.600 11.800 19.500 16.400 12 21 12 21z"/></svg></button>
   </div>
@@ -455,6 +461,7 @@ document.addEventListener("click",e=>{
     cat=s.dataset.cat;onlyFav=false;render();setNav("home");return}
   if(t.closest("#btnInstall,#btnPlus")){installApp();return}
   const f=t.closest("[data-fav]");if(f){toggleFav(f.dataset.fav);return}
+  const fb=t.closest("[data-font]");if(fb){applyFont(+fb.dataset.font);closeLayer($("#modal"));return}
   if(t.closest("[data-close]")||t===$("#modal")){closeLayer($("#modal"));return}
   if(t.closest("[data-closeGal]")||t===$("#galView")){closeLayer($("#galView"));return}
   const g=t.closest("[data-gal]");if(g){$("#galImg").src=GALLERY[+g.dataset.gal];openLayer($("#galView"));return}
@@ -503,27 +510,18 @@ let VISITS=null;
     const el=document.getElementById("visitNum");if(el)el.textContent=fa(VISITS.toLocaleString("en"));
   }catch(e){VISITS=false;const el=document.getElementById("visitNum");if(el)el.textContent="—"}
 })();
-const FONTS=[
- ["وزیرمتن","Vazirmatn:wght@300;400;600;800","Vazirmatn"],
- ["نسخ","Noto+Naskh+Arabic:wght@400;600;700","Noto Naskh Arabic"],
- ["کوفی","Noto+Kufi+Arabic:wght@400;600;800","Noto Kufi Arabic"],
- ["لاله‌زار","Lalezar","Lalezar"],
- ["امیری","Amiri:wght@400;700","Amiri"],
- ["قاهره","Cairo:wght@400;600;800","Cairo"],
- ["چنگا","Changa:wght@400;600;800","Changa"],
- ["المسیری","El+Messiri:wght@400;600;700","El Messiri"],
- ["لمونادا","Lemonada:wght@400;600;700","Lemonada"],
- ["هارماتان","Harmattan:wght@400;700","Harmattan"],
- ["نوتو سنس","Noto+Sans+Arabic:wght@400;600;800","Noto Sans Arabic"]
-];
-let fi=0; 
-function applyFont(i,say){
-  const [nm,q,fam]=FONTS[i];
-  if(!document.getElementById("gf-"+i)){const l=document.createElement("link");l.id="gf-"+i;l.rel="stylesheet";l.href="https://fonts.googleapis.com/css2?family="+q+"&display=swap";document.head.appendChild(l)}
-  document.documentElement.style.setProperty("--font",'"'+fam+'",Vazirmatn,system-ui,sans-serif');
-  if(say)toast("فونت: "+nm);
+const FONTS=[["وزیرمتن","Vazirmatn"],["شبنم","Shabnam"],["گندم","Gandom"]];
+let fi=0;
+function applyFont(i){
+  fi=i;
+  document.documentElement.style.setProperty("--font",'"'+FONTS[i][1]+'",Vazirmatn,system-ui,sans-serif');
+  try{localStorage.setItem("arga_font",i)}catch(e){}
 }
-$("#btnFont").onclick=()=>{fi=(fi+1)%FONTS.length;applyFont(fi,true)};
+try{const v=+localStorage.getItem("arga_font");if(Number.isInteger(v)&&v>=0&&v<FONTS.length)applyFont(v)}catch(e){}
+$("#btnFont").onclick=()=>{
+  $("#card").innerHTML=`<div class="info"><button style="float:left;font-size:22px" data-close>✕</button><h2 style="text-align:center">فونت</h2><div class="fnts">${FONTS.map((f,i)=>`<button data-font="${i}" class="${i===fi?"on":""}" style="font-family:'${f[1]}',system-ui,sans-serif"><b>${f[0]}</b><span>کافه خونه ئارگا ۱۲۳</span></button>`).join("")}</div></div>`;
+  openModal();
+};
 const themeMeta=document.querySelector('meta[name="theme-color"]');
 const sysDark=()=>matchMedia("(prefers-color-scheme: dark)").matches;
 function curTheme(){return document.documentElement.dataset.theme||(sysDark()?"dark":"light")}
