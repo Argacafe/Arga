@@ -53,8 +53,9 @@ button{font:inherit;cursor:pointer}
 .sw{display:flex;gap:8px;flex-wrap:wrap}
 .sw button{width:34px;height:34px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 1px var(--line);padding:0}
 .sw button.on{box-shadow:0 0 0 2px var(--acc)}
-.bar{position:fixed;inset-inline:0;bottom:0;background:#fff;border-top:1px solid var(--line);padding:10px 14px calc(10px + env(safe-area-inset-bottom));display:flex;gap:12px;align-items:center;z-index:6}
-.bar .btn{flex:1;padding:12px}
+.bar{position:fixed;inset-inline:0;bottom:0;background:#fff;border-top:1px solid var(--line);padding:8px 14px calc(8px + env(safe-area-inset-bottom));display:flex;gap:12px;align-items:center;z-index:6}
+.bar .btn{padding:8px 14px;font-size:14px;flex:none}
+.bar span{flex:1}
 .bar span{font-size:13px;color:var(--mut)}
 .gal{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .gal div{position:relative;aspect-ratio:1;border-radius:8px;overflow:hidden;border:1px solid var(--line)}
@@ -166,7 +167,7 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
 </section>
 </main>
 
-<div class="bar hide" id="bar"><span id="cnt"></span><button class="btn sec" id="prev" style="flex:none;padding:12px 14px">پیش‌نمایش</button><button class="btn" id="save" disabled>ذخیره و انتشار</button></div>
+<div class="bar hide" id="bar"><span id="cnt"></span><button class="btn sec" id="prev">پیش‌نمایش</button><button class="btn" id="save" disabled>ذخیره و انتشار</button></div>
 <input type="file" id="photoFile" accept="image/*" class="hide">
 <input type="file" id="storyFile" accept="image/*" class="hide">
 <datalist id="tags"><option value="جدید"><option value="پیشنهاد ویژه"><option value="پرفروش"><option value="تخفیف"></datalist>
