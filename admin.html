@@ -72,6 +72,21 @@ label.chk input{width:auto}
 .crop:active{cursor:grabbing}
 #cropDlg{max-width:340px}
 #cropDlg input[type=range]{padding:0;border:0;width:100%;margin:4px 0 10px}
+.st{padding:4px 12px;font-size:13px;border-radius:99px;border:1px solid var(--line);background:#e8f3ec;color:var(--ok)}
+.st.off{background:#f8e6e3;color:var(--bad);border-color:#ecc3bd}
+.it.off .row:first-child{opacity:.55}
+select{font:inherit;background:#fff;border:1px solid var(--line);border-radius:8px;padding:8px 10px;width:100%}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.simg{width:46px;height:46px;border-radius:50%;object-fit:cover;border:1px solid var(--line);background:var(--soft);display:grid;place-items:center;flex:none;overflow:hidden}
+.simg img{width:100%;height:100%;object-fit:cover}
+.hist{display:flex;align-items:center;gap:8px;border-top:1px solid var(--line);padding:9px 0;font-size:13px}
+.hist:first-of-type{border-top:0}
+.hist .d{flex:1}.hist .m{color:var(--mut);font-size:12px;direction:ltr;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fg button{padding:8px 14px;border-radius:8px;border:1px solid var(--line);background:#fff}
+.fg button.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+#pv{position:fixed;inset:0;z-index:20;background:#222;display:flex;flex-direction:column}
+#pv .pvh{display:flex;justify-content:space-between;align-items:center;color:#fff;padding:10px 14px;font-size:14px}
+#pv iframe{flex:1;border:0;background:#fff;width:100%;max-width:480px;margin:0 auto}
 .hide{display:none!important}
 dialog{border:0;border-radius:12px;padding:16px;max-width:330px;width:90%}
 dialog::backdrop{background:rgba(0,0,0,.45)}
@@ -92,10 +107,22 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
 </section>
 
 <section id="app" class="hide">
-  <div class="tabs"><button id="tabMenu" class="on">منو</button><button id="tabGal">گالری</button><button id="tabInfo">اطلاعات کافه</button></div>
+  <div class="tabs"><button id="tabMenu" class="on">منو</button><button id="tabGal">گالری</button><button id="tabInfo">تنظیمات</button></div>
 
   <div id="menuView">
     <input id="search" placeholder="جستجوی آیتم" style="margin-bottom:12px">
+    <details class="card" id="bulk">
+      <summary style="cursor:pointer;font-weight:600">تغییر گروهی قیمت</summary>
+      <div style="margin-top:10px;display:grid;gap:8px">
+        <div class="g2"><div><div class="lbl">کدام آیتم‌ها</div><select id="bkScope"></select></div>
+        <div><div class="lbl">نوع تغییر</div><select id="bkDir"><option value="1">افزایش</option><option value="-1">کاهش</option></select></div></div>
+        <div class="g2"><div><div class="lbl">مقدار</div><input id="bkVal" inputmode="decimal" dir="ltr" placeholder="مثلاً ۱۰"></div>
+        <div><div class="lbl">واحد</div><select id="bkMode"><option value="pct">درصد</option><option value="abs">هزار تومان</option></select></div></div>
+        <div><div class="lbl">گرد کردن قیمت جدید</div><select id="bkRound"><option value="1">نزدیک‌ترین ۱ هزار تومان</option><option value="5">نزدیک‌ترین ۵ هزار تومان</option><option value="0">بدون گرد کردن</option></select></div>
+        <p class="mut" id="bkPrev" style="margin:0"></p>
+        <button class="btn" id="bkGo">اعمال روی آیتم‌ها</button>
+      </div>
+    </details>
     <div id="cats"></div>
     <button class="btn" id="addCat" style="width:100%">دسته‌ی جدید</button>
   </div>
@@ -116,6 +143,12 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
       <input type="file" id="logoFile" accept="image/*" class="hide">
     </div>
     <div class="card">
+      <h2>ظاهر سایت</h2>
+      <div class="lbl">فونت پیش‌فرض</div><div class="sw fg" id="fontPick" style="margin-bottom:12px"></div>
+      <div class="lbl">رنگ اصلی</div><div class="sw" id="accPick"></div>
+      <p class="mut" style="margin:10px 0 0">مشتری‌ای که خودش فونت را از داخل سایت عوض کرده باشد، فونت خودش می‌ماند.</p>
+    </div>
+    <div class="card">
       <h2>اطلاعات تماس</h2>
       <div class="fld"><div class="lbl">نام کافه</div><input data-i="name"></div>
       <div class="fld"><div class="lbl">ساعت کاری</div><input data-i="hours"></div>
@@ -124,12 +157,20 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
       <div class="fld"><div class="lbl">شماره تلفن</div><input data-i="phone" dir="ltr" inputmode="tel"></div>
       <div class="fld" style="margin:0"><div class="lbl">آیدی اینستاگرام (بدون @)</div><input data-i="instagram" dir="ltr"></div>
     </div>
+    <div class="card">
+      <h2>نسخه‌های قبلی منو</h2>
+      <p class="mut" style="margin:0 0 6px">منو، قیمت‌ها و اطلاعات کافه به حالت یکی از ذخیره‌های قبلی برمی‌گردد. نسخه‌ی فعلی هم در تاریخچه می‌ماند.</p>
+      <div id="hist"></div>
+    </div>
   </div>
 </section>
 </main>
 
-<div class="bar hide" id="bar"><span id="cnt"></span><button class="btn" id="save" disabled>ذخیره و انتشار</button></div>
+<div class="bar hide" id="bar"><span id="cnt"></span><button class="btn sec" id="prev" style="flex:none;padding:12px 14px">پیش‌نمایش</button><button class="btn" id="save" disabled>ذخیره و انتشار</button></div>
 <input type="file" id="photoFile" accept="image/*" class="hide">
+<input type="file" id="storyFile" accept="image/*" class="hide">
+<datalist id="tags"><option value="جدید"><option value="پیشنهاد ویژه"><option value="پرفروش"><option value="تخفیف"></datalist>
+<div id="pv" class="hide"><div class="pvh"><span>پیش‌نمایش، هنوز منتشر نشده</span><button class="btn sec sm" id="pvClose">بستن</button></div><iframe id="pvf" sandbox="allow-scripts"></iframe></div>
 <dialog id="cropDlg">
   <p id="cropMsg" style="margin:0 0 10px;font-size:14px">تنظیم عکس</p>
   <canvas id="cropCv" class="crop"></canvas>
@@ -151,11 +192,12 @@ const fa=n=>String(n).replace(/\d/g,d=>"۰۱۲۳۴۵۶۷۸۹"[d]);
 
 let TOKEN="";try{TOKEN=localStorage.getItem("arga_admin_token")||""}catch(e){}
 let SRC="",SW="",HEAD="";
-let CATS=[],GALLERY=[],INFO={},ORIG={},EXTRA_LOCAL={};
+let CATS=[],GALLERY=[],INFO={},ORIG={},EXTRA_LOCAL={},EXTRA_STORY={},SITE={font:0,accent:"#b87333"},PUB="",PUBID=0;
 let PENDING={},LOGOVER=0;
-let BASE="",photoTarget=null;
+let BASE="",photoTarget=null,storyTarget=null;
 
 const PAL=[["#3b2316","#9a6a47"],["#a9794f","#f0d3a8"],["#d6456f","#f8a5b8"],["#1f8fb3","#7fe0d4"],["#c9702a","#f6c27a"],["#5b8f3a","#d6e59a"],["#6b4aa0","#c9b3ee"],["#7a6a5a","#d9cbb8"]];
+const FONTS=["وزیرمتن","شبنم","گندم"],ACCS=["#b87333","#c0392b","#2e8b57","#2874a6","#8e44ad","#d4a017","#444444"];
 const LOGOS=[["images/logo-96.png",96],["images/logo-192.png",192],["images/logo-512.png",512],["images/apple-touch-icon.png",180],["images/favicon.png",64],["images/icon-192.png",192],["images/icon-512.png",512]];
 const MASKABLE=[["images/icon-maskable-192.png",192],["images/icon-maskable-512.png",512]];
 
@@ -165,32 +207,42 @@ async function gh(path,opt){
   if(!r.ok){const t=await r.text();const e=new Error(r.status+" "+t.slice(0,160));e.status=r.status;throw e}
   return r;
 }
-const getText=async p=>(await gh("/contents/"+p+"?ref="+BR,{headers:{Accept:"application/vnd.github.raw+json"}})).text();
+const getText=async(p,ref)=>(await gh("/contents/"+p+"?ref="+(ref||BR),{headers:{Accept:"application/vnd.github.raw+json"}})).text();
 const post=(p,b)=>gh(p,{method:"POST",body:JSON.stringify(b)}).then(r=>r.json());
 
 function parse(src){
   const m=src.match(/const MENU=(\[[\s\S]*?\n\]);/),l=src.match(/const LOCAL=(\{.*\});/),g=src.match(/const GALLERY=(\[.*?\]);/),n=src.match(/const INFO=(\{.*\});/);
   if(!m||!l||!g||!n)throw new Error("ساختار فایل index.html تغییر کرده و خوانده نشد.");
   const menu=new Function("return "+m[1])(),local=new Function("return "+l[1])();
+  const st=src.match(/const STORY=(\{[\s\S]*?\n\});/),si=src.match(/const SITE=(\{.*\});/);
+  const STORY=st?new Function("return "+st[1])():{};
+  SITE=Object.assign({font:0,accent:"#b87333"},si?JSON.parse(si[1]):{});
   GALLERY=new Function("return "+g[1])();
   INFO=new Function("return "+n[1])();
   const names=new Set();
-  CATS=menu.map(c=>({id:c.id,t:c.t,e:c.e,g:c.g,items:c.items.map(a=>{names.add(a[0]);return{n:a[0],p:a[1],d:a[2]||"",e:a[3]||"",photo:local[a[0]]||""}})}));
+  CATS=menu.map(c=>({id:c.id,t:c.t,e:c.e,g:c.g,story:STORY[c.id]||null,items:c.items.map(a=>{names.add(a[0]);const x=a[4]||{};return{n:a[0],p:a[1],d:a[2]||"",e:a[3]||"",photo:local[a[0]]||"",off:x.off?1:0,tag:x.tag||"",old:x.old||0}})}));
+  EXTRA_STORY={};for(const k in STORY)if(!CATS.some(c=>c.id===k))EXTRA_STORY[k]=STORY[k];
   EXTRA_LOCAL={};for(const k in local)if(!names.has(k))EXTRA_LOCAL[k]=local[k];
 }
 const q=s=>JSON.stringify(s);
 function serMenu(){
   return "const MENU=[\n"+CATS.map(c=>" {id:"+q(c.id)+",t:"+q(c.t)+",e:"+q(c.e)+",g:["+c.g.map(q).join(", ")+"],items:[\n"+
-    c.items.map(i=>"  ["+[q(i.n),i.p,q(i.d)].concat(i.e?[q(i.e)]:[]).join(", ")+"]").join(",\n")+"]}").join(",\n")+"\n];";
+    c.items.map(i=>{const x={};if(i.off)x.off=1;if(i.tag)x.tag=i.tag;if(i.old>0)x.old=i.old;const hx=Object.keys(x).length,a=[q(i.n),i.p,q(i.d)];if(i.e||hx)a.push(q(i.e||""));if(hx)a.push(JSON.stringify(x));return"  ["+a.join(", ")+"]"}).join(",\n")+"]}").join(",\n")+"\n];";
 }
 function serLocal(){
   const o={};CATS.forEach(c=>c.items.forEach(i=>{if(i.photo)o[i.n]=i.photo}));
   for(const k in EXTRA_LOCAL)if(!(k in o))o[k]=EXTRA_LOCAL[k];
   return "const LOCAL="+JSON.stringify(o)+";";
 }
+function serStory(){
+  const all=Object.assign({},EXTRA_STORY);CATS.forEach(c=>{if(c.story&&c.story.img)all[c.id]=c.story});
+  const k=n=>/^[A-Za-z_]\w*$/.test(n)?n:q(n);
+  return "const STORY={\n"+Object.keys(all).map(n=>" "+k(n)+":{img:"+q(all[n].img)+(all[n].cut?",cut:1":"")+"}").join(",\n")+"\n};";
+}
+const serSite=()=>"const SITE="+JSON.stringify(SITE)+";";
 const serGal=()=>"const GALLERY="+JSON.stringify(GALLERY)+";";
 const serInfo=()=>"const INFO="+JSON.stringify(INFO)+";";
-const state=()=>serMenu()+serLocal()+serGal()+serInfo()+Object.keys(PENDING).join()+LOGOVER;
+const state=()=>serMenu()+serLocal()+serGal()+serInfo()+serStory()+serSite()+Object.keys(PENDING).join()+LOGOVER;
 const dirty=()=>state()!==BASE;
 
 const src_=p=>PENDING[p]||p;
@@ -202,30 +254,40 @@ function render(){
     return '<details class="card cat" '+(f||c._open?"open":"")+' data-c="'+ci+'"><summary><span>'+esc(c.e)+'</span><span>'+esc(c.t)+'</span><span class="n">'+fa(c.items.length)+' آیتم</span></summary>'+
       catPanel(c)+items.map(x=>itemHtml(ci,x.ii,x.i)).join("")+
       '<button class="add" data-add="'+ci+'">آیتم جدید</button></details>'}).join("");
-  bar();
+  fillScope();bar();
+}
+function fillScope(){
+  const sel=$("#bkScope"),v=sel.value;
+  sel.innerHTML='<option value="all">همه‌ی آیتم‌ها</option>'+CATS.map((c,k)=>'<option value="'+k+'">'+esc(c.e+" "+(c.t||"دسته‌ی بدون نام"))+'</option>').join("");
+  if([].some.call(sel.options,o=>o.value===v))sel.value=v;
+  bulkPrev();
 }
 function catPanel(c){
   return '<div style="margin:8px 0"><button class="btn sec sm" data-cedit>'+(c._edit?"بستن تنظیمات دسته":"تنظیمات دسته")+'</button></div>'+(c._edit?
    '<div class="cp"><div class="row"><div style="flex:none;width:64px"><div class="lbl">ایموجی</div><input data-cf="e" value="'+esc(c.e)+'" style="text-align:center"></div>'+
    '<div style="flex:1"><div class="lbl">نام دسته</div><input data-cf="t" value="'+esc(c.t)+'"></div></div>'+
    '<div><div class="lbl">رنگ</div><div class="sw">'+PAL.map((g,k)=>'<button data-cg="'+k+'" class="'+(JSON.stringify(g)===JSON.stringify(c.g)?"on":"")+'" style="background:linear-gradient(135deg,'+g[0]+','+g[1]+')" aria-label="رنگ '+(k+1)+'"></button>').join("")+'</div></div>'+
+   '<div><div class="lbl">کاور استوری (هایلایت)</div><div class="row"><div class="simg">'+(c.story&&c.story.img?'<img src="'+esc(src_(c.story.img))+'" alt="">':esc(c.e))+'</div><button class="btn sec sm" data-story>تغییر کاور</button>'+(c.story&&c.story.img?'<button class="btn sec sm" data-rmstory>حذف کاور</button>':"")+'</div></div>'+
    '<div class="row"><button class="btn sec sm" data-cup>بالاتر</button><button class="btn sec sm" data-cdown>پایین‌تر</button><button class="btn bad sm" data-cdel>حذف دسته</button></div></div>':"");
 }
 function itemHtml(ci,ii,i){
   const c=CATS[ci];
-  return '<div class="it" data-c="'+ci+'" data-i="'+ii+'"><div class="row">'+
+  return '<div class="it'+(i.off?" off":"")+'" data-c="'+ci+'" data-i="'+ii+'"><div class="row">'+
    '<button class="th" data-photo>'+(i.photo?'<img src="'+esc(src_(i.photo))+'" alt="">':esc(i.e||c.e))+'</button>'+
    '<input data-f="n" value="'+esc(i.n)+'" placeholder="نام">'+
    '<input data-f="p" class="pr" inputmode="decimal" value="'+esc(i.p)+'"><span class="unit">هزار<br>تومان</span>'+
    '<button class="more" data-more>'+(i._open?"کمتر":"بیشتر")+'</button></div>'+
+   '<div class="row" style="margin-top:6px"><button class="st'+(i.off?" off":"")+'" data-off>'+(i.off?"ناموجود":"موجود")+'</button>'+(i.tag?'<span class="mut">'+esc(i.tag)+'</span>':"")+'</div>'+
    (i._open?'<div class="det"><div><div class="lbl">توضیحات</div><input data-f="d" value="'+esc(i.d)+'"></div>'+
+   '<div class="g2"><div><div class="lbl">برچسب (مثلاً جدید)</div><input data-f="tag" list="tags" maxlength="20" value="'+esc(i.tag)+'"></div>'+
+   '<div><div class="lbl">قیمت قبلی (خط‌خورده)</div><input data-f="old" class="pr" style="width:100%" inputmode="decimal" dir="ltr" value="'+esc(i.old||"")+'"></div></div>'+
    '<div style="width:90px"><div class="lbl">ایموجی</div><input data-f="e" value="'+esc(i.e)+'" placeholder="'+esc(c.e)+'" style="text-align:center"></div>'+
    '<div class="row"><button class="btn sec sm" data-photo>'+(i.photo?"تغییر عکس":"افزودن عکس")+'</button>'+(i.photo?'<button class="btn sec sm" data-rmphoto>حذف عکس</button>':"")+
    '<button class="btn sec sm" data-up>بالاتر</button><button class="btn sec sm" data-down>پایین‌تر</button><button class="btn bad sm" data-del>حذف</button></div></div>':"")+'</div>';
 }
 function bar(){
   const d=dirty();$("#save").disabled=!d;
-  $("#cnt").textContent=d?"تغییرات ذخیره نشده":"ذخیره شده";
+  $("#cnt").textContent=d?"تغییرات ذخیره نشده":(PUB||"ذخیره شده");
 }
 function renderGal(){
   $("#gal").innerHTML=GALLERY.map((p,i)=>'<div><img src="'+esc(src_(p))+'" alt=""><button data-g="'+i+'" aria-label="حذف">✕</button></div>').join("")||'<p class="mut" style="grid-column:1/-1;margin:0">عکسی وجود ندارد.</p>';
@@ -233,6 +295,8 @@ function renderGal(){
 }
 function renderInfo(){
   document.querySelectorAll("[data-i]").forEach(el=>{el.value=INFO[el.dataset.i]||""});
+  $("#fontPick").innerHTML=FONTS.map((f,k)=>'<button data-font="'+k+'" class="'+(SITE.font===k?"on":"")+'">'+f+'</button>').join("");
+  $("#accPick").innerHTML=ACCS.map(a=>'<button data-acc="'+a+'" class="'+(SITE.accent.toLowerCase()===a?"on":"")+'" style="background:'+a+'" aria-label="رنگ"></button>').join("");
   $("#logoPrev").src=src_("images/logo-192.png")+(PENDING["images/logo-192.png"]?"":"?v="+Date.now());
   bar();
 }
@@ -303,15 +367,20 @@ $("#cats").addEventListener("input",e=>{
   }
   const row=e.target.closest(".it");if(!row||!e.target.dataset.f)return;
   const i=CATS[+row.dataset.c].items[+row.dataset.i],f=e.target.dataset.f;
-  if(f==="p"){const v=parseFloat(enDigits(e.target.value));i.p=isNaN(v)?"":v}else i[f]=clean(e.target.value);
+  if(f==="p"){const v=parseFloat(enDigits(e.target.value));i.p=isNaN(v)?"":v}
+  else if(f==="old"){const v=parseFloat(enDigits(e.target.value));i.old=isNaN(v)||v<0?0:v}
+  else if(f==="tag")i.tag=clean(e.target.value).slice(0,20);
+  else i[f]=clean(e.target.value);
   bar();
 });
 $("#cats").addEventListener("toggle",e=>{const d=e.target.closest(".cat");if(d)CATS[+d.dataset.c]._open=d.open},true);
 $("#cats").addEventListener("click",async e=>{
   const b=e.target.closest("button");if(!b)return;
-  const cd=b.closest(".cat"),isCat=b.hasAttribute("data-cedit")||b.dataset.cg!==undefined||b.hasAttribute("data-cup")||b.hasAttribute("data-cdown")||b.hasAttribute("data-cdel");
+  const cd=b.closest(".cat"),isCat=b.hasAttribute("data-cedit")||b.hasAttribute("data-story")||b.hasAttribute("data-rmstory")||b.dataset.cg!==undefined||b.hasAttribute("data-cup")||b.hasAttribute("data-cdown")||b.hasAttribute("data-cdel");
   if(cd&&isCat){
     const k=+cd.dataset.c,c=CATS[k];c._open=true;
+    if(b.hasAttribute("data-story")){storyTarget=c;$("#storyFile").click();return}
+    if(b.hasAttribute("data-rmstory")){c.story=null;render();return}
     if(b.hasAttribute("data-cedit"))c._edit=!c._edit;
     else if(b.dataset.cg!==undefined)c.g=PAL[+b.dataset.cg].slice();
     else if(b.hasAttribute("data-cup")&&k>0){const t=CATS[k-1];CATS[k-1]=CATS[k];CATS[k]=t}
@@ -324,12 +393,13 @@ $("#cats").addEventListener("click",async e=>{
     render();return;
   }
   if(b.dataset.add!==undefined){
-    const c=CATS[+b.dataset.add];c._open=true;c.items.push({n:"",p:"",d:"",e:"",photo:"",_open:true});render();
+    const c=CATS[+b.dataset.add];c._open=true;c.items.push({n:"",p:"",d:"",e:"",photo:"",off:0,tag:"",old:0,_open:true});render();
     const ins=document.querySelectorAll('.it[data-c="'+b.dataset.add+'"] input[data-f="n"]');if(ins.length)ins[ins.length-1].focus();return;
   }
   const row=b.closest(".it");if(!row)return;
   const c=CATS[+row.dataset.c],idx=+row.dataset.i,i=c.items[idx];
   if(b.hasAttribute("data-more")){i._open=!i._open;render()}
+  else if(b.hasAttribute("data-off")){i.off=i.off?0:1;render()}
   else if(b.hasAttribute("data-photo")){photoTarget=i;$("#photoFile").click()}
   else if(b.hasAttribute("data-rmphoto")){i.photo="";render()}
   else if(b.hasAttribute("data-up")&&idx>0){const t=c.items[idx-1];c.items[idx-1]=i;c.items[idx]=t;render()}
@@ -343,7 +413,36 @@ $("#photoFile").addEventListener("change",async e=>{
   if(r===null){toast("عکس انتخاب نشد یا فایل عکس نبود.","err");photoTarget=null;return}
   const p=newPath("item");PENDING[p]=renderCrop(800,"#fff",1,"image/jpeg",.85);t.photo=p;photoTarget=null;render();
 });
+$("#storyFile").addEventListener("change",async e=>{
+  const f=e.target.files[0];e.target.value="";if(!f||!storyTarget)return;
+  const t=storyTarget;storyTarget=null;
+  const r=await cropImage(f,false,"تنظیم کاور استوری");
+  if(r===null){toast("عکس انتخاب نشد یا فایل عکس نبود.","err");return}
+  const p=newPath("story");PENDING[p]=renderCrop(400,"#fff",1,"image/jpeg",.85);t.story={img:p};t._open=true;render();
+});
 $("#search").addEventListener("input",render);
+
+function bulkCalc(){
+  const sc=$("#bkScope").value,v=parseFloat(enDigits($("#bkVal").value)),dir=+$("#bkDir").value,mode=$("#bkMode").value,rd=+$("#bkRound").value;
+  const list=[];CATS.forEach((c,k)=>{if(sc==="all"||+sc===k)c.items.forEach(i=>{if(typeof i.p==="number"&&i.p>0)list.push(i)})});
+  const calc=i=>{let n=mode==="pct"?i.p*(1+dir*v/100):i.p+dir*v;if(rd)n=Math.round(n/rd)*rd;else n=Math.round(n*100)/100;return Math.max(0,n)};
+  return{list:list,calc:calc,ok:!isNaN(v)&&v>0};
+}
+function bulkPrev(){
+  const b=bulkCalc(),el=$("#bkPrev");
+  if(!b.ok){el.textContent="مقدار را وارد کنید.";return}
+  const ex=b.list.slice(0,3).map(i=>(i.n||"بدون نام")+": "+fa(i.p)+" ← "+fa(b.calc(i))).join("، ");
+  el.textContent=fa(b.list.length)+" آیتم تغییر می‌کند. "+(ex?"مثلاً "+ex:"");
+}
+["#bkScope","#bkDir","#bkMode","#bkRound"].forEach(k=>$(k).addEventListener("change",bulkPrev));
+$("#bkVal").addEventListener("input",bulkPrev);
+$("#bkGo").onclick=async()=>{
+  const b=bulkCalc();
+  if(!b.ok){toast("مقدار تغییر را درست وارد کنید.","err");return}
+  if(!b.list.length){toast("آیتمی با قیمت پیدا نشد.","err");return}
+  if(!(await ask("قیمت "+fa(b.list.length)+" آیتم تغییر کند؟ قبل از ذخیره می‌توانید دوباره عوض کنید.")))return;
+  b.list.forEach(i=>{i.p=b.calc(i)});$("#bkVal").value="";render();toast("قیمت‌ها تغییر کرد. برای انتشار ذخیره را بزنید.","ok");
+};
 $("#addCat").onclick=()=>{
   CATS.push({id:"c"+Date.now().toString(36),t:"",e:"🍽️",g:PAL[CATS.length%PAL.length].slice(),items:[],_open:true,_edit:true});
   $("#search").value="";render();
@@ -353,7 +452,7 @@ $("#addCat").onclick=()=>{
 const TABS={menu:["#tabMenu","#menuView"],gal:["#tabGal","#galView"],info:["#tabInfo","#infoView"]};
 function tab(k){
   for(const n in TABS){$(TABS[n][0]).classList.toggle("on",n===k);$(TABS[n][1]).classList.toggle("hide",n!==k)}
-  if(k==="gal")renderGal();if(k==="info")renderInfo();
+  if(k==="gal")renderGal();if(k==="info"){renderInfo();loadHist()}
 }
 $("#tabMenu").onclick=()=>tab("menu");$("#tabGal").onclick=()=>tab("gal");$("#tabInfo").onclick=()=>tab("info");
 
@@ -373,6 +472,8 @@ $("#infoView").addEventListener("input",e=>{
   if(k==="phone")v=enDigits(v);
   INFO[k]=v;bar();
 });
+$("#fontPick").addEventListener("click",e=>{const b=e.target.closest("[data-font]");if(b){SITE.font=+b.dataset.font;renderInfo()}});
+$("#accPick").addEventListener("click",e=>{const b=e.target.closest("[data-acc]");if(b){SITE.accent=b.dataset.acc;renderInfo()}});
 $("#pickLogo").onclick=()=>$("#logoFile").click();
 $("#logoFile").addEventListener("change",async e=>{
   const f=e.target.files[0];e.target.value="";if(!f)return;
@@ -390,6 +491,11 @@ function normalizeInfo(){
   INFO.map=(INFO.map||"").trim();INFO.phone=(INFO.phone||"").trim();
   let ig=(INFO.instagram||"").trim();ig=ig.replace(/^https?:\/\/(www\.)?instagram\.com\//i,"").replace(/[\/?#].*$/,"").replace(/^@/,"");
   INFO.instagram=ig;
+}
+function buildOut(){
+  return SRC.replace(/const MENU=\[[\s\S]*?\n\];/,()=>serMenu()).replace(/const LOCAL=\{.*\};/,()=>serLocal())
+    .replace(/const GALLERY=\[.*?\];/,()=>serGal()).replace(/const INFO=\{.*\};/,()=>serInfo())
+    .replace(/const STORY=\{[\s\S]*?\n\};/,()=>serStory()).replace(/const SITE=\{.*\};/,()=>serSite());
 }
 function validate(){
   normalizeInfo();
@@ -410,6 +516,7 @@ function validate(){
     if(seen.has(i.n))return"نام «"+i.n+"» تکراری است.";
     seen.add(i.n);
     if(typeof i.p!=="number"||!(i.p>=0))return"قیمت «"+i.n+"» درست نیست.";
+    i.tag=(i.tag||"").trim();
   }
 }
 $("#save").onclick=async()=>{
@@ -419,9 +526,8 @@ $("#save").onclick=async()=>{
     const ref=await gh("/git/ref/heads/"+BR).then(r=>r.json());
     if(ref.object.sha!==HEAD){toast("سایت در این فاصله از جای دیگری تغییر کرده است. صفحه را دوباره باز کنید.","err");return}
     const base=await gh("/git/commits/"+HEAD).then(r=>r.json());
-    const out=SRC.replace(/const MENU=\[[\s\S]*?\n\];/,()=>serMenu()).replace(/const LOCAL=\{.*\};/,()=>serLocal())
-      .replace(/const GALLERY=\[.*?\];/,()=>serGal()).replace(/const INFO=\{.*\};/,()=>serInfo());
-    const used=new Set(GALLERY.concat(CATS.reduce((a,c)=>a.concat(c.items.map(i=>i.photo)),[])));
+    const out=buildOut();
+    const used=new Set(GALLERY.concat(CATS.reduce((a,c)=>a.concat(c.items.map(i=>i.photo),c.story?[c.story.img]:[]),[])));
     LOGOS.concat(MASKABLE).forEach(l=>used.add(l[0]));
     const tree=[];
     for(const p of Object.keys(PENDING)){
@@ -436,12 +542,68 @@ $("#save").onclick=async()=>{
     const nc=await post("/git/commits",{message:"Update menu and cafe info",tree:nt.sha,parents:[HEAD]});
     await gh("/git/refs/heads/"+BR,{method:"PATCH",body:JSON.stringify({sha:nc.sha})});
     HEAD=nc.sha;SRC=out;SW=sw;PENDING={};ORIG=Object.assign({},INFO);BASE=state();
-    toast("ذخیره شد. تا یکی دو دقیقه‌ی دیگر روی سایت دیده می‌شود.","ok");
+    toast("ذخیره شد. انتشار روی سایت چند دقیقه طول می‌کشد.","ok");
+    watchPublish(sw.match(/arga-v\d+/)[0]);loadHist(true);
   }catch(err){
     toast(err.status===401||err.status===403||err.status===404?"دسترسی کلید کافی نیست یا منقضی شده است. خارج شوید و کلید جدید وارد کنید.":"ذخیره نشد: "+err.message,"err");
   }finally{btn.textContent="ذخیره و انتشار";bar()}
 };
 
+function watchPublish(ver){
+  const id=++PUBID;PUB="در حال انتشار روی سایت...";bar();
+  let n=0;
+  const tick=async()=>{
+    if(id!==PUBID)return;
+    try{const t=await fetch("sw.js?w="+Date.now(),{cache:"no-store"}).then(r=>r.text());
+      if(t.indexOf(ver)>-1){PUB="روی سایت منتشر شد ✓";bar();setTimeout(()=>{if(id===PUBID){PUB="";bar()}},20000);return}}catch(e){}
+    if(++n>45){PUB="";bar();return}
+    setTimeout(tick,6000);
+  };
+  setTimeout(tick,5000);
+}
+$("#prev").onclick=()=>{
+  const bad=validate();if(bad){toast(bad,"err");render();return}
+  let h=buildOut();
+  for(const p of Object.keys(PENDING))h=h.split('"'+p+'"').join('"'+PENDING[p]+'"');
+  h=h.replace("<head>",'<head><base href="'+location.href.replace(/[^\/]*$/,"")+'">');
+  $("#pvf").srcdoc=h;$("#pv").classList.remove("hide");
+};
+$("#pvClose").onclick=()=>{$("#pv").classList.add("hide");$("#pvf").srcdoc=""};
+let HISTLOAD=false;
+async function loadHist(force){
+  if(HISTLOAD&&!force)return;HISTLOAD=true;
+  const el=$("#hist");el.innerHTML='<p class="mut">در حال دریافت...</p>';
+  try{
+    const list=await gh("/commits?sha="+BR+"&path=index.html&per_page=15").then(r=>r.json());
+    const fmt=d=>new Date(d).toLocaleString("fa-IR",{dateStyle:"medium",timeStyle:"short"});
+    el.innerHTML=list.map((c,k)=>'<div class="hist"><div class="d">'+esc(fmt(c.commit.author.date))+(k===0?' <span class="mut">(نسخه‌ی فعلی)</span>':"")+'<div class="m">'+esc(c.commit.message.split("\n")[0])+'</div></div>'+(k===0?"":'<button class="btn sec sm" data-rs="'+c.sha+'" data-when="'+esc(fmt(c.commit.author.date))+'">بازگردانی</button>')+'</div>').join("")||'<p class="mut">نسخه‌ای پیدا نشد.</p>';
+  }catch(e){HISTLOAD=false;el.innerHTML='<p class="mut">دریافت تاریخچه ممکن نشد.</p>'}
+}
+const BLOCKS=[/const MENU=\[[\s\S]*?\n\];/,/const LOCAL=\{.*\};/,/const GALLERY=\[.*?\];/,/const INFO=\{.*\};/,/const STORY=\{[\s\S]*?\n\};/,/const SITE=\{.*\};/];
+$("#hist").addEventListener("click",async e=>{
+  const b=e.target.closest("[data-rs]");if(!b)return;
+  if(dirty()){toast("اول تغییرات فعلی را ذخیره کنید یا صفحه را دوباره باز کنید.","err");return}
+  if(!(await ask("منو به نسخه‌ی "+b.dataset.when+" برگردد؟")))return;
+  b.disabled=true;
+  try{
+    const ref=await gh("/git/ref/heads/"+BR).then(r=>r.json());
+    if(ref.object.sha!==HEAD){toast("سایت در این فاصله از جای دیگری تغییر کرده است. صفحه را دوباره باز کنید.","err");return}
+    const old=await getText("index.html",b.dataset.rs);
+    let out=SRC;
+    for(const re of BLOCKS){const a=out.match(re),o=old.match(re);if(a&&o)out=out.replace(re,()=>o[0])}
+    if(out===SRC){toast("این نسخه با نسخه‌ی فعلی یکی است.","err");return}
+    const base=await gh("/git/commits/"+HEAD).then(r=>r.json());
+    const sw=SW.replace(/const V = "arga-v(\d+)"/,(m,n)=>'const V = "arga-v'+(+n+1)+'"');
+    const bi=await post("/git/blobs",{content:out,encoding:"utf-8"}),bs=await post("/git/blobs",{content:sw,encoding:"utf-8"});
+    const nt=await post("/git/trees",{base_tree:base.tree.sha,tree:[{path:"index.html",mode:"100644",type:"blob",sha:bi.sha},{path:"sw.js",mode:"100644",type:"blob",sha:bs.sha}]});
+    const nc=await post("/git/commits",{message:"Restore menu version",tree:nt.sha,parents:[HEAD]});
+    await gh("/git/refs/heads/"+BR,{method:"PATCH",body:JSON.stringify({sha:nc.sha})});
+    HEAD=nc.sha;SRC=out;SW=sw;PENDING={};parse(SRC);ORIG=Object.assign({},INFO);BASE=state();
+    render();renderInfo();toast("نسخه‌ی قبلی برگردانده شد. انتشار روی سایت چند دقیقه طول می‌کشد.","ok");
+    watchPublish(sw.match(/arga-v\d+/)[0]);loadHist(true);
+  }catch(err){toast("بازگردانی نشد: "+err.message,"err")}
+  finally{b.disabled=false}
+});
 async function load(){
   const repo=await gh("").then(r=>r.json());
   if(!repo.permissions||!repo.permissions.push){const e=new Error("این کلید اجازه‌ی نوشتن روی مخزن را ندارد.");e.status=403;throw e}
