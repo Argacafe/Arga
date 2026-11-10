@@ -204,10 +204,14 @@ nav.bottom button.on .navav{border-color:var(--fg)}
 .gal-view.closing{display:flex;pointer-events:none;animation:t-fade-out .18s ease both}
 .swap{animation:t-swap .34s var(--t-ease) both}
 @keyframes t-heart{0%{transform:scale(1)}30%{transform:scale(.72)}60%{transform:scale(1.28)}100%{transform:scale(1)}}
+.bigheart{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;z-index:6}
+.bigheart svg{width:104px;height:104px;fill:#fff;stroke:#fff;stroke-width:0;filter:drop-shadow(0 4px 18px rgba(0,0,0,.35));animation:bigHeart .9s cubic-bezier(.2,.8,.3,1) forwards}
+@keyframes bigHeart{0%{transform:scale(0);opacity:0}18%{transform:scale(1.25);opacity:1}32%{transform:scale(.94)}46%{transform:scale(1.04)}60%{transform:scale(1);opacity:1}100%{transform:scale(1.12) translateY(-8px);opacity:0}}
 .heart svg{transition:fill .2s ease,stroke .2s ease}
 .heart.pop svg{animation:t-heart .45s var(--t-ease)}
 @media(prefers-reduced-motion:reduce){
   .heart.pop svg,#btnTheme svg{animation:none!important;transition:none!important}
+  .bigheart{display:none}
   .modal.show,.modal.show .card,.modal.closing,.modal.closing .card,.gal-view.show,.gal-view.show img,.gal-view.closing,.swap{animation:none!important}
 }
 </style>
@@ -500,7 +504,9 @@ function toggleFav(id){
   id=+id;favs.has(id)?favs.delete(id):favs.add(id);saveFavs();
   $$(`[data-fav="${id}"]`).forEach(b=>{
     b.classList.toggle("on",favs.has(id));
-    if(favs.has(id)){b.classList.remove("pop");void b.offsetWidth;b.classList.add("pop");setTimeout(()=>b.classList.remove("pop"),500)}
+    if(favs.has(id)){b.classList.remove("pop");void b.offsetWidth;b.classList.add("pop");setTimeout(()=>b.classList.remove("pop"),500);
+      const m=b.closest(".post")&&b.closest(".post").querySelector(".media");
+      if(m){m.querySelectorAll(".bigheart").forEach(x=>x.remove());const h=document.createElement("span");h.className="bigheart";h.innerHTML=heartSvg;m.appendChild(h);setTimeout(()=>h.remove(),950)}}
   });
   if(onlyFav)render();
 }
