@@ -102,6 +102,7 @@ select{font:inherit;background:#fff;border:1px solid var(--line);border-radius:8
 .hide{display:none!important}
 dialog{border:0;border-radius:12px;padding:16px;max-width:330px;width:90%}
 dialog::backdrop{background:rgba(0,0,0,.45)}
+body.noKu .l-ku{display:none!important}body.noEn .l-en{display:none!important}
 </style>
 </head>
 <body>
@@ -162,6 +163,8 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
     </div>
     <div class="card">
       <h2>ویژگی‌های ویژه</h2>
+      <label class="tg2"><span>زبان انگلیسی</span><input type="checkbox" id="swEn"></label>
+      <label class="tg2"><span>زبان کوردی (سورانی)</span><input type="checkbox" id="swKu"></label>
       <label class="tg2"><span>متن «Made By AI: An Idiot» پایین صفحه</span><input type="checkbox" id="swFoot"></label>
       <label class="tg2"><span>افکت مخفی (نگه داشتن دکمه‌ی قلب پایین)</span><input type="checkbox" id="swEgg"></label>
       <p class="mut" style="margin:10px 0 4px">در صورت خرید لایسنس</p>
@@ -174,12 +177,12 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
       <div class="fld"><div class="lbl">آدرس</div><input data-i="address"></div>
       <div class="fld"><div class="lbl">لینک نقشه (Google Maps یا نشان)</div><input data-i="map" dir="ltr"></div>
       <div class="fld"><div class="lbl">آدرس سایت (برای دکمه‌ی اشتراک‌گذاری)</div><input data-i="site" dir="ltr"></div>
-      <div class="fld"><div class="lbl">نام کافه (انگلیسی)</div><input data-i="name_en" dir="ltr"></div>
-      <div class="fld"><div class="lbl">ساعت کاری (انگلیسی)</div><input data-i="hours_en" dir="ltr"></div>
-      <div class="fld"><div class="lbl">آدرس (انگلیسی)</div><input data-i="address_en" dir="ltr"></div>
-      <div class="fld"><div class="lbl">نام کافه (کوردی)</div><input data-i="name_ku"></div>
-      <div class="fld"><div class="lbl">ساعت کاری (کوردی)</div><input data-i="hours_ku"></div>
-      <div class="fld"><div class="lbl">آدرس (کوردی)</div><input data-i="address_ku"></div>
+      <div class="fld l-en"><div class="lbl">نام کافه (انگلیسی)</div><input data-i="name_en" dir="ltr"></div>
+      <div class="fld l-en"><div class="lbl">ساعت کاری (انگلیسی)</div><input data-i="hours_en" dir="ltr"></div>
+      <div class="fld l-en"><div class="lbl">آدرس (انگلیسی)</div><input data-i="address_en" dir="ltr"></div>
+      <div class="fld l-ku"><div class="lbl">نام کافه (کوردی)</div><input data-i="name_ku"></div>
+      <div class="fld l-ku"><div class="lbl">ساعت کاری (کوردی)</div><input data-i="hours_ku"></div>
+      <div class="fld l-ku"><div class="lbl">آدرس (کوردی)</div><input data-i="address_ku"></div>
       <div class="fld"><div class="lbl">شماره تلفن</div><input data-i="phone" dir="ltr" inputmode="tel"></div>
       <div class="fld" style="margin:0"><div class="lbl">آیدی اینستاگرام (بدون @)</div><input data-i="instagram" dir="ltr"></div>
     </div>
@@ -218,7 +221,7 @@ const fa=n=>String(n).replace(/\d/g,d=>"۰۱۲۳۴۵۶۷۸۹"[d]);
 
 let TOKEN="";try{TOKEN=localStorage.getItem("arga_admin_token")||""}catch(e){}
 let SRC="",SW="",HEAD="";
-let CATS=[],GALLERY=[],INFO={},ORIG={},EXTRA_LOCAL={},EXTRA_STORY={},SITE={font:0,accent:"#b87333",foot:1,egg:1,lic:"Sara"},PUB="",PUBID=0;
+let CATS=[],GALLERY=[],INFO={},ORIG={},EXTRA_LOCAL={},EXTRA_STORY={},SITE={font:0,accent:"#b87333",foot:1,egg:1,en:1,ku:1,lic:"Sara"},PUB="",PUBID=0;
 let PENDING={},LOGOVER=0;
 let BASE="",photoTarget=null,storyTarget=null;
 
@@ -242,7 +245,7 @@ function parse(src){
   const menu=new Function("return "+m[1])(),local=new Function("return "+l[1])();
   const st=src.match(/const STORY=(\{[\s\S]*?\n\});/),si=src.match(/const SITE=(\{.*\});/);
   const STORY=st?new Function("return "+st[1])():{};
-  SITE=Object.assign({font:0,accent:"#b87333",foot:1,egg:1,lic:"Sara"},si?JSON.parse(si[1]):{});
+  SITE=Object.assign({font:0,accent:"#b87333",foot:1,egg:1,en:1,ku:1,lic:"Sara"},si?JSON.parse(si[1]):{});
   GALLERY=new Function("return "+g[1])();
   INFO=new Function("return "+n[1])();
   const names=new Set();
@@ -292,8 +295,8 @@ function catPanel(c){
   return '<div style="margin:8px 0"><button class="btn sec sm" data-cedit>'+(c._edit?"بستن تنظیمات دسته":"تنظیمات دسته")+'</button></div>'+(c._edit?
    '<div class="cp"><div class="row"><div style="flex:none;width:64px"><div class="lbl">ایموجی</div><input data-cf="e" value="'+esc(c.e)+'" style="text-align:center"></div>'+
    '<div style="flex:1"><div class="lbl">نام دسته</div><input data-cf="t" value="'+esc(c.t)+'"></div></div>'+
-   '<div><div class="lbl">نام انگلیسی دسته</div><input data-cf="en" dir="ltr" value="'+esc(c.en||"")+'"></div>'+
-   '<div><div class="lbl">نام کوردی دسته</div><input data-cf="ku" value="'+esc(c.ku||"")+'"></div>'+
+   '<div class="l-en"><div class="lbl">نام انگلیسی دسته</div><input data-cf="en" dir="ltr" value="'+esc(c.en||"")+'"></div>'+
+   '<div class="l-ku"><div class="lbl">نام کوردی دسته</div><input data-cf="ku" value="'+esc(c.ku||"")+'"></div>'+
    '<div><div class="lbl">رنگ</div><div class="sw">'+PAL.map((g,k)=>'<button data-cg="'+k+'" class="'+(JSON.stringify(g)===JSON.stringify(c.g)?"on":"")+'" style="background:linear-gradient(135deg,'+g[0]+','+g[1]+')" aria-label="رنگ '+(k+1)+'"></button>').join("")+'</div></div>'+
    '<div><div class="lbl">کاور استوری (هایلایت)</div><div class="row"><div class="simg">'+(c.story&&c.story.img?'<img src="'+esc(src_(c.story.img))+'" alt="">':esc(c.e))+'</div><button class="btn sec sm" data-story>تغییر کاور</button>'+(c.story&&c.story.img?'<button class="btn sec sm" data-rmstory>حذف کاور</button>':"")+'</div></div>'+
    '<div class="row"><button class="btn sec sm" data-cup>بالاتر</button><button class="btn sec sm" data-cdown>پایین‌تر</button><button class="btn bad sm" data-cdel>حذف دسته</button></div></div>':"");
@@ -305,12 +308,12 @@ function itemHtml(ci,ii,i){
    '<input data-f="n" value="'+esc(i.n)+'" placeholder="نام">'+
    '<input data-f="p" class="pr" inputmode="decimal" value="'+esc(i.p)+'"><span class="unit">هزار<br>تومان</span>'+
    '<button class="more" data-more>'+(i._open?"کمتر":"بیشتر")+'</button></div>'+
-   '<div class="row" style="margin-top:6px"><button class="st'+(i.off?" off":"")+'" data-off>'+(i.off?"ناموجود":"موجود")+'</button>'+(i.tag?'<span class="mut">'+esc(i.tag)+'</span>':"")+(i.n&&(!i.en||!i.ku)?'<span class="mut" style="color:var(--bad)">'+(!i.en&&!i.ku?"بدون اسم انگلیسی و کوردی":!i.en?"بدون اسم انگلیسی":"بدون اسم کوردی")+'</span>':"")+'</div>'+
+   '<div class="row" style="margin-top:6px"><button class="st'+(i.off?" off":"")+'" data-off>'+(i.off?"ناموجود":"موجود")+'</button>'+(i.tag?'<span class="mut">'+esc(i.tag)+'</span>':"")+(()=>{const m=[];if(SITE.en!==0&&!i.en)m.push("انگلیسی");if(SITE.ku!==0&&!i.ku)m.push("کوردی");return i.n&&m.length?'<span class="mut" style="color:var(--bad)">بدون اسم '+m.join(" و ")+'</span>':""})()+'</div>'+
    (i._open?'<div class="det"><div><div class="lbl">توضیحات</div><input data-f="d" value="'+esc(i.d)+'"></div>'+
-   '<div><div class="lbl">نام انگلیسی (در حالت انگلیسی سایت نشان داده می‌شود)</div><input data-f="en" dir="ltr" value="'+esc(i.en||"")+'"></div>'+
-   '<div><div class="lbl">توضیحات انگلیسی</div><input data-f="ed" dir="ltr" value="'+esc(i.ed||"")+'"></div>'+
-   '<div><div class="lbl">نام کوردی (در حالت کوردی سایت نشان داده می‌شود)</div><input data-f="ku" value="'+esc(i.ku||"")+'"></div>'+
-   '<div><div class="lbl">توضیحات کوردی</div><input data-f="kd" value="'+esc(i.kd||"")+'"></div>'+
+   '<div class="l-en"><div class="lbl">نام انگلیسی (در حالت انگلیسی سایت نشان داده می‌شود)</div><input data-f="en" dir="ltr" value="'+esc(i.en||"")+'"></div>'+
+   '<div class="l-en"><div class="lbl">توضیحات انگلیسی</div><input data-f="ed" dir="ltr" value="'+esc(i.ed||"")+'"></div>'+
+   '<div class="l-ku"><div class="lbl">نام کوردی (در حالت کوردی سایت نشان داده می‌شود)</div><input data-f="ku" value="'+esc(i.ku||"")+'"></div>'+
+   '<div class="l-ku"><div class="lbl">توضیحات کوردی</div><input data-f="kd" value="'+esc(i.kd||"")+'"></div>'+
    '<div class="g2"><div><div class="lbl">برچسب (مثلاً جدید)</div><input data-f="tag" list="tags" maxlength="20" value="'+esc(i.tag)+'"></div>'+
    '<div><div class="lbl">قیمت قبلی (خط‌خورده)</div><input data-f="old" class="pr" style="width:100%" inputmode="decimal" dir="ltr" value="'+esc(i.old||"")+'"></div></div>'+
    '<div style="width:90px"><div class="lbl">ایموجی</div><input data-f="e" value="'+esc(i.e)+'" placeholder="'+esc(c.e)+'" style="text-align:center"></div>'+
@@ -327,7 +330,7 @@ function renderGal(){
 }
 function renderInfo(){
   document.querySelectorAll("[data-i]").forEach(el=>{el.value=INFO[el.dataset.i]||""});
-  $("#swFoot").checked=SITE.foot!==0;$("#swEgg").checked=SITE.egg!==0;
+  $("#swFoot").checked=SITE.foot!==0;$("#swEn").checked=SITE.en!==0;$("#swKu").checked=SITE.ku!==0;document.body.classList.toggle("noEn",SITE.en===0);document.body.classList.toggle("noKu",SITE.ku===0);$("#swEgg").checked=SITE.egg!==0;
   $("#licLine").textContent="✓ کاربر : "+(SITE.lic||"Sara")+" مجاز است";
   $("#fontPick").innerHTML=FONTS.map((f,k)=>'<button data-font="'+k+'" class="'+(SITE.font===k?"on":"")+'" style="font-family:\''+f+'\',Vazirmatn,sans-serif">کافه آرگا</button>').join("");
   $("#accPick").innerHTML=ACCS.map(a=>'<button data-acc="'+a+'" class="'+(SITE.accent.toLowerCase()===a?"on":"")+'" style="background:'+a+'" aria-label="رنگ"></button>').join("");
@@ -506,6 +509,8 @@ $("#infoView").addEventListener("input",e=>{
   if(k==="phone")v=enDigits(v);
   INFO[k]=v;bar();
 });
+$("#swEn").onchange=e=>{SITE.en=e.target.checked?1:0;bar();renderInfo();render()};
+$("#swKu").onchange=e=>{SITE.ku=e.target.checked?1:0;bar();renderInfo();render()};
 $("#swFoot").onchange=e=>{SITE.foot=e.target.checked?1:0;bar()};
 $("#swEgg").onchange=e=>{SITE.egg=e.target.checked?1:0;bar()};
 $("#fontPick").addEventListener("click",e=>{const b=e.target.closest("[data-font]");if(b){SITE.font=+b.dataset.font;renderInfo()}});

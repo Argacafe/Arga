@@ -429,7 +429,8 @@ function toast(m){const t=$("#toast");t.textContent=tr(m);t.classList.add("show"
 function filtered(){
   return ITEMS.filter(i=>(cat==="all"||i.c===cat)&&(!onlyFav||favs.has(i.id))&&(!query||(i.n+i.d+i.en+i.ed+i.ku+i.kd).toLowerCase().includes(query.toLowerCase())));
 }
-const SITE={"font":0,"accent":"#b87333","foot":0,"egg":1,"lic":"Sara"};
+const SITE={"font":0,"accent":"#b87333","foot":0,"egg":1,"en":1,"ku":1,"lic":"Sara"};
+if((LANG==="en"&&SITE.en===0)||(LANG==="ku"&&SITE.ku===0)){LANG="fa";document.documentElement.lang="fa";document.documentElement.dir="rtl"}
 const STORY={
  all:{img:"images/logo-96.png"},
  hotcoffee:{img:"images/espresso.png",cut:1},
@@ -602,7 +603,7 @@ let _fv=-1;try{const t=localStorage.getItem("arga_font");if(t!==null)_fv=+t}catc
 if(Number.isInteger(_fv)&&_fv>=0&&_fv<FONTS.length)applyFont(_fv,1);else if(SITE.font>0&&SITE.font<FONTS.length)applyFont(SITE.font,1);
 if(SITE.accent&&/^#[0-9a-f]{6}$/i.test(SITE.accent)&&SITE.accent.toLowerCase()!=="#b87333"){const r=document.documentElement.style;r.setProperty("--accent",SITE.accent);r.setProperty("--grad","linear-gradient(45deg,color-mix(in srgb,"+SITE.accent+",#fff 35%),"+SITE.accent+",color-mix(in srgb,"+SITE.accent+",#000 40%))")}
 $("#btnFont").onclick=()=>{
-  $("#card").innerHTML=`<div class="info"><button style="float:left;font-size:22px" data-close>✕</button><h2 style="text-align:center">${L("زبان","Language","زمان")}</h2><div class="fnts" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px"><button data-lang="fa" class="${LANG==="fa"?"on":""}"><b>فارسی</b></button><button data-lang="ku" class="${LANG==="ku"?"on":""}"><b>کوردی</b></button><button data-lang="en" class="${LANG==="en"?"on":""}"><b>English</b></button></div>
+  $("#card").innerHTML=`<div class="info"><button style="float:left;font-size:22px" data-close>✕</button><h2 style="text-align:center">${L("زبان","Language","زمان")}</h2><div class="fnts" style="display:grid;grid-template-columns:repeat(${1+(SITE.ku!==0)+(SITE.en!==0)},1fr);gap:8px"><button data-lang="fa" class="${LANG==="fa"?"on":""}"><b>فارسی</b></button>${SITE.ku!==0?`<button data-lang="ku" class="${LANG==="ku"?"on":""}"><b>کوردی</b></button>`:""}${SITE.en!==0?`<button data-lang="en" class="${LANG==="en"?"on":""}"><b>English</b></button>`:""}</div>
    <h2 style="text-align:center;margin-top:16px">${L("فونت","Font","فۆنت")}</h2><div class="fnts">${FONTS.map((f,i)=>`<button data-font="${i}" class="${i===fi?"on":""}" style="font-family:'${f[1]}',system-ui,sans-serif"><b>${L(f[0],f[1])}</b><span>${L("کافه خونه ئارگا ۱۲۳","Arga Cafe 123","کافێی ماڵی ئارگا ۱۲۳")}</span></button>`).join("")}</div></div>`;
   openModal();
 };
