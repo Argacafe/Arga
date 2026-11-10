@@ -88,6 +88,12 @@ select{font:inherit;background:#fff;border:1px solid var(--line);border-radius:8
 #pv{position:fixed;inset:0;z-index:20;background:#222;display:flex;flex-direction:column}
 #pv .pvh{display:flex;justify-content:space-between;align-items:center;color:#fff;padding:10px 14px;font-size:14px}
 #pv iframe{flex:1;border:0;background:#fff;width:100%;max-width:480px;margin:0 auto}
+.tg2{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid var(--line);font-size:14px}
+.tg2:first-of-type{border-top:0}
+.tg2 input{appearance:none;-webkit-appearance:none;width:44px;height:26px;border-radius:99px;background:#cfd3d8;position:relative;flex:none;cursor:pointer;transition:background .2s;margin:0}
+.tg2 input::after{content:"";position:absolute;top:3px;inset-inline-start:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:inset-inline-start .2s}
+.tg2 input:checked{background:#1a9a45}
+.tg2 input:checked::after{inset-inline-start:21px}
 .hide{display:none!important}
 dialog{border:0;border-radius:12px;padding:16px;max-width:330px;width:90%}
 dialog::backdrop{background:rgba(0,0,0,.45)}
@@ -150,6 +156,13 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
       <p class="mut" style="margin:10px 0 0">مشتری‌ای که خودش فونت را از داخل سایت عوض کرده باشد، فونت خودش می‌ماند.</p>
     </div>
     <div class="card">
+      <h2>ویژگی‌های ویژه</h2>
+      <label class="tg2"><span>متن «Made By AI: An Idiot» پایین صفحه</span><input type="checkbox" id="swFoot"></label>
+      <label class="tg2"><span>افکت مخفی (نگه داشتن دکمه‌ی قلب پایین)</span><input type="checkbox" id="swEgg"></label>
+      <p class="mut" style="margin:10px 0 4px">در صورت خرید لایسنس</p>
+      <p id="licLine" style="margin:0;color:#1a9a45;font-weight:600"></p>
+    </div>
+    <div class="card">
       <h2>اطلاعات تماس</h2>
       <div class="fld"><div class="lbl">نام کافه</div><input data-i="name"></div>
       <div class="fld"><div class="lbl">ساعت کاری</div><input data-i="hours"></div>
@@ -197,7 +210,7 @@ const fa=n=>String(n).replace(/\d/g,d=>"۰۱۲۳۴۵۶۷۸۹"[d]);
 
 let TOKEN="";try{TOKEN=localStorage.getItem("arga_admin_token")||""}catch(e){}
 let SRC="",SW="",HEAD="";
-let CATS=[],GALLERY=[],INFO={},ORIG={},EXTRA_LOCAL={},EXTRA_STORY={},SITE={font:0,accent:"#b87333"},PUB="",PUBID=0;
+let CATS=[],GALLERY=[],INFO={},ORIG={},EXTRA_LOCAL={},EXTRA_STORY={},SITE={font:0,accent:"#b87333",foot:1,egg:1,lic:"Sara"},PUB="",PUBID=0;
 let PENDING={},LOGOVER=0;
 let BASE="",photoTarget=null,storyTarget=null;
 
@@ -221,7 +234,7 @@ function parse(src){
   const menu=new Function("return "+m[1])(),local=new Function("return "+l[1])();
   const st=src.match(/const STORY=(\{[\s\S]*?\n\});/),si=src.match(/const SITE=(\{.*\});/);
   const STORY=st?new Function("return "+st[1])():{};
-  SITE=Object.assign({font:0,accent:"#b87333"},si?JSON.parse(si[1]):{});
+  SITE=Object.assign({font:0,accent:"#b87333",foot:1,egg:1,lic:"Sara"},si?JSON.parse(si[1]):{});
   GALLERY=new Function("return "+g[1])();
   INFO=new Function("return "+n[1])();
   const names=new Set();
@@ -303,6 +316,8 @@ function renderGal(){
 }
 function renderInfo(){
   document.querySelectorAll("[data-i]").forEach(el=>{el.value=INFO[el.dataset.i]||""});
+  $("#swFoot").checked=SITE.foot!==0;$("#swEgg").checked=SITE.egg!==0;
+  $("#licLine").textContent="✓ کاربر : "+(SITE.lic||"Sara")+" مجاز است";
   $("#fontPick").innerHTML=FONTS.map((f,k)=>'<button data-font="'+k+'" class="'+(SITE.font===k?"on":"")+'">'+f+'</button>').join("");
   $("#accPick").innerHTML=ACCS.map(a=>'<button data-acc="'+a+'" class="'+(SITE.accent.toLowerCase()===a?"on":"")+'" style="background:'+a+'" aria-label="رنگ"></button>').join("");
   $("#logoPrev").src=src_("images/logo-192.png")+(PENDING["images/logo-192.png"]?"":"?v="+Date.now());
@@ -480,6 +495,8 @@ $("#infoView").addEventListener("input",e=>{
   if(k==="phone")v=enDigits(v);
   INFO[k]=v;bar();
 });
+$("#swFoot").onchange=e=>{SITE.foot=e.target.checked?1:0;bar()};
+$("#swEgg").onchange=e=>{SITE.egg=e.target.checked?1:0;bar()};
 $("#fontPick").addEventListener("click",e=>{const b=e.target.closest("[data-font]");if(b){SITE.font=+b.dataset.font;renderInfo()}});
 $("#accPick").addEventListener("click",e=>{const b=e.target.closest("[data-acc]");if(b){SITE.accent=b.dataset.acc;renderInfo()}});
 $("#pickLogo").onclick=()=>$("#logoFile").click();
