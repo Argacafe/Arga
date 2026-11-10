@@ -114,10 +114,8 @@ nav.bottom button.on svg{stroke-width:2.6}
 @media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .neon-foot{color:#f3e6ff}}
 :root[data-theme="dark"] .neon-foot{color:#f3e6ff}
 .neon-foot a{color:inherit;text-decoration:none}
-.neon-foot .ai{color:#ff7a00;font-weight:600;animation:neonOrange 2.6s ease-in-out infinite alternate}
-@keyframes neonOrange{from{text-shadow:0 0 3px rgba(255,140,30,.7),0 0 8px rgba(255,120,0,.45),0 0 16px rgba(255,100,0,.3)}to{text-shadow:0 0 6px rgba(255,170,60,.95),0 0 14px rgba(255,130,0,.8),0 0 30px rgba(255,100,0,.65)}}
 @keyframes neonFoot{from{text-shadow:0 0 3px rgba(176,76,255,.7),0 0 8px rgba(150,60,255,.45),0 0 16px rgba(122,44,255,.3)}to{text-shadow:0 0 6px rgba(200,110,255,.95),0 0 14px rgba(160,70,255,.8),0 0 30px rgba(122,44,255,.65),0 0 48px rgba(122,44,255,.35)}}
-@media(prefers-reduced-motion:reduce){.neon-foot,.neon-foot .ai{animation:none}}
+@media(prefers-reduced-motion:reduce){.neon-foot{animation:none}}
 [data-nav="fav"]{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;touch-action:none;-webkit-tap-highlight-color:transparent}
 [data-nav="fav"].hold svg{animation:heartHold 3s linear forwards;transform-origin:center}
 @keyframes heartHold{0%{transform:scale(1);filter:drop-shadow(0 0 0 #7fd8ff)}100%{transform:scale(1.45);filter:drop-shadow(0 0 8px #7fd8ff) drop-shadow(0 0 16px #38b6ff)}}
@@ -255,7 +253,7 @@ nav.bottom button.on .navav{border-color:var(--fg)}
   <div class="grid" id="grid"></div>
   <div class="list" id="list"></div>
   <div class="empty" id="empty">این همه آیتم خوب داریم، ول کن اینو</div>
-  <p class="neon-foot">Made By <span class="ai">AI</span>: <a href="https://kurd.cc"><span class="ai">A</span>n <span class="ai">I</span>diot</a></p>
+  <p class="neon-foot">Made By AI: <a href="https://kurd.cc">An Idiot</a></p>
 </main>
 
 <nav class="bottom">
