@@ -177,6 +177,9 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
       <div class="fld"><div class="lbl">نام کافه (انگلیسی)</div><input data-i="name_en" dir="ltr"></div>
       <div class="fld"><div class="lbl">ساعت کاری (انگلیسی)</div><input data-i="hours_en" dir="ltr"></div>
       <div class="fld"><div class="lbl">آدرس (انگلیسی)</div><input data-i="address_en" dir="ltr"></div>
+      <div class="fld"><div class="lbl">نام کافه (کوردی)</div><input data-i="name_ku"></div>
+      <div class="fld"><div class="lbl">ساعت کاری (کوردی)</div><input data-i="hours_ku"></div>
+      <div class="fld"><div class="lbl">آدرس (کوردی)</div><input data-i="address_ku"></div>
       <div class="fld"><div class="lbl">شماره تلفن</div><input data-i="phone" dir="ltr" inputmode="tel"></div>
       <div class="fld" style="margin:0"><div class="lbl">آیدی اینستاگرام (بدون @)</div><input data-i="instagram" dir="ltr"></div>
     </div>
@@ -243,14 +246,14 @@ function parse(src){
   GALLERY=new Function("return "+g[1])();
   INFO=new Function("return "+n[1])();
   const names=new Set();
-  CATS=menu.map(c=>({id:c.id,t:c.t,en:c.en||"",e:c.e,g:c.g,story:STORY[c.id]||null,items:c.items.map(a=>{names.add(a[0]);const x=a[4]||{};return{n:a[0],p:a[1],d:a[2]||"",e:a[3]||"",photo:local[a[0]]||"",off:x.off?1:0,tag:x.tag||"",old:x.old||0,en:x.en||"",ed:x.ed||""}})}));
+  CATS=menu.map(c=>({id:c.id,t:c.t,en:c.en||"",ku:c.ku||"",e:c.e,g:c.g,story:STORY[c.id]||null,items:c.items.map(a=>{names.add(a[0]);const x=a[4]||{};return{n:a[0],p:a[1],d:a[2]||"",e:a[3]||"",photo:local[a[0]]||"",off:x.off?1:0,tag:x.tag||"",old:x.old||0,en:x.en||"",ed:x.ed||"",ku:x.ku||"",kd:x.kd||""}})}));
   EXTRA_STORY={};for(const k in STORY)if(!CATS.some(c=>c.id===k))EXTRA_STORY[k]=STORY[k];
   EXTRA_LOCAL={};for(const k in local)if(!names.has(k))EXTRA_LOCAL[k]=local[k];
 }
 const q=s=>JSON.stringify(s);
 function serMenu(){
-  return "const MENU=[\n"+CATS.map(c=>" {id:"+q(c.id)+",t:"+q(c.t)+(c.en?",en:"+q(c.en):"")+",e:"+q(c.e)+",g:["+c.g.map(q).join(", ")+"],items:[\n"+
-    c.items.map(i=>{const x={};if(i.off)x.off=1;if(i.tag)x.tag=i.tag;if(i.old>0)x.old=i.old;if(i.en)x.en=i.en;if(i.ed)x.ed=i.ed;const hx=Object.keys(x).length,a=[q(i.n),i.p,q(i.d)];if(i.e||hx)a.push(q(i.e||""));if(hx)a.push(JSON.stringify(x));return"  ["+a.join(", ")+"]"}).join(",\n")+"]}").join(",\n")+"\n];";
+  return "const MENU=[\n"+CATS.map(c=>" {id:"+q(c.id)+",t:"+q(c.t)+(c.en?",en:"+q(c.en):"")+(c.ku?",ku:"+q(c.ku):"")+",e:"+q(c.e)+",g:["+c.g.map(q).join(", ")+"],items:[\n"+
+    c.items.map(i=>{const x={};if(i.off)x.off=1;if(i.tag)x.tag=i.tag;if(i.old>0)x.old=i.old;if(i.en)x.en=i.en;if(i.ed)x.ed=i.ed;if(i.ku)x.ku=i.ku;if(i.kd)x.kd=i.kd;const hx=Object.keys(x).length,a=[q(i.n),i.p,q(i.d)];if(i.e||hx)a.push(q(i.e||""));if(hx)a.push(JSON.stringify(x));return"  ["+a.join(", ")+"]"}).join(",\n")+"]}").join(",\n")+"\n];";
 }
 function serLocal(){
   const o={};CATS.forEach(c=>c.items.forEach(i=>{if(i.photo)o[i.n]=i.photo}));
@@ -290,6 +293,7 @@ function catPanel(c){
    '<div class="cp"><div class="row"><div style="flex:none;width:64px"><div class="lbl">ایموجی</div><input data-cf="e" value="'+esc(c.e)+'" style="text-align:center"></div>'+
    '<div style="flex:1"><div class="lbl">نام دسته</div><input data-cf="t" value="'+esc(c.t)+'"></div></div>'+
    '<div><div class="lbl">نام انگلیسی دسته</div><input data-cf="en" dir="ltr" value="'+esc(c.en||"")+'"></div>'+
+   '<div><div class="lbl">نام کوردی دسته</div><input data-cf="ku" value="'+esc(c.ku||"")+'"></div>'+
    '<div><div class="lbl">رنگ</div><div class="sw">'+PAL.map((g,k)=>'<button data-cg="'+k+'" class="'+(JSON.stringify(g)===JSON.stringify(c.g)?"on":"")+'" style="background:linear-gradient(135deg,'+g[0]+','+g[1]+')" aria-label="رنگ '+(k+1)+'"></button>').join("")+'</div></div>'+
    '<div><div class="lbl">کاور استوری (هایلایت)</div><div class="row"><div class="simg">'+(c.story&&c.story.img?'<img src="'+esc(src_(c.story.img))+'" alt="">':esc(c.e))+'</div><button class="btn sec sm" data-story>تغییر کاور</button>'+(c.story&&c.story.img?'<button class="btn sec sm" data-rmstory>حذف کاور</button>':"")+'</div></div>'+
    '<div class="row"><button class="btn sec sm" data-cup>بالاتر</button><button class="btn sec sm" data-cdown>پایین‌تر</button><button class="btn bad sm" data-cdel>حذف دسته</button></div></div>':"");
@@ -301,10 +305,12 @@ function itemHtml(ci,ii,i){
    '<input data-f="n" value="'+esc(i.n)+'" placeholder="نام">'+
    '<input data-f="p" class="pr" inputmode="decimal" value="'+esc(i.p)+'"><span class="unit">هزار<br>تومان</span>'+
    '<button class="more" data-more>'+(i._open?"کمتر":"بیشتر")+'</button></div>'+
-   '<div class="row" style="margin-top:6px"><button class="st'+(i.off?" off":"")+'" data-off>'+(i.off?"ناموجود":"موجود")+'</button>'+(i.tag?'<span class="mut">'+esc(i.tag)+'</span>':"")+(i.n&&!i.en?'<span class="mut" style="color:var(--bad)">بدون اسم انگلیسی</span>':"")+'</div>'+
+   '<div class="row" style="margin-top:6px"><button class="st'+(i.off?" off":"")+'" data-off>'+(i.off?"ناموجود":"موجود")+'</button>'+(i.tag?'<span class="mut">'+esc(i.tag)+'</span>':"")+(i.n&&(!i.en||!i.ku)?'<span class="mut" style="color:var(--bad)">'+(!i.en&&!i.ku?"بدون اسم انگلیسی و کوردی":!i.en?"بدون اسم انگلیسی":"بدون اسم کوردی")+'</span>':"")+'</div>'+
    (i._open?'<div class="det"><div><div class="lbl">توضیحات</div><input data-f="d" value="'+esc(i.d)+'"></div>'+
    '<div><div class="lbl">نام انگلیسی (در حالت انگلیسی سایت نشان داده می‌شود)</div><input data-f="en" dir="ltr" value="'+esc(i.en||"")+'"></div>'+
    '<div><div class="lbl">توضیحات انگلیسی</div><input data-f="ed" dir="ltr" value="'+esc(i.ed||"")+'"></div>'+
+   '<div><div class="lbl">نام کوردی (در حالت کوردی سایت نشان داده می‌شود)</div><input data-f="ku" value="'+esc(i.ku||"")+'"></div>'+
+   '<div><div class="lbl">توضیحات کوردی</div><input data-f="kd" value="'+esc(i.kd||"")+'"></div>'+
    '<div class="g2"><div><div class="lbl">برچسب (مثلاً جدید)</div><input data-f="tag" list="tags" maxlength="20" value="'+esc(i.tag)+'"></div>'+
    '<div><div class="lbl">قیمت قبلی (خط‌خورده)</div><input data-f="old" class="pr" style="width:100%" inputmode="decimal" dir="ltr" value="'+esc(i.old||"")+'"></div></div>'+
    '<div style="width:90px"><div class="lbl">ایموجی</div><input data-f="e" value="'+esc(i.e)+'" placeholder="'+esc(c.e)+'" style="text-align:center"></div>'+
@@ -421,7 +427,7 @@ $("#cats").addEventListener("click",async e=>{
     render();return;
   }
   if(b.dataset.add!==undefined){
-    const c=CATS[+b.dataset.add];c._open=true;c.items.push({n:"",p:"",d:"",e:"",photo:"",off:0,tag:"",old:0,en:"",ed:"",_open:true});render();
+    const c=CATS[+b.dataset.add];c._open=true;c.items.push({n:"",p:"",d:"",e:"",photo:"",off:0,tag:"",old:0,en:"",ed:"",ku:"",kd:"",_open:true});render();
     const ins=document.querySelectorAll('.it[data-c="'+b.dataset.add+'"] input[data-f="n"]');if(ins.length)ins[ins.length-1].focus();return;
   }
   const row=b.closest(".it");if(!row)return;
@@ -472,7 +478,7 @@ $("#bkGo").onclick=async()=>{
   b.list.forEach(i=>{i.p=b.calc(i)});$("#bkVal").value="";render();toast("قیمت‌ها تغییر کرد و برای تمیزتر شدن منو گرد شدند (مثلاً ۱۴۱ تا ۱۴۴ شد ۱۴۵ و ۱۴۶ تا ۱۴۹ شد ۱۵۰). برای انتشار ذخیره را بزنید.","ok");
 };
 $("#addCat").onclick=()=>{
-  CATS.push({id:"c"+Date.now().toString(36),t:"",en:"",e:"🍽️",g:PAL[CATS.length%PAL.length].slice(),items:[],_open:true,_edit:true});
+  CATS.push({id:"c"+Date.now().toString(36),t:"",en:"",ku:"",e:"🍽️",g:PAL[CATS.length%PAL.length].slice(),items:[],_open:true,_edit:true});
   $("#search").value="";render();
   const t=[].slice.call(document.querySelectorAll('input[data-cf="t"]')).pop();if(t){t.scrollIntoView({block:"center"});t.focus()}
 };
@@ -535,7 +541,7 @@ function validate(){
   if(changed("phone")&&INFO.phone&&INFO.phone.replace(/\D/g,"").length<5)return"شماره تلفن کوتاه است.";
   if(changed("instagram")&&!/^[A-Za-z0-9._]+$/.test(INFO.instagram))return"آیدی اینستاگرام درست نیست.";
   for(const c of CATS){
-    c.t=c.t.trim();c.en=(c.en||"").trim();c.e=c.e.trim()||"🍽️";
+    c.t=c.t.trim();c.en=(c.en||"").trim();c.ku=(c.ku||"").trim();c.e=c.e.trim()||"🍽️";
     if(!c.t)return"یکی از دسته‌ها نام ندارد.";
     if(!c.items.length)return"دسته‌ی «"+c.t+"» آیتمی ندارد. آیتم اضافه کنید یا دسته را حذف کنید.";
   }
@@ -546,7 +552,7 @@ function validate(){
     if(seen.has(i.n))return"نام «"+i.n+"» تکراری است.";
     seen.add(i.n);
     if(typeof i.p!=="number"||!(i.p>=0))return"قیمت «"+i.n+"» درست نیست.";
-    i.tag=(i.tag||"").trim();i.en=(i.en||"").trim();i.ed=(i.ed||"").trim();
+    i.tag=(i.tag||"").trim();i.en=(i.en||"").trim();i.ed=(i.ed||"").trim();i.ku=(i.ku||"").trim();i.kd=(i.kd||"").trim();
   }
 }
 $("#save").onclick=async()=>{
