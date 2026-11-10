@@ -120,6 +120,7 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
         <div class="g2"><div><div class="lbl">مقدار</div><input id="bkVal" inputmode="decimal" dir="ltr" placeholder="مثلاً ۱۰"></div>
         <div><div class="lbl">واحد</div><select id="bkMode"><option value="pct">درصد</option><option value="abs">هزار تومان</option></select></div></div>
         <p class="mut" id="bkPrev" style="margin:0"></p>
+        <p class="mut" style="margin:0;font-size:12.5px">قیمت‌های جدید برای تمیزتر شدن منو به بالاترین مضرب ۵ گرد می‌شوند. مثلاً ۱۴۱ تا ۱۴۴ می‌شود ۱۴۵ و ۱۴۶ تا ۱۴۹ می‌شود ۱۵۰.</p>
         <button class="btn" id="bkGo">اعمال روی آیتم‌ها</button>
       </div>
     </details>
@@ -432,7 +433,7 @@ $("#search").addEventListener("input",render);
 function bulkCalc(){
   const sc=$("#bkScope").value,v=parseFloat(enDigits($("#bkVal").value)),dir=+$("#bkDir").value,mode=$("#bkMode").value;
   const list=[];CATS.forEach((c,k)=>{if(sc==="all"||+sc===k)c.items.forEach(i=>{if(typeof i.p==="number"&&i.p>0)list.push(i)})});
-  const calc=i=>{let n=mode==="pct"?i.p*(1+dir*v/100):i.p+dir*v;n=Math.round(n*100)/100;return Math.max(0,n)};
+  const calc=i=>{let n=mode==="pct"?i.p*(1+dir*v/100):i.p+dir*v;return Math.max(0,Math.ceil(Math.round(n*100)/100/5-1e-9)*5)};
   return{list:list,calc:calc,ok:!isNaN(v)&&v>0};
 }
 function bulkPrev(){
@@ -447,8 +448,8 @@ $("#bkGo").onclick=async()=>{
   const b=bulkCalc();
   if(!b.ok){toast("مقدار تغییر را درست وارد کنید.","err");return}
   if(!b.list.length){toast("آیتمی با قیمت پیدا نشد.","err");return}
-  if(!(await ask("قیمت "+fa(b.list.length)+" آیتم تغییر کند؟ قبل از ذخیره می‌توانید دوباره عوض کنید.")))return;
-  b.list.forEach(i=>{i.p=b.calc(i)});$("#bkVal").value="";render();toast("قیمت‌ها تغییر کرد. برای انتشار ذخیره را بزنید.","ok");
+  if(!(await ask("قیمت "+fa(b.list.length)+" آیتم تغییر کند؟ قیمت‌های جدید برای تمیزتر شدن منو گرد می‌شوند. قبل از ذخیره می‌توانید دوباره عوض کنید.")))return;
+  b.list.forEach(i=>{i.p=b.calc(i)});$("#bkVal").value="";render();toast("قیمت‌ها تغییر کرد و برای تمیزتر شدن منو گرد شدند (مثلاً ۱۴۱ تا ۱۴۴ شد ۱۴۵ و ۱۴۶ تا ۱۴۹ شد ۱۵۰). برای انتشار ذخیره را بزنید.","ok");
 };
 $("#addCat").onclick=()=>{
   CATS.push({id:"c"+Date.now().toString(36),t:"",en:"",e:"🍽️",g:PAL[CATS.length%PAL.length].slice(),items:[],_open:true,_edit:true});
