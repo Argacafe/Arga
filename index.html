@@ -14,7 +14,7 @@
 <link rel="icon" type="image/png" href="images/favicon.png">
 <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
 <meta property="og:image" content="images/logo-512.png">
-<script>try{if(localStorage.getItem("arga_lang")==="en"){document.documentElement.lang="en";document.documentElement.dir="ltr"}}catch(e){}</script>
+<script>try{var _l=localStorage.getItem("arga_lang");if(_l==="en"){document.documentElement.lang="en";document.documentElement.dir="ltr"}else if(_l==="ku")document.documentElement.lang="ckb"}catch(e){}</script>
 <style>
 @font-face{font-family:"Metal";src:url(fonts/MetalMania-digits.ttf) format("truetype");font-display:block}
 @font-face{font-family:"Vazirmatn";src:url(fonts/Vazirmatn-VF.woff2) format("woff2");font-weight:100 900;font-display:swap}
@@ -274,29 +274,31 @@ nav.bottom button.on .navav{border-color:var(--fg)}
 <div class="toast" id="toast"></div>
 
 <script>
-let LANG="fa";try{if(localStorage.getItem("arga_lang")==="en")LANG="en"}catch(e){}
-const L=(f,e)=>LANG==="en"?e:f;
+let LANG="fa";try{const _s=localStorage.getItem("arga_lang");if(_s==="en"||_s==="ku")LANG=_s}catch(e){}
+const L=(f,e,k)=>LANG==="en"?e:LANG==="ku"&&k!==undefined?k:f;
 const T={"نصب اپلیکیشن":"Install app","تغییر فونت":"Font & language","حالت تاریک / روشن":"Dark / light mode","علاقه‌مندی‌ها":"Favorites","اینستاگرام":"Instagram","واتساپ":"WhatsApp","لوگوی کافه Arga":"Arga Cafe logo","آیتم":"Items","دسته‌بندی":"Categories","امتیاز":"Rating","۱۰/۱۰":"10/10","تماس":"Call","آدرس":"Location","رزرو":"Reserve","اشتراک‌گذاری":"Share","نمای شبکه‌ای":"Grid view","نمای لیستی":"List view","دنبال چی می‌گردی؟":"What are you looking for?","این همه آیتم خوب داریم، ول کن اینو":"We have so many good items, skip this one","آیتم‌هایی که دوست داری لایک کن":"Like the items you love","خانه":"Home","گالری کافه":"Cafe gallery","جستجو":"Search","درباره‌ی ما":"About us","منو را مستقیم از صفحه‌ی گوشی‌تان باز کنید.":"Open the menu straight from your home screen.","نصب":"Install","بعداً":"Later","ناموجود":"Sold out","پسندیدن":"Like","عکس کافه Arga":"Arga Cafe photo","بازدید:":"Visits:","نصب اپلیکیشن روی گوشی":"Install the app on your phone","اپلیکیشن نصب شد ✅":"App installed ✅","اپلیکیشن قبلاً نصب شده است ✅":"The app is already installed ✅","حالت تاریک 🌙":"Dark mode 🌙","حالت روشن ☀️":"Light mode ☀️","لینک کپی شد":"Link copied"};
-const tr=x=>LANG==="en"&&T[x]!==undefined?T[x]:x;
+const TK={"نصب اپلیکیشن": "دامەزراندنی ئەپ", "تغییر فونت": "فۆنت و زمان", "حالت تاریک / روشن": "دۆخی تاریک / ڕووناک", "علاقه‌مندی‌ها": "دڵخوازەکان", "اینستاگرام": "ئینستاگرام", "واتساپ": "واتساپ", "لوگوی کافه Arga": "لۆگۆی کافێی ئارگا", "آیتم": "جۆر", "دسته‌بندی": "بەش", "امتیاز": "نمرە", "تماس": "پەیوەندی", "آدرس": "ناونیشان", "رزرو": "حیجز", "اشتراک‌گذاری": "هاوبەشکردن", "نمای شبکه‌ای": "شێوەی خانەخانە", "نمای لیستی": "شێوەی لیست", "دنبال چی می‌گردی؟": "بەدوای چیدا دەگەڕێیت؟", "این همه آیتم خوب داریم، ول کن اینو": "ئەوەندە جۆری باشمان هەیە، وازی لەمە بێنە", "آیتم‌هایی که دوست داری لایک کن": "ئەو جۆرانەی حەزت لێیانە لایک بکە", "خانه": "ماڵەوە", "گالری کافه": "گاڵێری کافێ", "جستجو": "گەڕان", "درباره‌ی ما": "دەربارەی ئێمە", "منو را مستقیم از صفحه‌ی گوشی‌تان باز کنید.": "مێنیووەکە ڕاستەوخۆ لە شاشەی مۆبایلەکەتەوە بکەرەوە.", "نصب": "دامەزراندن", "بعداً": "دواتر", "ناموجود": "نەماوە", "پسندیدن": "لایک", "عکس کافه Arga": "وێنەی کافێی ئارگا", "بازدید:": "سەردان:", "نصب اپلیکیشن روی گوشی": "دامەزراندنی ئەپ لەسەر مۆبایل", "اپلیکیشن نصب شد ✅": "ئەپەکە دامەزرا ✅", "اپلیکیشن قبلاً نصب شده است ✅": "ئەپەکە پێشتر دامەزراوە ✅", "حالت تاریک 🌙": "دۆخی تاریک 🌙", "حالت روشن ☀️": "دۆخی ڕووناک ☀️", "لینک کپی شد": "لینکەکە کۆپی کرا"};
+const dict=()=>LANG==="en"?T:LANG==="ku"?TK:null;
+const tr=x=>{const d=dict();return d&&d[x]!==undefined?d[x]:x};
 function applyLangTree(root){
-  const en=LANG==="en",nodes=[],w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
+  const D=dict(),nodes=[],w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
   while(w.nextNode())if(!/^(SCRIPT|STYLE)$/.test(w.currentNode.parentNode.nodeName))nodes.push(w.currentNode);
   nodes.forEach(n=>{
     const orig=n.__fa!==undefined?n.__fa:n.nodeValue,k=orig.trim();
-    if(en&&T[k]!==undefined){if(n.__fa===undefined)n.__fa=n.nodeValue;n.nodeValue=orig.replace(k,T[k])}
-    else if(!en&&n.__fa!==undefined)n.nodeValue=n.__fa;
+    if(D&&D[k]!==undefined){if(n.__fa===undefined)n.__fa=n.nodeValue;n.nodeValue=orig.replace(k,D[k])}
+    else if(!D&&n.__fa!==undefined)n.nodeValue=n.__fa;
   });
   root.querySelectorAll("[aria-label],[title],[placeholder],[alt]").forEach(el=>{
     ["aria-label","title","placeholder","alt"].forEach(a=>{
       if(!el.hasAttribute(a))return;
       const key="__fa_"+a,orig=el[key]!==undefined?el[key]:el.getAttribute(a);
-      if(en&&T[orig]!==undefined){el[key]=orig;el.setAttribute(a,T[orig])}
-      else if(!en&&el[key]!==undefined)el.setAttribute(a,el[key]);
+      if(D&&D[orig]!==undefined){el[key]=orig;el.setAttribute(a,D[orig])}
+      else if(!D&&el[key]!==undefined)el.setAttribute(a,el[key]);
     });
   });
 }
-const nI=k=>LANG==="en"&&INFO[k+"_en"]?INFO[k+"_en"]:INFO[k];
-const INFO={"name":"کافه خونه ئارگا","hours":"هر روز ۱۰ صبح تا ۱۰ شب","address":"مریوان، چهارراه اصلی، خیابان باهنر","map":"https://maps.app.goo.gl/nutpnMqZqy9oqxxEA?g_st=ac","phone":"093676199xx","instagram":"Argacafe","name_en":"Arga Cafe","hours_en":"Every day, 10 AM to 10 PM","address_en":"Main Intersection (Chahâr Râh-e Asli) , Bahonar St.","site":"https://argacafe.pages.dev/"};
+const nI=k=>LANG==="en"&&INFO[k+"_en"]?INFO[k+"_en"]:LANG==="ku"&&INFO[k+"_ku"]?INFO[k+"_ku"]:INFO[k];
+const INFO={"name":"کافه خونه ئارگا","hours":"هر روز ۱۰ صبح تا ۱۰ شب","address":"مریوان، چهارراه اصلی، خیابان باهنر","map":"https://maps.app.goo.gl/nutpnMqZqy9oqxxEA?g_st=ac","phone":"093676199xx","instagram":"Argacafe","name_en":"Arga Cafe","hours_en":"Every day, 10 AM to 10 PM","address_en":"Main Intersection (Chahâr Râh-e Asli) , Bahonar St.","site":"https://argacafe.pages.dev/","name_ku":"کافێی ماڵی ئارگا","hours_ku":"هەموو ڕۆژێک، ۱۰ی بەیانی تا ۱۰ی شەو","address_ku":"مەریوان، چوارڕێیانی سەرەکی، شەقامی باهونەر"};
 const eh=t=>String(t).replace(/[&<>"']/g,c=>"&#"+c.charCodeAt(0)+";");
 const safeUrl=u=>/^https?:\/\//i.test(u)?u:"#";
 const telHref=()=>"tel:"+INFO.phone.replace(/[^\d+]/g,"");
@@ -316,75 +318,75 @@ setBio();
    هر آیتم: [نام، قیمت، توضیح/ترکیبات، (اختیاری) ایموجی]
    عکس واقعی: در PHOTOS با نام آیتم، یا img:"images/x.jpg" بعد از ساخت ITEMS. */
 const MENU=[
- {id:"hotcoffee",t:"نوشیدنی گرم با قهوه",en:"Hot Coffee",e:"☕",g:["#3b2316", "#9a6a47"],items:[
-  ["اسپرسو", 140, "۷۰-۳۰ روبوستا", "", {"en":"Espresso","ed":"70/30 Robusta blend"}],
-  ["آمریکانو", 150, "", "", {"en":"Americano"}],
-  ["لته", 200, "", "🥛", {"en":"Latte"}],
-  ["کاپوچینو", 200, "", "", {"en":"Cappuccino"}],
-  ["موکا", 240, "", "🍫", {"en":"Mocha"}],
-  ["لته با سیروپ دلخواه", 240, "کارامل، فندق، نارگیل", "", {"en":"Syrup Latte","ed":"Caramel, hazelnut, coconut"}]]},
- {id:"coldcoffee",t:"نوشیدنی سرد با قهوه",en:"Iced Coffee",e:"🧊",g:["#4a362b", "#b98a62"],items:[
-  ["آیس لته", 200, "اسپرسو دبل، شیر، یخ", "🧊", {"en":"Iced Latte","ed":"Double espresso, milk, ice"}],
-  ["آیس لته (سیروپ دلخواه)", 240, "کارامل، فندق، نارگیل", "", {"en":"Iced Syrup Latte","ed":"Caramel, hazelnut, coconut"}],
-  ["آیس موکا", 240, "اسپرسو، شیر، سیروپ شکلات، یخ", "🍫", {"en":"Iced Mocha","ed":"Espresso, milk, chocolate syrup, ice"}],
-  ["آیس تونیک آمریکانو", 185, "اسپرسو، آب گازدار", "🫧", {"en":"Iced Tonic Americano","ed":"Espresso, sparkling water"}]]},
- {id:"frappe",t:"فراپه و فراپاچینو",en:"Frappes & Frappuccinos",e:"🥤",g:["#a9794f", "#f0d3a8"],items:[
-  ["فراپاچینو", 260, "بستنی وانیلی، اسپرسو، شیر، سس کارامل، یخ", "", {"en":"Frappuccino","ed":"Vanilla ice cream, espresso, milk, caramel sauce, ice"}],
-  ["فراپاچینو لوتوس", 340, "بستنی وانیلی، اسپرسو، کره لوتوس، شیر، یخ", "🍪", {"en":"Lotus Frappuccino","ed":"Vanilla ice cream, espresso, Lotus spread, milk, ice"}],
-  ["فراپه کره بیسکویت", 285, "بستنی کره‌ای، کره بیسکویت، شیر، یخ", "🍪", {"en":"Cookie Butter Frappe","ed":"Butter ice cream, cookie butter, milk, ice"}],
-  ["فراپاچینو موز و نوتلا", 340, "بستنی وانیلی، اسپرسو، موز، نوتلا، شیر، یخ", "🍌", {"en":"Banana Nutella Frappuccino","ed":"Vanilla ice cream, espresso, banana, Nutella, milk, ice"}]]},
- {id:"shake",t:"میلک شیک",en:"Milkshakes",e:"🥛",g:["#5a3425", "#c9a07f"],items:[
-  ["شیک شکلات", 320, "", "🍫", {"en":"Chocolate Shake"}],
-  ["شیک نوتلا", 390, "", "🍫", {"en":"Nutella Shake"}],
-  ["شیک بادام زمینی", 385, "", "🥜", {"en":"Peanut Shake"}],
-  ["شیک بادام زمینی نوتلا", 395, "", "🥜", {"en":"Peanut Nutella Shake"}],
-  ["شیک توت فرنگی", 345, "", "🍓", {"en":"Strawberry Shake"}],
-  ["شیک لوتوس", 405, "", "🍪", {"en":"Lotus Shake"}],
-  ["شیک پسته", 445, "", "🌰", {"en":"Pistachio Shake"}],
-  ["شیک موز", 345, "", "🍌", {"en":"Banana Shake"}],
-  ["شیک موز و نوتلا", 425, "", "🍌", {"en":"Banana Nutella Shake"}],
-  ["شیک موز شکلات", 375, "", "🍌", {"en":"Banana Chocolate Shake"}]]},
- {id:"smoothie",t:"اسموتی",en:"Smoothies",e:"🍓",g:["#d6456f", "#f8a5b8"],items:[
-  ["تروپیکال", 310, "انبه، آناناس، موز، لیمو", "🍍", {"en":"Tropical","ed":"Mango, pineapple, banana, lime"}],
-  ["فرش پیچ", 310, "هلو، توت فرنگی، موز", "🍑", {"en":"Fresh Peach","ed":"Peach, strawberry, banana"}],
-  ["آلبالو نمکی", 340, "آلبالو، تمشک، توت فرنگی، آب انار", "🍒", {"en":"Salty Sour Cherry","ed":"Sour cherry, raspberry, strawberry, pomegranate juice"}]]},
- {id:"mocktail",t:"ماکتیل‌ها",en:"Mocktails",e:"🍹",g:["#1f8fb3", "#7fe0d4"],items:[
-  ["لیموناد", 185, "لیمو، سودا، سیروپ لیمو", "🍋", {"en":"Lemonade","ed":"Lemon, soda, lemon syrup"}],
-  ["موهیتو", 185, "کلاسیک", "🌿", {"en":"Mojito","ed":"Classic"}],
-  ["بلو اوشن", 190, "نوشیدنی آلوئه‌ورا، سیروپ بلوکاراسائو، سودا", "🌊", {"en":"Blue Ocean","ed":"Aloe vera drink, blue curaçao syrup, soda"}],
-  ["میدنایت رز", 190, "", "🌹", {"en":"Midnight Rose"}],
-  ["رد موهیتو", 210, "تمشک، لیمو، نعناع، سودا", "🍹", {"en":"Red Mojito","ed":"Raspberry, lime, mint, soda"}],
-  ["آرگارین", 205, "", "🍹", {"en":"Argarin"}]]},
- {id:"coolbev",t:"سرد نوش‌ها",en:"Cold Drinks",e:"🧃",g:["#c9702a", "#f6c27a"],items:[
-  ["آیس تی", 185, "", "🧊", {"en":"Iced Tea"}],
-  ["شربت مجنون", 185, "شربت گلاب زعفران، خاکشیر، عرق بیدمشک", "🌸", {"en":"Majnoon Sharbat","ed":"Rosewater and saffron syrup, khakshir seeds, willow flower water"}],
-  ["شربت شیراز", 195, "شربت بهارنارنج، خاکشیر، تخم شربتی، سردم پنیرک", "🌼", {"en":"Shiraz Sharbat","ed":"Bitter orange blossom syrup, khakshir seeds, basil seeds, mallow infusion"}],
-  ["سان ست", 225, "آب پرتقال، سیروپ انبه، سردم پنیرک", "🌅", {"en":"Sunset","ed":"Orange juice, mango syrup, mallow infusion"}]]},
- {id:"tea",t:"گرم نوش‌ها",en:"Teas & Infusions",e:"🍵",g:["#5b8f3a", "#d6e59a"],items:[
-  ["دمنوش آرامش", 185, "گل گاوزبان، اسطوخودوس، بهارنارنج، گل محمدی", "🌿", {"en":"Calm Herbal Tea","ed":"Borage, lavender, bitter orange blossom, damask rose"}],
-  ["دمنوش شه نوش", 185, "سیب، زعفران، گل محمدی، هل", "🌹", {"en":"Shah Nush Herbal Tea","ed":"Apple, saffron, damask rose, cardamom"}],
-  ["دمنوش سلامت", 195, "گل ختمی، زنجبیل، گل گاوزبان، لیمو تازه", "🍋", {"en":"Wellness Herbal Tea","ed":"Marshmallow flower, ginger, borage, fresh lemon"}],
-  ["چای زعفران", 125, "", "🍵", {"en":"Saffron Tea"}],
-  ["چای نعناع", 95, "", "🌿", {"en":"Mint Tea"}],
-  ["چای", 105, "", "🍵", {"en":"Tea"}]]},
- {id:"hotnocoffee",t:"نوشیدنی گرم بدون قهوه",en:"Hot Drinks (No Coffee)",e:"🍫",g:["#3b1f14", "#a0603e"],items:[
-  ["هات چاکلت", 200, "", "", {"en":"Hot Chocolate"}],
-  ["ماسالا", 200, "", "🍵", {"en":"Masala Chai"}],
-  ["وایت چاکلت", 200, "", "🤍", {"en":"White Chocolate"}],
-  ["شیر نوتلا", 275, "", "🍫", {"en":"Nutella Milk"}],
-  ["شیر بیسکویت", 210, "", "🍪", {"en":"Cookie Milk"}],
-  ["شیر توت فرنگی", 205, "", "🍓", {"en":"Strawberry Milk"}]]},
- {id:"extra",t:"افزودنی‌ها",en:"Add-ons",e:"➕",g:["#7a6a5a", "#d9cbb8"],items:[
-  ["سیروپ", 35, "کارامل، شکلات، فندق، نارگیل ...", "🍯", {"en":"Syrup","ed":"Caramel, chocolate, hazelnut, coconut ..."}],
-  ["نوتلا", 85, "", "🍫", {"en":"Nutella"}],
-  ["نبات", 30, "", "🍬", {"en":"Rock Candy"}],
-  ["شیر", 80, "", "🥛", {"en":"Milk"}],
+ {id:"hotcoffee",t:"نوشیدنی گرم با قهوه",en:"Hot Coffee",ku:"خواردنەوەی گەرمی قاوە",e:"☕",g:["#3b2316", "#9a6a47"],items:[
+  ["اسپرسو", 140, "۷۰-۳۰ روبوستا", "", {"en":"Espresso","ed":"70/30 Robusta blend","ku":"ئێسپرێسۆ","kd":"۷۰-۳۰ ڕۆبۆستا"}],
+  ["آمریکانو", 150, "", "", {"en":"Americano","ku":"ئامریکانۆ"}],
+  ["لته", 200, "", "🥛", {"en":"Latte","ku":"لاتێ"}],
+  ["کاپوچینو", 200, "", "", {"en":"Cappuccino","ku":"کاپوچینۆ"}],
+  ["موکا", 240, "", "🍫", {"en":"Mocha","ku":"مۆکا"}],
+  ["لته با سیروپ دلخواه", 240, "کارامل، فندق، نارگیل", "", {"en":"Syrup Latte","ed":"Caramel, hazelnut, coconut","ku":"لاتێ لەگەڵ شەربەتی دڵخواز","kd":"کاراملێ، فندق، نارگیل"}]]},
+ {id:"coldcoffee",t:"نوشیدنی سرد با قهوه",en:"Iced Coffee",ku:"خواردنەوەی ساردی قاوە",e:"🧊",g:["#4a362b", "#b98a62"],items:[
+  ["آیس لته", 200, "اسپرسو دبل، شیر، یخ", "🧊", {"en":"Iced Latte","ed":"Double espresso, milk, ice","ku":"ئایس لاتێ","kd":"ئێسپرێسۆی دەبڵ، شیر، سەهۆڵ"}],
+  ["آیس لته (سیروپ دلخواه)", 240, "کارامل، فندق، نارگیل", "", {"en":"Iced Syrup Latte","ed":"Caramel, hazelnut, coconut","ku":"ئایس لاتێ (شەربەتی دڵخواز)","kd":"کاراملێ، فندق، نارگیل"}],
+  ["آیس موکا", 240, "اسپرسو، شیر، سیروپ شکلات، یخ", "🍫", {"en":"Iced Mocha","ed":"Espresso, milk, chocolate syrup, ice","ku":"ئایس مۆکا","kd":"ئێسپرێسۆ، شیر، شەربەتی شکۆلات، سەهۆڵ"}],
+  ["آیس تونیک آمریکانو", 185, "اسپرسو، آب گازدار", "🫧", {"en":"Iced Tonic Americano","ed":"Espresso, sparkling water","ku":"ئایس تۆنیک ئامریکانۆ","kd":"ئێسپرێسۆ، ئاوی گازدار"}]]},
+ {id:"frappe",t:"فراپه و فراپاچینو",en:"Frappes & Frappuccinos",ku:"فراپە و فراپاچینۆ",e:"🥤",g:["#a9794f", "#f0d3a8"],items:[
+  ["فراپاچینو", 260, "بستنی وانیلی، اسپرسو، شیر، سس کارامل، یخ", "", {"en":"Frappuccino","ed":"Vanilla ice cream, espresso, milk, caramel sauce, ice","ku":"فراپاچینۆ","kd":"بەستەنی ڤانیلا، ئێسپرێسۆ، شیر، سۆسی کاراملێ، سەهۆڵ"}],
+  ["فراپاچینو لوتوس", 340, "بستنی وانیلی، اسپرسو، کره لوتوس، شیر، یخ", "🍪", {"en":"Lotus Frappuccino","ed":"Vanilla ice cream, espresso, Lotus spread, milk, ice","ku":"فراپاچینۆی لۆتۆس","kd":"بەستەنی ڤانیلا، ئێسپرێسۆ، کەرەی لۆتۆس، شیر، سەهۆڵ"}],
+  ["فراپه کره بیسکویت", 285, "بستنی کره‌ای، کره بیسکویت، شیر، یخ", "🍪", {"en":"Cookie Butter Frappe","ed":"Butter ice cream, cookie butter, milk, ice","ku":"فراپەی کەرەی بیسکۆیت","kd":"بەستەنی کەرەیی، کەرەی بیسکۆیت، شیر، سەهۆڵ"}],
+  ["فراپاچینو موز و نوتلا", 340, "بستنی وانیلی، اسپرسو، موز، نوتلا، شیر، یخ", "🍌", {"en":"Banana Nutella Frappuccino","ed":"Vanilla ice cream, espresso, banana, Nutella, milk, ice","ku":"فراپاچینۆی مۆز و نۆتێلا","kd":"بەستەنی ڤانیلا، ئێسپرێسۆ، مۆز، نۆتێلا، شیر، سەهۆڵ"}]]},
+ {id:"shake",t:"میلک شیک",en:"Milkshakes",ku:"میلک شەیک",e:"🥛",g:["#5a3425", "#c9a07f"],items:[
+  ["شیک شکلات", 320, "", "🍫", {"en":"Chocolate Shake","ku":"شەیکی شکۆلات"}],
+  ["شیک نوتلا", 390, "", "🍫", {"en":"Nutella Shake","ku":"شەیکی نۆتێلا"}],
+  ["شیک بادام زمینی", 385, "", "🥜", {"en":"Peanut Shake","ku":"شەیکی بادەمی زەوی"}],
+  ["شیک بادام زمینی نوتلا", 395, "", "🥜", {"en":"Peanut Nutella Shake","ku":"شەیکی بادەمی زەوی و نۆتێلا"}],
+  ["شیک توت فرنگی", 345, "", "🍓", {"en":"Strawberry Shake","ku":"شەیکی توو فەرەنگی"}],
+  ["شیک لوتوس", 405, "", "🍪", {"en":"Lotus Shake","ku":"شەیکی لۆتۆس"}],
+  ["شیک پسته", 445, "", "🌰", {"en":"Pistachio Shake","ku":"شەیکی پستە"}],
+  ["شیک موز", 345, "", "🍌", {"en":"Banana Shake","ku":"شەیکی مۆز"}],
+  ["شیک موز و نوتلا", 425, "", "🍌", {"en":"Banana Nutella Shake","ku":"شەیکی مۆز و نۆتێلا"}],
+  ["شیک موز شکلات", 375, "", "🍌", {"en":"Banana Chocolate Shake","ku":"شەیکی مۆز و شکۆلات"}]]},
+ {id:"smoothie",t:"اسموتی",en:"Smoothies",ku:"سمووسی",e:"🍓",g:["#d6456f", "#f8a5b8"],items:[
+  ["تروپیکال", 310, "انبه، آناناس، موز، لیمو", "🍍", {"en":"Tropical","ed":"Mango, pineapple, banana, lime","ku":"تڕۆپیکاڵ","kd":"ئەنبە، ئاناناس، مۆز، لیمۆ"}],
+  ["فرش پیچ", 310, "هلو، توت فرنگی، موز", "🍑", {"en":"Fresh Peach","ed":"Peach, strawberry, banana","ku":"فرێش پیچ","kd":"هەڵوو، توو فەرەنگی، مۆز"}],
+  ["آلبالو نمکی", 340, "آلبالو، تمشک، توت فرنگی، آب انار", "🍒", {"en":"Salty Sour Cherry","ed":"Sour cherry, raspberry, strawberry, pomegranate juice","ku":"ئالبالووی سویر","kd":"ئالبالوو، تەمشک، توو فەرەنگی، ئاوی هەنار"}]]},
+ {id:"mocktail",t:"ماکتیل‌ها",en:"Mocktails",ku:"مۆکتەیل",e:"🍹",g:["#1f8fb3", "#7fe0d4"],items:[
+  ["لیموناد", 185, "لیمو، سودا، سیروپ لیمو", "🍋", {"en":"Lemonade","ed":"Lemon, soda, lemon syrup","ku":"لیمۆناد","kd":"لیمۆ، سۆدا، شەربەتی لیمۆ"}],
+  ["موهیتو", 185, "کلاسیک", "🌿", {"en":"Mojito","ed":"Classic","ku":"مۆهیتۆ","kd":"کلاسیک"}],
+  ["بلو اوشن", 190, "نوشیدنی آلوئه‌ورا، سیروپ بلوکاراسائو، سودا", "🌊", {"en":"Blue Ocean","ed":"Aloe vera drink, blue curaçao syrup, soda","ku":"بلوو ئۆشێن","kd":"خواردنەوەی ئالۆئەڤێرا، شەربەتی بلوو کوراساو، سۆدا"}],
+  ["میدنایت رز", 190, "", "🌹", {"en":"Midnight Rose","ku":"میدنایت ڕۆز"}],
+  ["رد موهیتو", 210, "تمشک، لیمو، نعناع، سودا", "🍹", {"en":"Red Mojito","ed":"Raspberry, lime, mint, soda","ku":"ڕێد مۆهیتۆ","kd":"تەمشک، لیمۆ، پونگ، سۆدا"}],
+  ["آرگارین", 205, "", "🍹", {"en":"Argarin","ku":"ئارگارین"}]]},
+ {id:"coolbev",t:"سرد نوش‌ها",en:"Cold Drinks",ku:"خواردنەوە فێنکەکان",e:"🧃",g:["#c9702a", "#f6c27a"],items:[
+  ["آیس تی", 185, "", "🧊", {"en":"Iced Tea","ku":"ئایس تی"}],
+  ["شربت مجنون", 185, "شربت گلاب زعفران، خاکشیر، عرق بیدمشک", "🌸", {"en":"Majnoon Sharbat","ed":"Rosewater and saffron syrup, khakshir seeds, willow flower water","ku":"شەربەتی مەجنوون","kd":"شەربەتی گوڵاو و زەعفەران، خاکشیر، ئاوی بیدمشک"}],
+  ["شربت شیراز", 195, "شربت بهارنارنج، خاکشیر، تخم شربتی، سردم پنیرک", "🌼", {"en":"Shiraz Sharbat","ed":"Bitter orange blossom syrup, khakshir seeds, basil seeds, mallow infusion","ku":"شەربەتی شیراز","kd":"شەربەتی بەهارنارنج، خاکشیر، تۆوی شەربەتی، سەردەمی پەنیرەک"}],
+  ["سان ست", 225, "آب پرتقال، سیروپ انبه، سردم پنیرک", "🌅", {"en":"Sunset","ed":"Orange juice, mango syrup, mallow infusion","ku":"سانسێت","kd":"ئاوی پرتەقاڵ، شەربەتی ئەنبە، سەردەمی پەنیرەک"}]]},
+ {id:"tea",t:"گرم نوش‌ها",en:"Teas & Infusions",ku:"چا و دەمکراو",e:"🍵",g:["#5b8f3a", "#d6e59a"],items:[
+  ["دمنوش آرامش", 185, "گل گاوزبان، اسطوخودوس، بهارنارنج، گل محمدی", "🌿", {"en":"Calm Herbal Tea","ed":"Borage, lavender, bitter orange blossom, damask rose","ku":"دەمکراوی ئارامی","kd":"گوڵە گاوزەبان، ئەستۆخودووس، بەهارنارنج، گوڵی محەمەدی"}],
+  ["دمنوش شه نوش", 185, "سیب، زعفران، گل محمدی، هل", "🌹", {"en":"Shah Nush Herbal Tea","ed":"Apple, saffron, damask rose, cardamom","ku":"دەمکراوی شەنۆش","kd":"سێو، زەعفەران، گوڵی محەمەدی، هێل"}],
+  ["دمنوش سلامت", 195, "گل ختمی، زنجبیل، گل گاوزبان، لیمو تازه", "🍋", {"en":"Wellness Herbal Tea","ed":"Marshmallow flower, ginger, borage, fresh lemon","ku":"دەمکراوی سەلامەتی","kd":"گوڵی خەتمی، زەنجەفیل، گوڵە گاوزەبان، لیمۆی تازە"}],
+  ["چای زعفران", 125, "", "🍵", {"en":"Saffron Tea","ku":"چای زەعفەران"}],
+  ["چای نعناع", 95, "", "🌿", {"en":"Mint Tea","ku":"چای پونگ"}],
+  ["چای", 105, "", "🍵", {"en":"Tea","ku":"چا"}]]},
+ {id:"hotnocoffee",t:"نوشیدنی گرم بدون قهوه",en:"Hot Drinks (No Coffee)",ku:"خواردنەوەی گەرمی بێ قاوە",e:"🍫",g:["#3b1f14", "#a0603e"],items:[
+  ["هات چاکلت", 200, "", "", {"en":"Hot Chocolate","ku":"هات چاکلێت"}],
+  ["ماسالا", 200, "", "🍵", {"en":"Masala Chai","ku":"ماسالا"}],
+  ["وایت چاکلت", 200, "", "🤍", {"en":"White Chocolate","ku":"وایت چاکلێت"}],
+  ["شیر نوتلا", 275, "", "🍫", {"en":"Nutella Milk","ku":"شیری نۆتێلا"}],
+  ["شیر بیسکویت", 210, "", "🍪", {"en":"Cookie Milk","ku":"شیری بیسکۆیت"}],
+  ["شیر توت فرنگی", 205, "", "🍓", {"en":"Strawberry Milk","ku":"شیری توو فەرەنگی"}]]},
+ {id:"extra",t:"افزودنی‌ها",en:"Add-ons",ku:"زیادەکراوەکان",e:"➕",g:["#7a6a5a", "#d9cbb8"],items:[
+  ["سیروپ", 35, "کارامل، شکلات، فندق، نارگیل ...", "🍯", {"en":"Syrup","ed":"Caramel, chocolate, hazelnut, coconut ...","ku":"شەربەت","kd":"کاراملێ، شکۆلات، فندق، نارگیل ..."}],
+  ["نوتلا", 85, "", "🍫", {"en":"Nutella","ku":"نۆتێلا"}],
+  ["نبات", 30, "", "🍬", {"en":"Rock Candy","ku":"نەبات"}],
+  ["شیر", 80, "", "🥛", {"en":"Milk","ku":"شیر"}],
   [".", 0, "", "", {"off":1}]]}
 ];
-const CATS=[{id:"all",t:"همه",en:"All",e:"🍽️"},...MENU.map(m=>({id:m.id,t:m.t,en:m.en||"",e:m.e}))];
-const ct=c=>LANG==="en"&&c.en?c.en:c.t;
+const CATS=[{id:"all",t:"همه",en:"All",ku:"هەموو",e:"🍽️"},...MENU.map(m=>({id:m.id,t:m.t,en:m.en||"",ku:m.ku||"",e:m.e}))];
+const ct=c=>LANG==="en"&&c.en?c.en:LANG==="ku"&&c.ku?c.ku:c.t;
 const ITEMS=[];let _id=0;
-MENU.forEach(m=>m.items.forEach(([n,p,d,e,x])=>{x=x||{};ITEMS.push({id:++_id,c:m.id,n,p,d:d||"",e:e||m.e,g:m.g,off:x.off?1:0,tag:x.tag||"",old:x.old||0,en:x.en||"",ed:x.ed||""})}));
+MENU.forEach(m=>m.items.forEach(([n,p,d,e,x])=>{x=x||{};ITEMS.push({id:++_id,c:m.id,n,p,d:d||"",e:e||m.e,g:m.g,off:x.off?1:0,tag:x.tag||"",old:x.old||0,en:x.en||"",ed:x.ed||"",ku:x.ku||"",kd:x.kd||""})}));
 
 const PHOTOS={
  "آمریکانو":"photo-1583577012061-d69d2dbc900a",
@@ -401,9 +403,9 @@ const FIT=new Set(["images/latte-cup.jpg","images/americano-cup.jpg","images/whi
 ITEMS.forEach(i=>{if(FIT.has(i.img))i.fit=true});
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const fa=n=>LANG==="en"?String(n):String(n).replace(/\d/g,d=>"۰۱۲۳۴۵۶۷۸۹"[d]);
-const price=p=>fa(p)+(LANG==="en"?",000 Toman":",۰۰۰ تومان");
-const nm=i=>LANG==="en"&&i.en?i.en:i.n;
-const ds=i=>LANG==="en"&&i.en?(i.ed||i.d):i.d;
+const price=p=>fa(p)+(LANG==="en"?",000 Toman":LANG==="ku"?",۰۰۰ تمەن":",۰۰۰ تومان");
+const nm=i=>LANG==="en"&&i.en?i.en:LANG==="ku"&&i.ku?i.ku:i.n;
+const ds=i=>LANG==="en"&&i.en?(i.ed||i.d):LANG==="ku"&&i.ku?(i.kd||i.d):i.d;
 const priceH=i=>(i.old?`<s class="old">${price(i.old)}</s> `:"")+price(i.p);
 const badge=i=>(i.off?`<span class="ofl">${tr("ناموجود")}</span>`:"")+(i.tag?`<span class="tg">${eh(i.tag)}</span>`:"");
 let cat="all",view="grid",onlyFav=false,query="";
@@ -425,7 +427,7 @@ let animDir=null;
 function toast(m){const t=$("#toast");t.textContent=tr(m);t.classList.add("show");setTimeout(()=>t.classList.remove("show"),1800)}
 
 function filtered(){
-  return ITEMS.filter(i=>(cat==="all"||i.c===cat)&&(!onlyFav||favs.has(i.id))&&(!query||(i.n+i.d+i.en+i.ed).toLowerCase().includes(query.toLowerCase())));
+  return ITEMS.filter(i=>(cat==="all"||i.c===cat)&&(!onlyFav||favs.has(i.id))&&(!query||(i.n+i.d+i.en+i.ed+i.ku+i.kd).toLowerCase().includes(query.toLowerCase())));
 }
 const SITE={"font":0,"accent":"#b87333","foot":0,"egg":1,"lic":"Sara"};
 const STORY={
@@ -482,7 +484,7 @@ function openGallery(){
 }
 function openInfo(){
   $("#card").innerHTML=`<div class="info"><button style="float:left;font-size:22px" data-close>✕</button>
-   <img src="images/logo-192.png" alt="" width="84" height="84" style="display:block;margin:6px auto;border-radius:50%"><h2 style="text-align:center">${L("درباره‌ی ","About ")}${eh(nI("name"))}</h2>
+   <img src="images/logo-192.png" alt="" width="84" height="84" style="display:block;margin:6px auto;border-radius:50%"><h2 style="text-align:center">${L("درباره‌ی ","About ","دەربارەی ")}${eh(nI("name"))}</h2>
    <div class="row">🕗 <div>${eh(nI("hours"))}</div></div>
    <div class="row">📍 <div><a href="${eh(safeUrl(INFO.map))}" target="_blank" rel="noopener" style="color:inherit">${eh(nI("address"))}</a></div></div>
    <div class="row">📞 <div><a href="${eh(telHref())}" dir="ltr" style="color:inherit">${eh(INFO.phone)}</a></div></div>
@@ -493,8 +495,8 @@ function openInfo(){
 }
 function setLang(l){
   LANG=l;try{localStorage.setItem("arga_lang",l)}catch(e){}
-  const d=document.documentElement;d.lang=l;d.dir=l==="en"?"ltr":"rtl";
-  document.title=L("کافه Arga | منو","Arga Cafe | Menu");
+  const d=document.documentElement;d.lang=l==="ku"?"ckb":l;d.dir=l==="en"?"ltr":"rtl";
+  document.title=L("کافه Arga | منو","Arga Cafe | Menu","کافێی Arga | مێنیو");
   setBio();render();applyLangTree(document.body);
 }
 function setNav(n){
@@ -567,14 +569,14 @@ function installApp(){
   const ios=/iphone|ipad|ipod/i.test(navigator.userAgent);
   $("#card").innerHTML=`<div class="info"><button style="float:left;font-size:22px" data-close>✕</button>
    <img src="images/logo-192.png" alt="" width="72" height="72" style="display:block;margin:6px auto;border-radius:50%">
-   <h2 style="text-align:center">${L("نصب اپلیکیشن Arga","Install the Arga app")}</h2>
-   ${ios?`<div class="row">1️⃣ <div>${L("در Safari دکمه‌ی اشتراک‌گذاری (مربع با فلش) را بزنید","In Safari, tap the Share button (the square with an arrow)")}</div></div>
-   <div class="row">2️⃣ <div>${L("گزینه‌ی <b dir=\"ltr\">Add to Home Screen</b> را انتخاب کنید","Choose <b dir=\"ltr\">Add to Home Screen</b>")}</div></div>
-   <div class="row">3️⃣ <div>${L("روی <b dir=\"ltr\">Add</b> بزنید","Tap <b dir=\"ltr\">Add</b>")}</div></div>`
-   :`<div class="row">1️⃣ <div>${L("منوی مرورگر (⋮ بالا) را باز کنید","Open the browser menu (⋮ at the top)")}</div></div>
-   <div class="row">2️⃣ <div>${L("گزینه‌ی <b dir=\"ltr\">Install app</b> یا <b dir=\"ltr\">Add to Home screen</b> را بزنید","Tap <b dir=\"ltr\">Install app</b> or <b dir=\"ltr\">Add to Home screen</b>")}</div></div>
-   <div class="row">3️⃣ <div>${L("روی <b>نصب</b> بزنید؛ اپ تمام‌صفحه باز می‌شود","Tap <b>Install</b>; the app opens full screen")}</div></div>`}
-   <div class="row" style="border:0;color:var(--mut);font-size:12.5px">${L("اگر گزینه‌ی نصب را نمی‌بینید، سایت را با Chrome یا Safari (نه از داخل برنامه‌های دیگر) باز کنید.","If you don't see the install option, open the site in Chrome or Safari (not inside another app).")}</div></div>`;
+   <h2 style="text-align:center">${L("نصب اپلیکیشن Arga","Install the Arga app","دامەزراندنی ئەپی Arga")}</h2>
+   ${ios?`<div class="row">1️⃣ <div>${L("در Safari دکمه‌ی اشتراک‌گذاری (مربع با فلش) را بزنید","In Safari, tap the Share button (the square with an arrow)","لە Safari دوگمەی هاوبەشکردن (چوارگۆشە لەگەڵ تیر) دابگرە")}</div></div>
+   <div class="row">2️⃣ <div>${L("گزینه‌ی <b dir=\"ltr\">Add to Home Screen</b> را انتخاب کنید","Choose <b dir=\"ltr\">Add to Home Screen</b>","هەڵبژاردەی <b dir=\"ltr\">Add to Home Screen</b> هەڵبژێرە")}</div></div>
+   <div class="row">3️⃣ <div>${L("روی <b dir=\"ltr\">Add</b> بزنید","Tap <b dir=\"ltr\">Add</b>","<b dir=\"ltr\">Add</b> دابگرە")}</div></div>`
+   :`<div class="row">1️⃣ <div>${L("منوی مرورگر (⋮ بالا) را باز کنید","Open the browser menu (⋮ at the top)","مێنیووی وێبگەڕ (⋮ لە سەرەوە) بکەرەوە")}</div></div>
+   <div class="row">2️⃣ <div>${L("گزینه‌ی <b dir=\"ltr\">Install app</b> یا <b dir=\"ltr\">Add to Home screen</b> را بزنید","Tap <b dir=\"ltr\">Install app</b> or <b dir=\"ltr\">Add to Home screen</b>","<b dir=\"ltr\">Install app</b> یان <b dir=\"ltr\">Add to Home screen</b> دابگرە")}</div></div>
+   <div class="row">3️⃣ <div>${L("روی <b>نصب</b> بزنید؛ اپ تمام‌صفحه باز می‌شود","Tap <b>Install</b>; the app opens full screen","<b>دامەزراندن</b> دابگرە؛ ئەپەکە بە شاشەی تەواو دەکرێتەوە")}</div></div>`}
+   <div class="row" style="border:0;color:var(--mut);font-size:12.5px">${L("اگر گزینه‌ی نصب را نمی‌بینید، سایت را با Chrome یا Safari (نه از داخل برنامه‌های دیگر) باز کنید.","If you don't see the install option, open the site in Chrome or Safari (not inside another app).","ئەگەر هەڵبژاردەی دامەزراندنت نەبینی، ماڵپەڕەکە بە Chrome یان Safari بکەرەوە (نەک لە ناو ئەپێکی تر).")}</div></div>`;
   openModal();
 }
 let VISITS=null;
@@ -600,8 +602,8 @@ let _fv=-1;try{const t=localStorage.getItem("arga_font");if(t!==null)_fv=+t}catc
 if(Number.isInteger(_fv)&&_fv>=0&&_fv<FONTS.length)applyFont(_fv,1);else if(SITE.font>0&&SITE.font<FONTS.length)applyFont(SITE.font,1);
 if(SITE.accent&&/^#[0-9a-f]{6}$/i.test(SITE.accent)&&SITE.accent.toLowerCase()!=="#b87333"){const r=document.documentElement.style;r.setProperty("--accent",SITE.accent);r.setProperty("--grad","linear-gradient(45deg,color-mix(in srgb,"+SITE.accent+",#fff 35%),"+SITE.accent+",color-mix(in srgb,"+SITE.accent+",#000 40%))")}
 $("#btnFont").onclick=()=>{
-  $("#card").innerHTML=`<div class="info"><button style="float:left;font-size:22px" data-close>✕</button><h2 style="text-align:center">${L("زبان","Language")}</h2><div class="fnts" style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><button data-lang="fa" class="${LANG==="fa"?"on":""}"><b>فارسی</b></button><button data-lang="en" class="${LANG==="en"?"on":""}"><b>English</b></button></div>
-   <h2 style="text-align:center;margin-top:16px">${L("فونت","Font")}</h2><div class="fnts">${FONTS.map((f,i)=>`<button data-font="${i}" class="${i===fi?"on":""}" style="font-family:'${f[1]}',system-ui,sans-serif"><b>${L(f[0],f[1])}</b><span>${L("کافه خونه ئارگا ۱۲۳","Arga Cafe 123")}</span></button>`).join("")}</div></div>`;
+  $("#card").innerHTML=`<div class="info"><button style="float:left;font-size:22px" data-close>✕</button><h2 style="text-align:center">${L("زبان","Language","زمان")}</h2><div class="fnts" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px"><button data-lang="fa" class="${LANG==="fa"?"on":""}"><b>فارسی</b></button><button data-lang="ku" class="${LANG==="ku"?"on":""}"><b>کوردی</b></button><button data-lang="en" class="${LANG==="en"?"on":""}"><b>English</b></button></div>
+   <h2 style="text-align:center;margin-top:16px">${L("فونت","Font","فۆنت")}</h2><div class="fnts">${FONTS.map((f,i)=>`<button data-font="${i}" class="${i===fi?"on":""}" style="font-family:'${f[1]}',system-ui,sans-serif"><b>${L(f[0],f[1])}</b><span>${L("کافه خونه ئارگا ۱۲۳","Arga Cafe 123","کافێی ماڵی ئارگا ۱۲۳")}</span></button>`).join("")}</div></div>`;
   openModal();
 };
 const themeMeta=document.querySelector('meta[name="theme-color"]');
@@ -623,7 +625,7 @@ function waNumber(){
   return d;
 }
 $("#btnRes").onclick=()=>{
-  const wa=waNumber(),msg=encodeURIComponent(L("سلام، می‌خواستم یک میز رزرو کنم.","Hi, I'd like to reserve a table."));
+  const wa=waNumber(),msg=encodeURIComponent(L("سلام، می‌خواستم یک میز رزرو کنم.","Hi, I'd like to reserve a table.","سڵاو، دەمەوێت مێزێک حیجز بکەم."));
   $("#card").innerHTML=`<div class="info"><button style="float:left;font-size:22px" data-close>✕</button>
    <h2 style="text-align:center;margin-bottom:14px">رزرو</h2>
    <div class="rsv">
@@ -779,7 +781,7 @@ $("#btnShare").onclick=async()=>{
 })();
 if(SITE.foot===0){const f=document.querySelector(".neon-foot");if(f)f.remove()}
 render();
-if(LANG==="en"){document.title="Arga Cafe | Menu";setBio();applyLangTree(document.body)}
+if(LANG!=="fa"){document.title=L("","Arga Cafe | Menu","کافێی Arga | مێنیو");setBio();applyLangTree(document.body)}
 </script>
 </body>
 </html>
