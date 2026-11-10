@@ -154,6 +154,7 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
       <div class="fld"><div class="lbl">ساعت کاری</div><input data-i="hours"></div>
       <div class="fld"><div class="lbl">آدرس</div><input data-i="address"></div>
       <div class="fld"><div class="lbl">لینک نقشه (Google Maps یا نشان)</div><input data-i="map" dir="ltr"></div>
+      <div class="fld"><div class="lbl">آدرس سایت (برای دکمه‌ی اشتراک‌گذاری)</div><input data-i="site" dir="ltr"></div>
       <div class="fld"><div class="lbl">نام کافه (انگلیسی)</div><input data-i="name_en" dir="ltr"></div>
       <div class="fld"><div class="lbl">ساعت کاری (انگلیسی)</div><input data-i="hours_en" dir="ltr"></div>
       <div class="fld"><div class="lbl">آدرس (انگلیسی)</div><input data-i="address_en" dir="ltr"></div>
@@ -494,7 +495,7 @@ window.addEventListener("beforeunload",e=>{if(TOKEN&&CATS.length&&dirty()){e.pre
 
 function normalizeInfo(){
   INFO.name=(INFO.name||"").trim();INFO.hours=(INFO.hours||"").trim();INFO.address=(INFO.address||"").trim();
-  INFO.map=(INFO.map||"").trim();INFO.phone=(INFO.phone||"").trim();
+  INFO.site=(INFO.site||"").trim();if(INFO.site&&!/^https?:\/\//i.test(INFO.site))INFO.site="https://"+INFO.site;INFO.map=(INFO.map||"").trim();INFO.phone=(INFO.phone||"").trim();
   let ig=(INFO.instagram||"").trim();ig=ig.replace(/^https?:\/\/(www\.)?instagram\.com\//i,"").replace(/[\/?#].*$/,"").replace(/^@/,"");
   INFO.instagram=ig;
 }
