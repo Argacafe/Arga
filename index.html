@@ -296,7 +296,7 @@ function applyLangTree(root){
   });
 }
 const nI=k=>LANG==="en"&&INFO[k+"_en"]?INFO[k+"_en"]:INFO[k];
-const INFO={"name": "کافه خونه ئارگا", "hours": "هر روز ۱۰ صبح تا ۱۰ شب", "address": "مریوان، چهارراه اصلی، خیابان باهنر", "map": "https://maps.app.goo.gl/nutpnMqZqy9oqxxEA?g_st=ac", "phone": "093676199xx", "instagram": "Argacafe", "name_en": "Arga Cafe", "hours_en": "Every day, 10 AM to 10 PM", "address_en": "Main Intersection (Chahâr Râh-e Asli) , Bahonar St.", "site": "https://argacafe.pages.dev/"};
+const INFO={"name":"کافه خونه ئارگا","hours":"هر روز ۱۰ صبح تا ۱۰ شب","address":"مریوان، چهارراه اصلی، خیابان باهنر","map":"https://maps.app.goo.gl/nutpnMqZqy9oqxxEA?g_st=ac","phone":"093676199xx","instagram":"Argacafe","name_en":"Arga Cafe","hours_en":"Every day, 10 AM to 10 PM","address_en":"Main Intersection (Chahâr Râh-e Asli) , Bahonar St.","site":"https://argacafe.pages.dev/"};
 const eh=t=>String(t).replace(/[&<>"']/g,c=>"&#"+c.charCodeAt(0)+";");
 const safeUrl=u=>/^https?:\/\//i.test(u)?u:"#";
 const telHref=()=>"tel:"+INFO.phone.replace(/[^\d+]/g,"");
@@ -427,7 +427,7 @@ function toast(m){const t=$("#toast");t.textContent=tr(m);t.classList.add("show"
 function filtered(){
   return ITEMS.filter(i=>(cat==="all"||i.c===cat)&&(!onlyFav||favs.has(i.id))&&(!query||(i.n+i.d+i.en+i.ed).toLowerCase().includes(query.toLowerCase())));
 }
-const SITE={"font":0,"accent":"#b87333","foot":1,"egg":1,"lic":"Sara"};
+const SITE={"font":0,"accent":"#b87333","foot":0,"egg":1,"lic":"Sara"};
 const STORY={
  all:{img:"images/logo-96.png"},
  hotcoffee:{img:"images/espresso.png",cut:1},
