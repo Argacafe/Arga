@@ -14,6 +14,8 @@
 <meta name="apple-mobile-web-app-title" content="مدیریت ئارگا">
 <style>
 @font-face{font-family:"Vazirmatn";src:url(fonts/Vazirmatn-VF.woff2) format("woff2");font-weight:100 900;font-display:swap}
+@font-face{font-family:"Shabnam";src:url(fonts/Shabnam.woff2) format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"Gandom";src:url(fonts/Gandom.woff2) format("woff2");font-weight:400;font-display:swap}
 :root{--bg:#f7f3ee;--card:#fff;--ink:#2b2118;--mut:#85766a;--line:#e6dccf;--acc:#7a4f33;--soft:#efe5d7;--ok:#2f7d55;--bad:#b8372b}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.7 Vazirmatn,Tahoma,sans-serif;padding-bottom:92px}
@@ -83,7 +85,10 @@ select{font:inherit;background:#fff;border:1px solid var(--line);border-radius:8
 .hist{display:flex;align-items:center;gap:8px;border-top:1px solid var(--line);padding:9px 0;font-size:13px}
 .hist:first-of-type{border-top:0}
 .hist .d{flex:1}.hist .m{color:var(--mut);font-size:12px;direction:ltr;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.fg button{padding:8px 14px;border-radius:8px;border:1px solid var(--line);background:#fff}
+.fg button{padding:12px 16px;border-radius:10px;border:1px solid var(--line);background:#fff;font-size:20px;line-height:1.4;color:var(--ink,#222)}
+#fontPick{display:grid!important;grid-template-columns:repeat(3,1fr);gap:8px}
+#fontPick button{width:auto!important;height:auto!important;border-radius:10px!important;padding:12px 4px!important;font-size:18px!important;white-space:nowrap}
+.lic{display:block;width:100%;padding:11px 14px;border-radius:10px;border:1px solid #bfe3cb;background:#e8f6ed;color:#1a9a45;font:inherit;font-weight:600;text-align:center;cursor:default}
 .fg button.on{background:var(--acc);color:#fff;border-color:var(--acc)}
 #pv{position:fixed;inset:0;z-index:20;background:#222;display:flex;flex-direction:column}
 #pv .pvh{display:flex;justify-content:space-between;align-items:center;color:#fff;padding:10px 14px;font-size:14px}
@@ -160,7 +165,7 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
       <label class="tg2"><span>متن «Made By AI: An Idiot» پایین صفحه</span><input type="checkbox" id="swFoot"></label>
       <label class="tg2"><span>افکت مخفی (نگه داشتن دکمه‌ی قلب پایین)</span><input type="checkbox" id="swEgg"></label>
       <p class="mut" style="margin:10px 0 4px">در صورت خرید لایسنس</p>
-      <p id="licLine" style="margin:0;color:#1a9a45;font-weight:600"></p>
+      <button type="button" class="lic" id="licLine" tabindex="-1"></button>
     </div>
     <div class="card">
       <h2>اطلاعات تماس</h2>
@@ -215,7 +220,7 @@ let PENDING={},LOGOVER=0;
 let BASE="",photoTarget=null,storyTarget=null;
 
 const PAL=[["#3b2316","#9a6a47"],["#a9794f","#f0d3a8"],["#d6456f","#f8a5b8"],["#1f8fb3","#7fe0d4"],["#c9702a","#f6c27a"],["#5b8f3a","#d6e59a"],["#6b4aa0","#c9b3ee"],["#7a6a5a","#d9cbb8"]];
-const FONTS=["وزیرمتن","شبنم","گندم"],ACCS=["#b87333","#c0392b","#2e8b57","#2874a6","#8e44ad","#d4a017","#444444"];
+const FONTS=["Vazirmatn","Shabnam","Gandom"],ACCS=["#b87333","#c0392b","#2e8b57","#2874a6","#8e44ad","#d4a017","#444444"];
 const LOGOS=[["images/logo-96.png",96],["images/logo-192.png",192],["images/logo-512.png",512],["images/apple-touch-icon.png",180],["images/favicon.png",64],["images/icon-192.png",192],["images/icon-512.png",512]];
 const MASKABLE=[["images/icon-maskable-192.png",192],["images/icon-maskable-512.png",512]];
 
@@ -318,7 +323,7 @@ function renderInfo(){
   document.querySelectorAll("[data-i]").forEach(el=>{el.value=INFO[el.dataset.i]||""});
   $("#swFoot").checked=SITE.foot!==0;$("#swEgg").checked=SITE.egg!==0;
   $("#licLine").textContent="✓ کاربر : "+(SITE.lic||"Sara")+" مجاز است";
-  $("#fontPick").innerHTML=FONTS.map((f,k)=>'<button data-font="'+k+'" class="'+(SITE.font===k?"on":"")+'">'+f+'</button>').join("");
+  $("#fontPick").innerHTML=FONTS.map((f,k)=>'<button data-font="'+k+'" class="'+(SITE.font===k?"on":"")+'" style="font-family:\''+f+'\',Vazirmatn,sans-serif">کافه آرگا</button>').join("");
   $("#accPick").innerHTML=ACCS.map(a=>'<button data-acc="'+a+'" class="'+(SITE.accent.toLowerCase()===a?"on":"")+'" style="background:'+a+'" aria-label="رنگ"></button>').join("");
   $("#logoPrev").src=src_("images/logo-192.png")+(PENDING["images/logo-192.png"]?"":"?v="+Date.now());
   bar();
