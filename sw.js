@@ -1,10 +1,10 @@
 /* Service worker: اجازه‌ی نصب + باز شدن سایت بدون اینترنت.
    صفحه‌ی اصلی اول از اینترنت گرفته می‌شود (تا تغییرات جدید زود دیده شود) و اگر نبود از حافظه. */
-const V = "arga-v91";
-const SHELL = ["./", "index.html", "manifest.webmanifest", "images/logo-96.png", "images/logo-192.png", "images/favicon.png", "fonts/Vazirmatn-VF.woff2", "fonts/MetalMania-digits.ttf"];
+const V = "arga-v92";
+const SHELL = ["./", "manifest.webmanifest", "images/logo-96.png", "images/logo-192.png", "images/favicon.png", "fonts/Vazirmatn-VF.woff2", "fonts/MetalMania-digits.ttf"];
 
 self.addEventListener("install", e => {
-  e.waitUntil(caches.open(V).then(c => c.addAll(SHELL)).then(() => self.skipWaiting()));
+  e.waitUntil(caches.open(V).then(c => Promise.all(SHELL.map(u => c.add(u).catch(() => {})))).then(() => self.skipWaiting()));
 });
 self.addEventListener("activate", e => {
   e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== V).map(k => caches.delete(k)))).then(() => self.clients.claim()));
@@ -18,7 +18,7 @@ self.addEventListener("fetch", e => {
   if (isPage) {
     // اول از اینترنت، ولی اگر بیش از ۲ ثانیه طول کشید همان نسخه‌ی ذخیره‌شده نشان داده می‌شود (اینترنت ضعیف سایت را معطل نکند).
     const net = fetch(req).then(r => { const c = r.clone(); caches.open(V).then(x => x.put(req, c)); return r; });
-    const cached = () => caches.match(req).then(r => r || caches.match("index.html"));
+    const cached = () => caches.match(req).then(r => r || caches.match("./"));
     e.respondWith(new Promise(res => {
       let done = false;
       const t = setTimeout(() => cached().then(r => { if (r && !done) { done = true; res(r) } }), 2000);
