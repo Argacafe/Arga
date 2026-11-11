@@ -172,8 +172,14 @@ body.noEn.noKu .l-any{display:none!important}
       <label class="tg2"><span>زبان کوردی (سورانی)</span><input type="checkbox" id="swKu"></label>
       <label class="tg2 l-en"><span>کلاه‌برداری (ارزآوری)</span><input type="checkbox" id="swFx"></label>
       <p class="mut l-en" style="margin:0 0 10px;font-size:12px">وقتی فعال باشد و زبان سایت روی انگلیسی باشد، ۳۰٪ به همه‌ی قیمت‌ها اضافه می‌شود. قیمت فارسی و کوردی تغییری نمی‌کند.</p>
-      <label class="tg2"><span>قفل راست‌کلیک و کپی عکس‌ها</span><input type="checkbox" id="swLock"></label>
-      <p class="mut" style="margin:0 0 10px;font-size:12px">وقتی فعال باشد، منوی راست‌کلیک و نگه‌داشتن روی عکس (ذخیره/کپی) بسته می‌شود و با نگه‌داشتن انگشت روی عکس آیتم، ایموجی 😏 بزرگ نشان داده می‌شود.</p>
+      <label class="tg2"><span>قفل راست‌کلیک</span><input type="checkbox" id="swLock"></label>
+      <div id="lockOpts" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 12px">
+        <img id="lockPrev" alt="" style="width:64px;height:40px;object-fit:cover;border-radius:6px;background:var(--line,#eee)">
+        <button type="button" class="btn sec" style="padding:6px 12px" id="lockPick">تغییر عکس</button>
+        <button type="button" class="btn sec" style="padding:6px 12px" id="lockDel">حذف عکس</button>
+        <input id="lockEmoji" maxlength="4" placeholder="ایموجی" style="width:84px;text-align:center">
+        <input type="file" id="lockFile" accept="image/*" class="hide">
+      </div>
       <label class="tg2"><span>متن «Made By AI: An Idiot» پایین صفحه</span><input type="checkbox" id="swFoot"></label>
       <label class="tg2"><span>افکت مخفی (نگه داشتن دکمه‌ی قلب پایین)</span><input type="checkbox" id="swEgg"></label>
       <p class="mut" style="margin:10px 0 4px">در صورت خرید لایسنس</p>
@@ -230,7 +236,7 @@ const fa=n=>String(n).replace(/\d/g,d=>"۰۱۲۳۴۵۶۷۸۹"[d]);
 
 let TOKEN="";try{TOKEN=localStorage.getItem("arga_admin_token")||""}catch(e){}
 let SRC="",SW="",HEAD="";
-let CATS=[],GALLERY=[],INFO={},ORIG={},EXTRA_LOCAL={},EXTRA_STORY={},SITE={font:0,accent:"#b87333",foot:1,egg:1,en:1,ku:1,fx:0,lock:1,lic:"Sara"},PUB="",PUBID=0;
+let CATS=[],GALLERY=[],INFO={},ORIG={},EXTRA_LOCAL={},EXTRA_STORY={},SITE={font:0,accent:"#b87333",foot:1,egg:1,en:1,ku:1,fx:0,lock:1,lockImg:"images/lock.jpg",lockEmoji:"😏",lic:"Sara"},PUB="",PUBID=0;
 let PENDING={},LOGOVER=0;
 let BASE="",photoTarget=null,storyTarget=null;
 
@@ -254,7 +260,7 @@ function parse(src){
   const menu=new Function("return "+m[1])(),local=new Function("return "+l[1])();
   const st=src.match(/const STORY=(\{[\s\S]*?\n\});/),si=src.match(/const SITE=(\{.*\});/);
   const STORY=st?new Function("return "+st[1])():{};
-  SITE=Object.assign({font:0,accent:"#b87333",foot:1,egg:1,en:1,ku:1,fx:0,lock:1,lic:"Sara"},si?JSON.parse(si[1]):{});
+  SITE=Object.assign({font:0,accent:"#b87333",foot:1,egg:1,en:1,ku:1,fx:0,lock:1,lockImg:"images/lock.jpg",lockEmoji:"😏",lic:"Sara"},si?JSON.parse(si[1]):{});
   GALLERY=new Function("return "+g[1])();
   INFO=new Function("return "+n[1])();
   const names=new Set();
@@ -341,7 +347,10 @@ function renderGal(){
 }
 function renderInfo(){
   document.querySelectorAll("[data-i]").forEach(el=>{el.value=INFO[el.dataset.i]||""});
-  $("#swFoot").checked=SITE.foot!==0;$("#swEn").checked=SITE.en!==0;$("#swFx").checked=SITE.fx===1;$("#swLock").checked=SITE.lock!==0;$("#swKu").checked=SITE.ku!==0;document.body.classList.toggle("noEn",SITE.en===0);document.body.classList.toggle("noKu",SITE.ku===0);$("#swEgg").checked=SITE.egg!==0;
+  $("#swFoot").checked=SITE.foot!==0;$("#swEn").checked=SITE.en!==0;$("#swFx").checked=SITE.fx===1;$("#swLock").checked=SITE.lock!==0;
+  $("#lockOpts").style.display=SITE.lock!==0?"flex":"none";
+  $("#lockPrev").style.display=SITE.lockImg?"":"none";if(SITE.lockImg)$("#lockPrev").src=src_(SITE.lockImg);
+  $("#lockEmoji").value=SITE.lockEmoji||"";$("#lockEmoji").style.display=SITE.lockImg?"none":"";$("#lockDel").style.display=SITE.lockImg?"":"none";$("#swKu").checked=SITE.ku!==0;document.body.classList.toggle("noEn",SITE.en===0);document.body.classList.toggle("noKu",SITE.ku===0);$("#swEgg").checked=SITE.egg!==0;
   $("#licLine").textContent="✓ کاربر : "+(SITE.lic||"Sara")+" مجاز است";
   $("#fontPick").innerHTML=FONTS.map((f,k)=>'<button data-font="'+k+'" class="'+(SITE.font===k?"on":"")+'" style="font-family:\''+f+'\',Vazirmatn,sans-serif">کافه آرگا</button>').join("");
   $("#accPick").innerHTML=ACCS.map(a=>'<button data-acc="'+a+'" class="'+(SITE.accent.toLowerCase()===a?"on":"")+'" style="background:'+a+'" aria-label="رنگ"></button>').join("");
@@ -521,7 +530,11 @@ $("#infoView").addEventListener("input",e=>{
   if(k==="phone")v=enDigits(v);
   INFO[k]=v;bar();
 });
-$("#swLock").onchange=e=>{SITE.lock=e.target.checked?1:0;bar()};
+$("#swLock").onchange=e=>{SITE.lock=e.target.checked?1:0;bar();renderInfo()};
+$("#lockPick").onclick=()=>$("#lockFile").click();
+$("#lockFile").addEventListener("change",async e=>{const f=e.target.files[0];e.target.value="";if(!f)return;const d=await wideJpeg(f);if(!d)return;const p=newPath("lock");PENDING[p]=d;SITE.lockImg=p;bar();renderInfo()});
+$("#lockDel").onclick=()=>{SITE.lockImg="";bar();renderInfo()};
+$("#lockEmoji").oninput=e=>{SITE.lockEmoji=e.target.value.trim();bar()};
 $("#swFx").onchange=e=>{SITE.fx=e.target.checked?1:0;bar()};
 $("#swEn").onchange=e=>{SITE.en=e.target.checked?1:0;bar();renderInfo();render()};
 $("#swKu").onchange=e=>{SITE.ku=e.target.checked?1:0;bar();renderInfo();render()};
@@ -583,7 +596,7 @@ $("#save").onclick=async()=>{
     const base=await gh("/git/commits/"+HEAD).then(r=>r.json());
     const out=buildOut();
     const used=new Set(GALLERY.concat(CATS.reduce((a,c)=>a.concat(c.items.map(i=>i.photo),c.story?[c.story.img]:[]),[])));
-    LOGOS.concat(MASKABLE).forEach(l=>used.add(l[0]));
+    LOGOS.concat(MASKABLE).forEach(l=>used.add(l[0]));if(SITE.lockImg)used.add(SITE.lockImg);
     const tree=[];
     for(const p of Object.keys(PENDING)){
       if(!used.has(p))continue;
