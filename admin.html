@@ -103,17 +103,22 @@ select{font:inherit;background:#fff;border:1px solid var(--line);border-radius:8
 dialog{border:0;border-radius:12px;padding:16px;max-width:330px;width:90%}
 dialog::backdrop{background:rgba(0,0,0,.45)}
 body.noKu .l-ku{display:none!important}body.noEn .l-en{display:none!important}
+.trd{border:1px solid var(--line,#ddd);border-radius:10px;padding:0 10px;margin:6px 0}
+.trd>summary{cursor:pointer;padding:9px 0;font-size:13px;color:var(--mut,#777);list-style:none}
+.trd>summary::before{content:"▸ "}.trd[open]>summary::before{content:"▾ "}
+.trd[open]{padding-bottom:8px}
+body.noEn.noKu .l-any{display:none!important}
 </style>
 </head>
 <body>
-<header><h1>مدیریت منوی ئارگا</h1><button id="logout" class="hide">خروج</button></header>
+<header><h1>مدیریت</h1><button id="logout" class="hide">خروج</button></header>
 <main>
 
 <section id="login" class="hide">
   <div class="card">
     <h2>ورود</h2>
-    <p class="mut">کلید دسترسی GitHub را وارد کنید.</p>
-    <input id="tok" type="password" dir="ltr" placeholder="github_pat_..." autocomplete="off">
+    <p class="mut">لایسنس را وارد کن.</p>
+    <input id="tok" type="password" dir="ltr" autocomplete="off">
     <p id="err"></p>
     <button id="go" class="btn" style="width:100%">ورود</button>
   </div>
@@ -295,8 +300,9 @@ function catPanel(c){
   return '<div style="margin:8px 0"><button class="btn sec sm" data-cedit>'+(c._edit?"بستن تنظیمات دسته":"تنظیمات دسته")+'</button></div>'+(c._edit?
    '<div class="cp"><div class="row"><div style="flex:none;width:64px"><div class="lbl">ایموجی</div><input data-cf="e" value="'+esc(c.e)+'" style="text-align:center"></div>'+
    '<div style="flex:1"><div class="lbl">نام دسته</div><input data-cf="t" value="'+esc(c.t)+'"></div></div>'+
+   '<details class="trd l-any" data-trct'+(c._tr?" open":"")+'><summary>ترجمه‌ها (انگلیسی و کوردی)</summary>'+
    '<div class="l-en"><div class="lbl">نام انگلیسی دسته</div><input data-cf="en" dir="ltr" value="'+esc(c.en||"")+'"></div>'+
-   '<div class="l-ku"><div class="lbl">نام کوردی دسته</div><input data-cf="ku" value="'+esc(c.ku||"")+'"></div>'+
+   '<div class="l-ku"><div class="lbl">نام کوردی دسته</div><input data-cf="ku" value="'+esc(c.ku||"")+'"></div></details>'+
    '<div><div class="lbl">رنگ</div><div class="sw">'+PAL.map((g,k)=>'<button data-cg="'+k+'" class="'+(JSON.stringify(g)===JSON.stringify(c.g)?"on":"")+'" style="background:linear-gradient(135deg,'+g[0]+','+g[1]+')" aria-label="رنگ '+(k+1)+'"></button>').join("")+'</div></div>'+
    '<div><div class="lbl">کاور استوری (هایلایت)</div><div class="row"><div class="simg">'+(c.story&&c.story.img?'<img src="'+esc(src_(c.story.img))+'" alt="">':esc(c.e))+'</div><button class="btn sec sm" data-story>تغییر کاور</button>'+(c.story&&c.story.img?'<button class="btn sec sm" data-rmstory>حذف کاور</button>':"")+'</div></div>'+
    '<div class="row"><button class="btn sec sm" data-cup>بالاتر</button><button class="btn sec sm" data-cdown>پایین‌تر</button><button class="btn bad sm" data-cdel>حذف دسته</button></div></div>':"");
@@ -310,10 +316,11 @@ function itemHtml(ci,ii,i){
    '<button class="more" data-more>'+(i._open?"کمتر":"بیشتر")+'</button></div>'+
    '<div class="row" style="margin-top:6px"><button class="st'+(i.off?" off":"")+'" data-off>'+(i.off?"ناموجود":"موجود")+'</button>'+(i.tag?'<span class="mut">'+esc(i.tag)+'</span>':"")+(()=>{const m=[];if(SITE.en!==0&&!i.en)m.push("انگلیسی");if(SITE.ku!==0&&!i.ku)m.push("کوردی");return i.n&&m.length?'<span class="mut" style="color:var(--bad)">بدون اسم '+m.join(" و ")+'</span>':""})()+'</div>'+
    (i._open?'<div class="det"><div><div class="lbl">توضیحات</div><input data-f="d" value="'+esc(i.d)+'"></div>'+
+   '<details class="trd l-any" data-trit'+(i._tr?" open":"")+'><summary>ترجمه‌ها (انگلیسی و کوردی)</summary>'+
    '<div class="l-en"><div class="lbl">نام انگلیسی (در حالت انگلیسی سایت نشان داده می‌شود)</div><input data-f="en" dir="ltr" value="'+esc(i.en||"")+'"></div>'+
    '<div class="l-en"><div class="lbl">توضیحات انگلیسی</div><input data-f="ed" dir="ltr" value="'+esc(i.ed||"")+'"></div>'+
    '<div class="l-ku"><div class="lbl">نام کوردی (در حالت کوردی سایت نشان داده می‌شود)</div><input data-f="ku" value="'+esc(i.ku||"")+'"></div>'+
-   '<div class="l-ku"><div class="lbl">توضیحات کوردی</div><input data-f="kd" value="'+esc(i.kd||"")+'"></div>'+
+   '<div class="l-ku"><div class="lbl">توضیحات کوردی</div><input data-f="kd" value="'+esc(i.kd||"")+'"></div></details>'+
    '<div class="g2"><div><div class="lbl">برچسب (مثلاً جدید)</div><input data-f="tag" list="tags" maxlength="20" value="'+esc(i.tag)+'"></div>'+
    '<div><div class="lbl">قیمت قبلی (خط‌خورده)</div><input data-f="old" class="pr" style="width:100%" inputmode="decimal" dir="ltr" value="'+esc(i.old||"")+'"></div></div>'+
    '<div style="width:90px"><div class="lbl">ایموجی</div><input data-f="e" value="'+esc(i.e)+'" placeholder="'+esc(c.e)+'" style="text-align:center"></div>'+
@@ -410,6 +417,7 @@ $("#cats").addEventListener("input",e=>{
   else i[f]=clean(e.target.value);
   bar();
 });
+$("#cats").addEventListener("toggle",e=>{const t=e.target;if(!t.classList||!t.classList.contains("trd"))return;const it=t.closest(".it"),cd=t.closest(".cat");if(it){const x=CATS[+it.dataset.c].items[+it.dataset.i];if(x)x._tr=t.open}else if(cd)CATS[+cd.dataset.c]._tr=t.open},true);
 $("#cats").addEventListener("toggle",e=>{const d=e.target.closest(".cat");if(d)CATS[+d.dataset.c]._open=d.open},true);
 $("#cats").addEventListener("click",async e=>{
   const b=e.target.closest("button");if(!b)return;
@@ -586,7 +594,7 @@ $("#save").onclick=async()=>{
     toast("ذخیره شد. انتشار روی سایت چند دقیقه طول می‌کشد.","ok");
     watchPublish(sw.match(/arga-v\d+/)[0]);loadHist(true);
   }catch(err){
-    toast(err.status===401||err.status===403||err.status===404?"دسترسی کلید کافی نیست یا منقضی شده است. خارج شوید و کلید جدید وارد کنید.":"ذخیره نشد: "+err.message,"err");
+    toast(err.status===401||err.status===403||err.status===404?"دسترسی لایسنس کافی نیست یا منقضی شده است. خارج شوید و لایسنس جدید وارد کنید.":"ذخیره نشد: "+err.message,"err");
   }finally{btn.textContent="ذخیره و انتشار";bar()}
 };
 
@@ -647,7 +655,7 @@ $("#hist").addEventListener("click",async e=>{
 });
 async function load(){
   const repo=await gh("").then(r=>r.json());
-  if(!repo.permissions||!repo.permissions.push){const e=new Error("این کلید اجازه‌ی نوشتن روی مخزن را ندارد.");e.status=403;throw e}
+  if(!repo.permissions||!repo.permissions.push){const e=new Error("این لایسنس اجازه‌ی نوشتن روی مخزن را ندارد.");e.status=403;throw e}
   const files=await Promise.all([getText("index.html"),getText("sw.js")]);SRC=files[0];SW=files[1];
   HEAD=(await gh("/git/ref/heads/"+BR).then(r=>r.json())).object.sha;
   parse(SRC);ORIG=Object.assign({},INFO);BASE=state();CATS[0]._open=true;
@@ -660,10 +668,10 @@ function showLogin(msg){
   $("#logout").classList.add("hide");$("#app").classList.add("hide");$("#bar").classList.add("hide");
 }
 $("#go").onclick=async()=>{
-  const t=$("#tok").value.trim();if(!t){$("#err").textContent="کلید را وارد کنید.";return}
+  const t=$("#tok").value.trim();if(!t){$("#err").textContent="لایسنس را وارد کن.";return}
   TOKEN=t;$("#go").disabled=true;$("#go").textContent="در حال بررسی...";
   try{await load();try{localStorage.setItem("arga_admin_token",TOKEN)}catch(e){}$("#tok").value=""}
-  catch(e){TOKEN="";showLogin(e.status===401?"کلید اشتباه است یا منقضی شده.":e.status===404?"این کلید به مخزن دسترسی ندارد.":e.message)}
+  catch(e){TOKEN="";showLogin(e.status===401?"لایسنس اشتباه است یا منقضی شده.":e.status===404?"این لایسنس به مخزن دسترسی ندارد.":e.message)}
   finally{$("#go").disabled=false;$("#go").textContent="ورود"}
 };
 $("#logout").onclick=async()=>{
@@ -672,7 +680,7 @@ $("#logout").onclick=async()=>{
   TOKEN="";CATS=[];showLogin();
 };
 if(TOKEN)load().catch(e=>{
-  if(e.status===401||e.status===403||e.status===404){try{localStorage.removeItem("arga_admin_token")}catch(_){}TOKEN="";showLogin("کلید قبلی دیگر معتبر نیست.")}
+  if(e.status===401||e.status===403||e.status===404){try{localStorage.removeItem("arga_admin_token")}catch(_){}TOKEN="";showLogin("لایسنس قبلی دیگر معتبر نیست.")}
   else showLogin("اتصال برقرار نشد: "+e.message);
 });
 else showLogin();
