@@ -103,6 +103,7 @@ select{font:inherit;background:#fff;border:1px solid var(--line);border-radius:8
 dialog{border:0;border-radius:12px;padding:16px;max-width:330px;width:90%}
 dialog::backdrop{background:rgba(0,0,0,.45)}
 body.noKu .l-ku{display:none!important}body.noEn .l-en{display:none!important}
+.txr{border-bottom:1px solid var(--line,#e5e5e5);padding:8px 0}.txr input{width:100%;margin-top:5px}
 .trd{border:1px solid var(--line,#ddd);border-radius:10px;padding:0 10px;margin:6px 0}
 .trd>summary{cursor:pointer;padding:9px 0;font-size:13px;color:var(--mut,#777);list-style:none}
 .trd>summary::before{content:"▸ "}.trd[open]>summary::before{content:"▾ "}
@@ -165,6 +166,11 @@ body.noEn.noKu .l-any{display:none!important}
       <div class="lbl">فونت پیش‌فرض</div><div class="sw fg" id="fontPick" style="margin-bottom:12px"></div>
       <div class="lbl">رنگ اصلی</div><div class="sw" id="accPick"></div>
       <p class="mut" style="margin:10px 0 0">مشتری‌ای که خودش فونت را از داخل سایت عوض کرده باشد، فونت خودش می‌ماند.</p>
+    </div>
+    <div class="card">
+      <h2>متن‌های سایت</h2>
+      <p class="mut" style="margin:0 0 10px">متن دکمه‌ها و عنوان‌های ثابت سایت را اینجا عوض کن. خالی بگذاری، متن پیش‌فرض نشان داده می‌شود.</p>
+      <div id="txtList"></div>
     </div>
     <div class="card">
       <h2>ویژگی‌های ویژه</h2>
@@ -236,7 +242,7 @@ const fa=n=>String(n).replace(/\d/g,d=>"۰۱۲۳۴۵۶۷۸۹"[d]);
 
 let TOKEN="";try{TOKEN=localStorage.getItem("arga_admin_token")||""}catch(e){}
 let SRC="",SW="",HEAD="";
-let CATS=[],GALLERY=[],INFO={},ORIG={},EXTRA_LOCAL={},EXTRA_STORY={},SITE={font:0,accent:"#b87333",foot:1,egg:1,en:1,ku:1,fx:0,lock:1,lockImg:"images/lock.jpg",lockEmoji:"😏",lic:"Sara"},PUB="",PUBID=0;
+let CATS=[],GALLERY=[],INFO={},ORIG={},EXTRA_LOCAL={},EXTRA_STORY={},SITE={font:0,accent:"#b87333",foot:1,egg:1,en:1,ku:1,fx:0,lock:1,lockImg:"images/lock.jpg",lockEmoji:"😏",txt:{},lic:"Sara"},PUB="",PUBID=0;
 let PENDING={},LOGOVER=0;
 let BASE="",photoTarget=null,storyTarget=null;
 
@@ -260,7 +266,7 @@ function parse(src){
   const menu=new Function("return "+m[1])(),local=new Function("return "+l[1])();
   const st=src.match(/const STORY=(\{[\s\S]*?\n\});/),si=src.match(/const SITE=(\{.*\});/);
   const STORY=st?new Function("return "+st[1])():{};
-  SITE=Object.assign({font:0,accent:"#b87333",foot:1,egg:1,en:1,ku:1,fx:0,lock:1,lockImg:"images/lock.jpg",lockEmoji:"😏",lic:"Sara"},si?JSON.parse(si[1]):{});
+  SITE=Object.assign({font:0,accent:"#b87333",foot:1,egg:1,en:1,ku:1,fx:0,lock:1,lockImg:"images/lock.jpg",lockEmoji:"😏",txt:{},lic:"Sara"},si?JSON.parse(si[1]):{});
   GALLERY=new Function("return "+g[1])();
   INFO=new Function("return "+n[1])();
   const names=new Set();
@@ -283,7 +289,7 @@ function serStory(){
   const k=n=>/^[A-Za-z_]\w*$/.test(n)?n:q(n);
   return "const STORY={\n"+Object.keys(all).map(n=>" "+k(n)+":{img:"+q(all[n].img)+(all[n].cut?",cut:1":"")+"}").join(",\n")+"\n};";
 }
-const serSite=()=>"const SITE="+JSON.stringify(SITE)+";";
+const serSite=()=>{const o=Object.assign({},SITE);if(!o.txt||!Object.keys(o.txt).length)delete o.txt;return "const SITE="+JSON.stringify(o)+";"};
 const serGal=()=>"const GALLERY="+JSON.stringify(GALLERY)+";";
 const serInfo=()=>"const INFO="+JSON.stringify(INFO)+";";
 const state=()=>serMenu()+serLocal()+serGal()+serInfo()+serStory()+serSite()+Object.keys(PENDING).join()+LOGOVER;
@@ -345,7 +351,27 @@ function renderGal(){
   $("#gal").innerHTML=GALLERY.map((p,i)=>'<div><img src="'+esc(src_(p))+'" alt=""><button data-g="'+i+'" aria-label="حذف">✕</button></div>').join("")||'<p class="mut" style="grid-column:1/-1;margin:0">عکسی وجود ندارد.</p>';
   bar();
 }
-function renderInfo(){
+function txtDicts(){
+  const g=n=>{const m=SRC.match(new RegExp("const "+n+"=(\\{.*\\});"));try{return m?JSON.parse(m[1]):{}}catch(e){return {}}};
+  return {en:g("T"),ku:g("TK")};
+}
+function renderTxt(){
+  const el=$("#txtList");if(!el||!SRC)return;
+  const D=txtDicts(),keys=Object.keys(D.en);
+  el.innerHTML=keys.map((k,n)=>{const v=(SITE.txt||{})[k]||{};
+    return '<div class="txr" data-k="'+esc(k)+'"><div class="lbl" style="font-weight:600">'+esc(k)+'</div>'+
+    '<input data-l="fa" placeholder="فارسی" value="'+esc(v.fa||"")+'">'+
+    '<input data-l="ku" class="l-ku" placeholder="'+esc(D.ku[k]||"کوردی")+'" value="'+esc(v.ku||"")+'">'+
+    '<input data-l="en" class="l-en" dir="ltr" placeholder="'+esc(D.en[k]||"English")+'" value="'+esc(v.en||"")+'"></div>'}).join("");
+}
+document.addEventListener("input",e=>{
+  const r=e.target.closest&&e.target.closest(".txr");if(!r||!e.target.dataset.l)return;
+  const k=r.dataset.k;SITE.txt=SITE.txt||{};const o=SITE.txt[k]||{};o[e.target.dataset.l]=e.target.value.trim();
+  if(!o.fa&&!o.en&&!o.ku)delete SITE.txt[k];else SITE.txt[k]=o;
+  for(const l of["fa","en","ku"])if(o[l]===""||o[l]===undefined)delete o[l];
+  bar();
+});
+function renderInfo(){renderTxt();
   document.querySelectorAll("[data-i]").forEach(el=>{el.value=INFO[el.dataset.i]||""});
   $("#swFoot").checked=SITE.foot!==0;$("#swEn").checked=SITE.en!==0;$("#swFx").checked=SITE.fx===1;$("#swLock").checked=SITE.lock!==0;
   $("#lockOpts").style.display=SITE.lock!==0?"flex":"none";
