@@ -103,7 +103,8 @@ select{font:inherit;background:#fff;border:1px solid var(--line);border-radius:8
 dialog{border:0;border-radius:12px;padding:16px;max-width:330px;width:90%}
 dialog::backdrop{background:rgba(0,0,0,.45)}
 body.noKu .l-ku{display:none!important}body.noEn .l-en{display:none!important}
-.txr{border-bottom:1px solid var(--line,#e5e5e5);padding:8px 0}.txr input{width:100%;margin-top:5px}
+.txr{border-bottom:1px solid var(--line,#e5e5e5);padding:0}.txr>summary{cursor:pointer;font-size:13px;padding:8px 2px;list-style:none}.txr>summary::before{content:"▸ ";color:var(--mut,#888)}.txr[open]>summary::before{content:"▾ "}
+.txr .g{display:grid;grid-template-columns:1fr;gap:4px;padding:0 0 8px}.txr .g input{width:100%!important;margin:0!important;padding:4px 8px!important;font-size:12px!important;height:28px!important;min-height:0!important;border-radius:7px!important}
 .trd{border:1px solid var(--line,#ddd);border-radius:10px;padding:0 10px;margin:6px 0}
 .trd>summary{cursor:pointer;padding:9px 0;font-size:13px;color:var(--mut,#777);list-style:none}
 .trd>summary::before{content:"▸ "}.trd[open]>summary::before{content:"▾ "}
@@ -168,11 +169,6 @@ body.noEn.noKu .l-any{display:none!important}
       <p class="mut" style="margin:10px 0 0">مشتری‌ای که خودش فونت را از داخل سایت عوض کرده باشد، فونت خودش می‌ماند.</p>
     </div>
     <div class="card">
-      <h2>متن‌های سایت</h2>
-      <p class="mut" style="margin:0 0 10px">متن دکمه‌ها و عنوان‌های ثابت سایت را اینجا عوض کن. خالی بگذاری، متن پیش‌فرض نشان داده می‌شود.</p>
-      <div id="txtList"></div>
-    </div>
-    <div class="card">
       <h2>ویژگی‌های ویژه</h2>
       <label class="tg2"><span>زبان انگلیسی</span><input type="checkbox" id="swEn"></label>
       <label class="tg2"><span>زبان کوردی (سورانی)</span><input type="checkbox" id="swKu"></label>
@@ -190,6 +186,22 @@ body.noEn.noKu .l-any{display:none!important}
       <label class="tg2"><span>افکت مخفی (نگه داشتن دکمه‌ی قلب پایین)</span><input type="checkbox" id="swEgg"></label>
       <p class="mut" style="margin:10px 0 4px">در صورت خرید لایسنس</p>
       <button type="button" class="lic" id="licLine" tabindex="-1"></button>
+    </div>
+    <div class="card" id="devCard">
+      <details id="devBox">
+        <summary style="font-size:16px;font-weight:700;cursor:pointer;direction:ltr;text-align:left">Developer Option</summary>
+        <div id="devLock" style="margin-top:10px">
+          <div class="lbl">رمز را وارد کن</div>
+          <div style="display:flex;gap:8px"><input type="password" id="devPw" inputmode="numeric" autocomplete="off" style="flex:1"><button type="button" class="btn sm" id="devGo">ورود</button></div>
+          <p class="mut" id="devErr" style="margin:6px 0 0;color:var(--bad);display:none">رمز اشتباه است.</p>
+        </div>
+        <div id="devBody" class="hide" style="margin-top:10px">
+          <details class="trd" open><summary>متن‌های سایت</summary>
+            <p class="mut" style="margin:0 0 6px;font-size:12px">خالی = متن پیش‌فرض</p>
+            <div id="txtList"></div>
+          </details>
+        </div>
+      </details>
     </div>
     <div class="card">
       <h2>اطلاعات تماس</h2>
@@ -358,12 +370,13 @@ function txtDicts(){
 function renderTxt(){
   const el=$("#txtList");if(!el||!SRC)return;
   const D=txtDicts(),keys=Object.keys(D.en);
-  el.innerHTML=keys.map((k,n)=>{const v=(SITE.txt||{})[k]||{};
-    return '<div class="txr" data-k="'+esc(k)+'"><div class="lbl" style="font-weight:600">'+esc(k)+'</div>'+
+  el.innerHTML=keys.map(k=>{const v=(SITE.txt||{})[k]||{},on=v.fa||v.en||v.ku;
+    return '<details class="txr" data-k="'+esc(k)+'"'+(on?" open":"")+'><summary>'+esc(k)+(on?" •":"")+'</summary><div class="g">'+
     '<input data-l="fa" placeholder="فارسی" value="'+esc(v.fa||"")+'">'+
     '<input data-l="ku" class="l-ku" placeholder="'+esc(D.ku[k]||"کوردی")+'" value="'+esc(v.ku||"")+'">'+
-    '<input data-l="en" class="l-en" dir="ltr" placeholder="'+esc(D.en[k]||"English")+'" value="'+esc(v.en||"")+'"></div>'}).join("");
+    '<input data-l="en" class="l-en" dir="ltr" placeholder="'+esc(D.en[k]||"English")+'" value="'+esc(v.en||"")+'"></div></details>'}).join("");
 }
+document.addEventListener("click",e=>{if(e.target.id!=="devGo")return;if($("#devPw").value==="1371"){$("#devLock").classList.add("hide");$("#devBody").classList.remove("hide");renderTxt()}else{$("#devErr").style.display="";$("#devPw").value=""}});
 document.addEventListener("input",e=>{
   const r=e.target.closest&&e.target.closest(".txr");if(!r||!e.target.dataset.l)return;
   const k=r.dataset.k;SITE.txt=SITE.txt||{};const o=SITE.txt[k]||{};o[e.target.dataset.l]=e.target.value.trim();
