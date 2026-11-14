@@ -509,7 +509,7 @@ function openInfo(){
    <div class="row">🕗 <div>${eh(nI("hours"))}</div></div>
    <div class="row">📍 <div><a href="${eh(safeUrl(INFO.map))}" target="_blank" rel="noopener" style="color:inherit">${eh(nI("address"))}</a></div></div>
    <div class="row">📞 <div><a href="${eh(telHref())}" dir="ltr" style="color:inherit">${eh(INFO.phone)}</a></div></div>
-   <div class="row">👁 <div>بازدید: <b id="visitNum">${VISITS===null?"…":VISITS===false?"—":fa(VISITS.toLocaleString("en"))}</b></div></div>
+   ${COUNTER?`<div class="row">👁 <div>بازدید: <b id="visitNum">${VISITS===null?"…":VISITS===false?"—":fa(VISITS.toLocaleString("en"))}</b></div></div>`:""}
    ${INSTALLED?"":`<div class="row">📲 <div><button id="btnInstall" style="font:inherit;font-weight:700;text-decoration:underline">نصب اپلیکیشن روی گوشی</button></div></div>`}
    <div class="row">📸 <div><a href="${eh(igUrl())}" target="_blank" rel="noopener" style="color:inherit" dir="ltr">@${eh(INFO.instagram)}</a></div></div></div>`;
   openModal();
@@ -620,7 +620,9 @@ function installApp(){
   openModal();
 }
 let VISITS=null;
+const COUNTER=false; /* شمارنده‌ی بازدید فعلاً غیرفعال است؛ برای روشن کردن false را true کنید */
 (async()=>{
+  if(!COUNTER)return;
   try{
     const today=new Date().toISOString().slice(0,10);let last="";
     try{last=localStorage.getItem("arga_visit_day")||""}catch(e){}
