@@ -187,6 +187,11 @@ body.noEn.noKu .l-any{display:none!important}
       <p class="mut" style="margin:10px 0 4px">در صورت خرید لایسنس</p>
       <button type="button" class="lic" id="licLine" tabindex="-1"></button>
     </div>
+    <div class="card">
+      <h2>دانلود سایت</h2>
+      <p class="mut" style="margin:0 0 10px;font-size:12px">یک فایل ZIP از کل سایت با آخرین تغییراتی که الان در پنل داری (حتی ذخیره‌نشده‌ها) دانلود می‌شود. برای آپلود روی هاست مستقل مثل arga.ir.</p>
+      <button type="button" class="btn" id="zipBtn">دانلود نسخه‌ی کامل سایت (ZIP)</button>
+    </div>
     <div class="card" id="devCard">
       <details id="devBox">
         <summary style="font-size:16px;font-weight:700;cursor:pointer;direction:ltr;text-align:left">Developer Option</summary>
@@ -626,6 +631,54 @@ function validate(){
     i.tag=(i.tag||"").trim();i.en=(i.en||"").trim();i.ed=(i.ed||"").trim();i.ku=(i.ku||"").trim();i.kd=(i.kd||"").trim();
   }
 }
+/* ---- دانلود ZIP کل سایت ---- */
+const CRCT=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0}return t})();
+const crc32=u=>{let c=0xFFFFFFFF;for(let i=0;i<u.length;i++)c=CRCT[(c^u[i])&255]^(c>>>8);return(c^0xFFFFFFFF)>>>0};
+function makeZip(files){
+  const enc=new TextEncoder(),parts=[],cd=[];let off=0;const d=new Date();
+  const dt=((d.getFullYear()-1980)<<9|(d.getMonth()+1)<<5|d.getDate()),tm=(d.getHours()<<11|d.getMinutes()<<5|d.getSeconds()>>1);
+  for(const f of files){
+    const nm=enc.encode(f.path),cr=crc32(f.data),sz=f.data.length;
+    const h=new DataView(new ArrayBuffer(30));h.setUint32(0,0x04034b50,true);h.setUint16(4,20,true);h.setUint16(6,0x0800,true);h.setUint16(8,0,true);h.setUint16(10,tm,true);h.setUint16(12,dt,true);h.setUint32(14,cr,true);h.setUint32(18,sz,true);h.setUint32(22,sz,true);h.setUint16(26,nm.length,true);h.setUint16(28,0,true);
+    parts.push(h.buffer,nm,f.data);
+    const c=new DataView(new ArrayBuffer(46));c.setUint32(0,0x02014b50,true);c.setUint16(4,20,true);c.setUint16(6,20,true);c.setUint16(8,0x0800,true);c.setUint16(10,0,true);c.setUint16(12,tm,true);c.setUint16(14,dt,true);c.setUint32(16,cr,true);c.setUint32(20,sz,true);c.setUint32(24,sz,true);c.setUint16(28,nm.length,true);c.setUint32(42,off,true);
+    cd.push(c.buffer,nm);off+=30+nm.length+sz;
+  }
+  let cdl=0;cd.forEach(x=>cdl+=x.byteLength||x.length);
+  const e=new DataView(new ArrayBuffer(22));e.setUint32(0,0x06054b50,true);e.setUint16(8,files.length,true);e.setUint16(10,files.length,true);e.setUint32(12,cdl,true);e.setUint32(16,off,true);
+  return new Blob(parts.concat(cd,[e.buffer]),{type:"application/zip"});
+}
+const b64u8=s=>{const b=atob(s),u=new Uint8Array(b.length);for(let i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return u};
+$("#zipBtn").onclick=async()=>{
+  const btn=$("#zipBtn"),t0=btn.textContent;btn.disabled=true;
+  try{
+    btn.textContent="در حال آماده‌سازی...";
+    const cm=await gh("/git/commits/"+HEAD).then(r=>r.json());
+    const tr=await gh("/git/trees/"+cm.tree.sha+"?recursive=1").then(r=>r.json());
+    const enc=new TextEncoder(),files=[],seen=new Set();
+    const list=tr.tree.filter(x=>x.type==="blob"&&!/^\./.test(x.path)&&x.path!=="README.md");
+    let done=0;const total=list.length;
+    const q=list.slice();
+    const work=async()=>{
+      while(q.length){
+        const x=q.shift();let data;
+        if(x.path==="index.html")data=enc.encode(buildOut());
+        else if(x.path==="sw.js")data=enc.encode(SW);
+        else if(PENDING[x.path])data=b64u8(PENDING[x.path].split(",")[1]);
+        else{const b=await gh("/git/blobs/"+x.sha).then(r=>r.json());data=b64u8(b.content.replace(/\n/g,""))}
+        files.push({path:x.path,data});seen.add(x.path);
+        btn.textContent="در حال آماده‌سازی... "+Math.round(++done/total*100)+"٪";
+      }
+    };
+    await Promise.all([work(),work(),work(),work(),work(),work()]);
+    for(const p of Object.keys(PENDING))if(!seen.has(p))files.push({path:p,data:b64u8(PENDING[p].split(",")[1])});
+    files.sort((a,b)=>a.path<b.path?-1:1);
+    const blob=makeZip(files),url=URL.createObjectURL(blob),l=document.createElement("a");
+    l.href=url;l.download="arga-site.zip";document.body.appendChild(l);l.click();l.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);
+    toast("فایل ZIP دانلود شد.","ok");
+  }catch(err){toast("دانلود انجام نشد: "+(err.message||"خطا"),"err")}
+  finally{btn.disabled=false;btn.textContent=t0}
+};
 $("#save").onclick=async()=>{
   const bad=validate();if(bad){toast(bad,"err");render();return}
   const btn=$("#save");btn.disabled=true;btn.textContent="در حال ذخیره...";
