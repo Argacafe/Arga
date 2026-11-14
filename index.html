@@ -412,15 +412,13 @@ MENU.forEach(m=>m.items.forEach(([n,p,d,e,x])=>{x=x||{};ITEMS.push({id:++_id,c:m
 const PHOTOS={
  "آمریکانو":"photo-1583577012061-d69d2dbc900a",
  "کاپوچینو":"photo-1670899604825-5b25fd14b4db",
- "هات چاکلت":"photo-1523754116966-300250e98597",
- "شیک شکلات":"photo-1648775948447-78c34dd56090",
- "لیموناد":"photo-1623157980612-da2c2cdb4c0b"
+ "شیک شکلات":"photo-1648775948447-78c34dd56090"
 };
-const LOCAL={"آمریکانو":"images/americano-cup.jpg","لته":"images/latte-swan.jpg","کاپوچینو":"images/latte-cup.jpg","موکا":"images/mocha-cup.jpg","لته با سیروپ دلخواه":"images/syrup-latte-swan.jpg","آیس لته":"images/ice-latte.jpg","آیس لته (سیروپ دلخواه)":"images/ice-syrup-trio.jpg","آیس موکا":"images/ice-mocha-new.jpg","آیس تونیک آمریکانو":"images/tonic-americano.jpg","فراپاچینو":"images/frappuccino-photo.jpg","فراپاچینو لوتوس":"images/frappuccino-lotus.jpg","فراپه کره بیسکویت":"images/frappe-biscuit-butter.jpg","فراپاچینو موز و نوتلا":"images/frappuccino-banana-nutella-photo.jpg","شیک شکلات":"images/shake-chocolate.jpg","شیک نوتلا":"images/shake-nutella-new.jpg","شیک بادام زمینی":"images/shake-peanut-new.jpg","شیک بادام زمینی نوتلا":"images/shake-peanut-nutella-new.jpg","شیک توت فرنگی":"images/shake-strawberry.jpg","شیک لوتوس":"images/shake-lotus-photo.jpg","شیک پسته":"images/shake-pistachio-new.jpg","شیک موز":"images/shake-banana-new.jpg","شیک موز و نوتلا":"images/shake-nutella-banana.jpg","شیک موز شکلات":"images/shake-banana-choc-photo.jpg","تروپیکال":"images/tropical.jpg","فرش پیچ":"images/fresh-peach.jpg","آلبالو نمکی":"images/albaloo.jpg","موهیتو":"images/mojito-photo.jpg","رد موهیتو":"images/red-mojito.jpg","آرگارین":"images/argarin.jpg","آیس تی":"images/ice-tea.jpg","شربت مجنون":"images/sharbat-majnoon.jpg","شربت شیراز":"images/sharbat-shiraz.jpg","سان ست":"images/sunset.jpg","چای زعفران":"images/tea.jpg","چای":"images/tea.jpg","ماسالا":"images/white-cup.jpg","وایت چاکلت":"images/white-cup.jpg","شیر توت فرنگی":"images/strawberry-shake.jpg","سیروپ":"images/syrups.jpg",".":"images/item-mw69bo4w363.jpg"};
+const LOCAL={"آمریکانو":"images/americano-cup.jpg","لته":"images/latte-swan.jpg","کاپوچینو":"images/latte-cup.jpg","موکا":"images/mocha-cup.jpg","لته با سیروپ دلخواه":"images/syrup-latte-swan.jpg","آیس لته":"images/ice-latte.jpg","آیس لته (سیروپ دلخواه)":"images/ice-syrup-trio.jpg","آیس موکا":"images/ice-mocha-new.jpg","آیس تونیک آمریکانو":"images/tonic-americano.jpg","فراپاچینو":"images/frappuccino-photo.jpg","فراپاچینو لوتوس":"images/frappuccino-lotus.jpg","فراپه کره بیسکویت":"images/frappe-biscuit-butter.jpg","فراپاچینو موز و نوتلا":"images/frappuccino-banana-nutella-photo.jpg","شیک شکلات":"images/shake-chocolate.jpg","شیک نوتلا":"images/shake-nutella-new.jpg","شیک بادام زمینی":"images/shake-peanut-new.jpg","شیک بادام زمینی نوتلا":"images/shake-peanut-nutella-new.jpg","شیک توت فرنگی":"images/shake-strawberry.jpg","شیک لوتوس":"images/shake-lotus-photo.jpg","شیک پسته":"images/shake-pistachio-new.jpg","شیک موز":"images/shake-banana-new.jpg","شیک موز و نوتلا":"images/shake-nutella-banana.jpg","شیک موز شکلات":"images/shake-banana-choc-photo.jpg","تروپیکال":"images/tropical.jpg","فرش پیچ":"images/fresh-peach.jpg","آلبالو نمکی":"images/albaloo.jpg","موهیتو":"images/mojito-photo.jpg","رد موهیتو":"images/red-mojito.jpg","آرگارین":"images/argarin.jpg","آیس تی":"images/ice-tea.jpg","شربت مجنون":"images/sharbat-majnoon.jpg","شربت شیراز":"images/sharbat-shiraz.jpg","سان ست":"images/sunset.jpg","چای زعفران":"images/tea.jpg","چای":"images/tea.jpg","ماسالا":"images/white-cup.jpg","وایت چاکلت":"images/white-cup.jpg","هات چاکلت":"images/story-hot-new.jpg","شیر توت فرنگی":"images/strawberry-shake.jpg","سیروپ":"images/syrups.jpg",".":"images/item-mw69bo4w363.jpg"};
 ITEMS.forEach(i=>{if(LOCAL[i.n])i.img=LOCAL[i.n]});
 const E=ITEMS.find(i=>i.n==="اسپرسو");if(E){E.img="images/espresso.png";E.cut=true}
 ITEMS.forEach(i=>{const k=PHOTOS[i.n];if(k&&!LOCAL[i.n]&&!(i.c==="shake"&&i.n!=="شیک شکلات"))i.img="https://images.unsplash.com/"+k+"?w=600&q=70&auto=format&fit=crop"});
-const FIT=new Set(["images/latte-cup.jpg","images/americano-cup.jpg","images/white-cup.jpg","images/latte-swan.jpg","images/syrup-latte-swan.jpg","images/mocha-cup.jpg","images/ice-mocha-new.jpg","images/ice-syrup-trio.jpg","images/syrups.jpg","images/tea.jpg"]);
+const FIT=new Set(["images/latte-cup.jpg","images/americano-cup.jpg","images/white-cup.jpg","images/latte-swan.jpg","images/syrup-latte-swan.jpg","images/mocha-cup.jpg","images/ice-mocha-new.jpg","images/ice-syrup-trio.jpg","images/syrups.jpg","images/tea.jpg","images/story-hot-new.jpg"]);
 ITEMS.forEach(i=>{if(FIT.has(i.img))i.fit=true});
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const fa=n=>LANG==="en"?String(n):String(n).replace(/\d/g,d=>"۰۱۲۳۴۵۶۷۸۹"[d]);
@@ -455,14 +453,14 @@ const STORY={
  all:{img:"images/logo-96.png"},
  hotcoffee:{img:"images/espresso.png",cut:1},
  coldcoffee:{img:"images/story-mwdm670xojd.jpg"},
- frappe:{img:"https://images.unsplash.com/photo-1637178035575-b0dcbd28a09b?w=200&h=200&q=70&auto=format&fit=crop"},
+ frappe:{img:"images/frappuccino-photo.jpg"},
  shake:{img:"images/story-mwdlzj9ai50.jpg"},
  smoothie:{img:"images/tropical.jpg"},
- mocktail:{img:"https://images.unsplash.com/photo-1623157980612-da2c2cdb4c0b?w=200&h=200&q=70&auto=format&fit=crop"},
+ mocktail:{img:"images/mojito-photo.jpg"},
  coolbev:{img:"images/story-mwdm11dr8iq.jpg"},
- tea:{img:"https://images.unsplash.com/photo-1761483281120-4fc47bfe3e29?w=200&h=200&q=70&auto=format&fit=crop"},
+ tea:{img:"images/tea.jpg"},
  hotnocoffee:{img:"images/story-hot-new.jpg"},
- extra:{img:"https://images.unsplash.com/photo-1750520335073-2535aa280946?w=200&h=200&q=70&auto=format&fit=crop"}
+ extra:{img:"images/syrups.jpg"}
 };
 function renderStories(){
   $("#stories").innerHTML=CATS.map(c=>`<button class="story ${c.id===cat?"on":""}" data-cat="${c.id}"><div class="ring"><div class="${STORY[c.id]&&STORY[c.id].cut?"cut":""}">${STORY[c.id]?`<img src="${STORY[c.id].img}" alt="" referrerpolicy="no-referrer" onerror="this.replaceWith(document.createTextNode('${c.e}'))">`:c.e}</div></div><span class="lb">${ct(c)}</span></button>`).join("");
