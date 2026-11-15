@@ -249,18 +249,31 @@ nav.bottom button.on .navav{border-color:var(--fg)}
 .th-man .steam{animation:thSteam 1.4s ease-in-out infinite;opacity:.15}
 @keyframes thSteam{0%,100%{opacity:.1;transform:translateY(1px)}50%{opacity:.7;transform:translateY(-1px)}}
 @keyframes thSw{from{transform:rotate(-32deg)}to{transform:rotate(32deg)}}
-.lg-pole{position:absolute;top:12px;width:3px;height:54px;border-radius:2px;background:var(--mut);opacity:.65}
-.lg-plank{position:absolute;width:34px;height:13px;box-sizing:border-box;padding-right:6px;text-align:center;font:700 9px/13px var(--font);color:var(--mut);background:var(--bg);clip-path:polygon(0 0,calc(100% - 7px) 0,100% 50%,calc(100% - 7px) 100%,0 100%);transition:background .25s,color .25s,opacity .25s}
-.lg-plank.cur{color:var(--fg)}
-.lg-plank.dim{opacity:.4}
-.lg-plank.tgt{background:var(--accent);color:#fff;animation:lgFlip .55s var(--t-ease)}
-@keyframes lgFlip{0%{transform:rotateX(0)}60%{transform:rotateX(380deg) scale(1.14)}100%{transform:rotateX(360deg) scale(1)}}
+.lg-pole{position:absolute;top:10px;width:3px;height:56px;border-radius:2px;background:var(--mut);opacity:.65}
+.lg-flag{position:absolute;width:22px;height:14px;border-radius:2px;overflow:hidden;box-shadow:0 0 0 1px rgba(128,128,128,.4);transform-origin:0 50%;animation:thWave .9s ease-in-out infinite alternate;transition:opacity .3s ease,transform .3s var(--t-ease)}
+.lg-flag svg,.th-held .fl svg,.th-disc .fl svg{display:block;width:100%;height:100%}
+.th-disc .fl svg{position:static;inset:auto;transition:none;transform:none;opacity:1}
+.lg-flag.cur{box-shadow:0 0 0 1.5px var(--accent)}
+.lg-flag.dim{opacity:.35}
+.lg-flag.tgt{transform:scale(1.18)}
+.lg-flag.gone{opacity:0;transform:scale(.3)}
+@keyframes thWave{from{transform:skewY(-4deg) scaleX(1)}to{transform:skewY(4deg) scaleX(.94)}}
+.lg-flag.tgt,.lg-flag.gone{animation:none}
 .lg-bub{position:absolute;top:2px;padding:0 8px;border-radius:9px;background:var(--bg);border:1px solid var(--line);font:700 11px/17px var(--font);color:var(--fg);white-space:nowrap;box-shadow:0 3px 8px rgba(0,0,0,.14);transform-origin:100% 100%;transform:scale(0);opacity:0;transition:transform .3s var(--t-ease),opacity .2s}
 .lg-bub.on{transform:scale(1);opacity:1}
 .lg-bub::after{content:"";position:absolute;right:8px;bottom:-4px;width:7px;height:7px;background:var(--bg);border-right:1px solid var(--line);border-bottom:1px solid var(--line);transform:rotate(45deg)}
-.th-disc .lt{position:absolute;inset:0;display:grid;place-items:center;font:800 19px var(--font);color:var(--accent);transition:opacity .3s ease,transform .5s var(--t-ease)}
+.lg-bub.r{transform-origin:0 100%}.lg-bub.r::after{right:auto;left:8px}
+.th-disc .lt{position:absolute;inset:0;display:grid;place-items:center;transition:opacity .3s ease,transform .5s var(--t-ease)}
+.th-disc .fl{width:30px;height:20px;border-radius:3px;overflow:hidden;box-shadow:0 0 0 1px rgba(128,128,128,.4)}
 .thstage:not(.sw) .lt.b,.thstage.sw .lt.a{opacity:0;transform:scale(.4) rotate(-40deg)}
-.th-man.point .ar.a{transform:rotate(-135deg)}
+.th-man.point .ar.a,.th-man.carry .ar.a{transform:rotate(-135deg)}
+.th-man.walk.point .ar.a,.th-man.walk.carry .ar.a{animation:none}
+.th-held{position:absolute;left:0;top:0;width:0;height:0;opacity:0;transform:scale(.2);transform-origin:21px 8px;transition:opacity .2s ease,transform .3s var(--t-ease)}
+.th-held.on{opacity:1;transform:none}
+.th-held i{position:absolute;left:20px;top:-15px;width:2px;height:23px;border-radius:1px;background:var(--fg)}
+.th-held .hf{position:absolute;left:22px;top:-15px;width:22px;height:14px}
+.th-man.flip .th-held .hf{transform:scaleX(-1)}
+.th-held .fl{width:100%;height:100%;border-radius:2px;overflow:hidden;box-shadow:0 0 0 1px rgba(128,128,128,.4);transform-origin:0 50%;animation:thWave .7s ease-in-out infinite alternate}
 html.th-vt::view-transition-old(root),html.th-vt::view-transition-new(root){animation:none;mix-blend-mode:normal}
 html.th-vt::view-transition-old(root){z-index:1}html.th-vt::view-transition-new(root){z-index:2}
 html.th-vt::view-transition-group(thstage),html.th-vt::view-transition-old(thstage),html.th-vt::view-transition-new(thstage){animation:none}
@@ -745,7 +758,7 @@ async function themeToggle(){
   finally{st.classList.remove("on");await thSleep(380);st.remove();thBusy=false}
 }
 $("#btnTheme").onclick=themeToggle;
-const LG_CODE={fa:"فا",ku:"کو",en:"EN"},LG_HI={fa:"سلام",ku:"سڵاو",en:"Hello"};
+const LG_HI={fa:"سلام",ku:"سڵاو",en:"Hello"};
 async function langSwitch(to){
   const from=LANG;
   if(to===from)return;
@@ -754,24 +767,31 @@ async function langSwitch(to){
   const langs=["fa"].concat(SITE.ku!==0?["ku"]:[],SITE.en!==0?["en"]:[]);
   const st=document.createElement("div");
   st.className="thstage";st.setAttribute("dir","ltr");st.setAttribute("aria-hidden","true");
-  st.innerHTML=`<div class="th-disc"><span class="lt a">${LG_CODE[from]}</span><span class="lt b">${LG_CODE[to]}</span></div><div class="th-ground"></div><div class="lg-pole"></div>${langs.map((l,i)=>`<div class="lg-plank${l===from?" cur":""}" data-l="${l}" style="top:${12+i*14}px">${LG_CODE[l]}</div>`).join("")}<div class="lg-bub"></div><div class="th-clip"><div class="th-man">${TH_MAN}</div></div>`;
+  st.innerHTML=`<div class="th-disc"><span class="lt a"><span class="fl">${FLAG[from]}</span></span><span class="lt b"><span class="fl">${FLAG[to]}</span></span></div><div class="th-ground"></div><div class="lg-pole"></div>${langs.map((l,i)=>`<div class="lg-flag${l===from?" cur":""}" data-l="${l}" style="top:${12+i*16}px">${FLAG[l]}</div>`).join("")}<div class="lg-bub"></div><div class="th-clip"><div class="th-man">${TH_MAN}<div class="th-held"><i></i><div class="hf"><div class="fl">${FLAG[to]}</div></div></div></div></div>`;
   document.body.appendChild(st);
   try{
-    const W=st.clientWidth,px=Math.round(W*.74),hx=px-26,sx=76,man=st.querySelector(".th-man"),bub=st.querySelector(".lg-bub");
+    const W=st.clientWidth,px=Math.round(W*.74),hx=px-26,sx=76,ex=112,man=st.querySelector(".th-man"),bub=st.querySelector(".lg-bub"),held=st.querySelector(".th-held");
     st.querySelector(".lg-pole").style.left=px+"px";
-    st.querySelectorAll(".lg-plank").forEach(e=>e.style.left=px+"px");
-    const T=(x,y)=>`translate(${x}px,${y}px)`;
+    st.querySelectorAll(".lg-flag").forEach(e=>e.style.left=(px+3)+"px");
+    const T=(x,y,f)=>`translate(${x}px,${y}px)${f?" scaleX(-1)":""}`;
     const mv=(a,b,d,e)=>{const an=man.animate([{transform:a},{transform:b}],{duration:d,easing:e,fill:"forwards"});return an.finished.then(()=>{man.style.transform=b;an.cancel()})};
     man.style.transform=T(sx,0);
     st.getBoundingClientRect();st.classList.add("on");await thSleep(200);
-    man.classList.add("walk");await mv(T(sx,0),T(hx,0),1300,"ease-in-out");man.classList.remove("walk");
+    man.classList.add("walk");await mv(T(sx,0),T(hx,0),1200,"ease-in-out");man.classList.remove("walk");
     man.classList.add("point");await thSleep(100);
-    st.querySelectorAll(".lg-plank").forEach(e=>e.classList.add(e.dataset.l===to?"tgt":"dim"));
-    mv(T(hx,0),T(hx,-5),140,"ease-out").then(()=>mv(T(hx,-5),T(hx,0),140,"ease-in"));
-    bub.textContent=LG_HI[to];bub.dir=to==="en"?"ltr":"rtl";bub.style.right=(W-(hx+14))+"px";bub.classList.add("on");
-    await thSleep(500);
+    const flags=[...st.querySelectorAll(".lg-flag")];
+    flags.forEach(e=>e.classList.add(e.dataset.l===to?"tgt":"dim"));
+    await thSleep(200);
+    flags.forEach(e=>{if(e.dataset.l===to)e.classList.add("gone")});
+    held.classList.add("on");man.classList.add("carry");man.classList.remove("point");
+    await thSleep(250);
+    man.classList.add("flip","walk");
+    await mv(T(hx,0,1),T(ex,0,1),1000,"ease-in-out");man.classList.remove("walk");
+    await thSleep(120);
+    bub.textContent=LG_HI[to];bub.dir=to==="en"?"ltr":"rtl";bub.classList.add("r");bub.style.left=(ex+14)+"px";bub.classList.add("on");
+    await thSleep(420);
     const b=st.getBoundingClientRect();
-    await thVT(()=>{setLang(to);st.classList.add("sw")},b.left+px,b.top+40);
+    await thVT(()=>{setLang(to);st.classList.add("sw")},b.left+ex-8,b.top+14);
     await thSleep(250);
   }catch(e){if(LANG!==to)setLang(to)}
   finally{st.classList.remove("on");await thSleep(380);st.remove();thBusy=false}
