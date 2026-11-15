@@ -298,9 +298,11 @@ header.top .ic{align-items:center}
 header.top .ic{gap:6px}
 header.top .ic button{display:grid;place-items:center;line-height:0;flex:none;width:34px;height:34px;min-width:0;padding:0;margin:0}
 header.top .ic button .i,header.top .ic button .ball{margin:0}
-svg.hb path{fill:#e0245e;stroke:currentColor;animation:heartRW 2.4s ease-in-out infinite}
+svg.hb{transform-origin:50% 56%;animation:heartBeat 1.4s ease-in-out infinite}
+svg.hb path{fill:#e0245e;stroke:currentColor;animation:heartRW 2.8s ease-in-out infinite}
+@keyframes heartBeat{0%,100%{transform:scale(1)}12%{transform:scale(1.2)}24%{transform:scale(.96)}38%{transform:scale(1.11)}55%{transform:scale(1)}}
 @keyframes heartRW{0%,100%{fill:#e0245e}50%{fill:#fff}}
-@media (prefers-reduced-motion:reduce){svg.hb path{animation:none}}
+@media (prefers-reduced-motion:reduce){svg.hb,svg.hb path{animation:none}}
 </style>
 </head>
 <body>
