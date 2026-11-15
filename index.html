@@ -791,32 +791,7 @@ async function themeToggle(){
   }catch(e){if(curTheme()!==to)setTheme(to,false)}
   finally{st.classList.remove("on");await thSleep(380);st.remove();thBusy=false}
 }
-let _ropeBusy=0;
-function ropeShow(){
-  if(_ropeBusy||matchMedia("(prefers-reduced-motion:reduce)").matches||!document.body.animate)return;
-  const bl=$("#thBall");if(!bl)return;_ropeBusy=1;
-  const r=bl.getBoundingClientRect(),W=innerWidth,H=innerHeight,x=r.left+r.width/2,y0=r.bottom-2,pitY=H-120,pitW=96,pitH=28;
-  const sc=document.createElement("div");sc.style.cssText="position:fixed;inset:0;z-index:150;pointer-events:none;overflow:hidden";
-  sc.innerHTML='<svg width="'+W+'" height="'+H+'" style="position:absolute;inset:0"><ellipse id="rpit" cx="'+x+'" cy="'+pitY+'" rx="0" ry="0" fill="#0a0806" stroke="#6b4a2b" stroke-width="3"/><line id="rrope" x1="'+x+'" y1="'+y0+'" x2="'+x+'" y2="'+y0+'" stroke="#a9793f" stroke-width="3" stroke-linecap="round" stroke-dasharray="1 0"/></svg>'
-   +'<div id="rguy" style="position:absolute;left:'+(x-32)+'px;top:'+(y0-6)+'px;width:64px;height:67px;opacity:0;transform-origin:50% 0">'+'<svg viewBox="0 0 80 84" width="64" height="67" style="display:block;overflow:visible"><g class="rg-leg" ><line x1="40" y1="54" x2="35" y2="74" stroke="#3b2a1d" stroke-width="5" stroke-linecap="round"/><line x1="40" y1="54" x2="46" y2="73" stroke="#5a4130" stroke-width="5" stroke-linecap="round"/></g><rect x="31" y="28" width="18" height="28" rx="7" fill="#8a5524"/><rect x="34" y="38" width="12" height="18" rx="3" fill="#f4ead9"/><circle cx="40" cy="19" r="9" fill="#e0ac82"/><path d="M31 17a9 9 0 0 1 18 0c-4-3-13-3-18 0z" fill="#2b1d14"/><path d="M38 31 L40 6" stroke="#e0ac82" stroke-width="4.5" stroke-linecap="round" fill="none"/><path d="M44 33 L58 38" stroke="#e0ac82" stroke-width="4.5" stroke-linecap="round" fill="none"/><rect x="56" y="32" width="9" height="10" rx="2" fill="#fff" stroke="#8a5524" stroke-width="1.5"/><path d="M65 35h3a2.5 2.5 0 0 1 0 5h-3" fill="none" stroke="#8a5524" stroke-width="1.5"/></svg>'+'</div>';
-  document.body.appendChild(sc);
-  const pit=sc.querySelector("#rpit"),rope=sc.querySelector("#rrope"),guy=sc.querySelector("#rguy");
-  const endY=pitY-8,dist=endY-y0;
-  const done=()=>{sc.animate([{opacity:1},{opacity:0}],{duration:400,fill:"forwards"}).onfinish=()=>{sc.remove();_ropeBusy=0}};
-  // 1: گودال باز می‌شود و طناب پایین می‌افتد
-  pit.animate([{rx:0,ry:0},{rx:pitW/2,ry:pitH/2}],{duration:500,fill:"forwards",easing:"ease-out"});
-  const t0=performance.now(),dur=700;
-  (function grow(t){const k=Math.min(1,(t-t0)/dur);rope.setAttribute("y2",y0+dist*(1-Math.pow(1-k,3)));if(k<1)requestAnimationFrame(grow)})(t0);
-  // 2: آدمک پیدا می‌شود و با طناب پایین می‌رود
-  guy.animate([{opacity:0,transform:"scale(.3)"},{opacity:1,transform:"scale(1)"}],{duration:350,delay:300,fill:"forwards"});
-  const slide=guy.animate([{transform:"translateY(0)"},{transform:"translateY("+(dist-8)+"px)"}],{duration:1800,delay:900,easing:"cubic-bezier(.4,0,.6,1)",fill:"forwards"});
-  slide.onfinish=()=>{
-    // 3: داخل گودال فرو می‌رود
-    const sink=guy.animate([{transform:"translateY("+(dist-8)+"px)",clipPath:"inset(0 0 0 0)"},{transform:"translateY("+(dist+40)+"px)",clipPath:"inset(0 0 70% 0)"}],{duration:700,easing:"ease-in",fill:"forwards"});
-    sink.onfinish=()=>{setTimeout(done,350)};
-  };
-}
-$("#btnTheme").onclick=()=>{themeToggle();ropeShow()};
+$("#btnTheme").onclick=themeToggle;
 const LG_HI={fa:"سلام",ku:"سڵاو",en:"Hello"};
 async function langSwitch(to){
   const from=LANG;
