@@ -266,12 +266,13 @@ nav.bottom button.on .navav{border-color:var(--fg)}
 .th-disc .lt{position:absolute;inset:0;display:grid;place-items:center;transition:opacity .3s ease,transform .5s var(--t-ease)}
 .th-disc .fl{width:30px;height:20px;border-radius:3px;overflow:hidden;box-shadow:0 0 0 1px rgba(128,128,128,.4)}
 .thstage:not(.sw) .lt.b,.thstage.sw .lt.a{opacity:0;transform:scale(.4) rotate(-40deg)}
-.lg-rock{position:absolute;left:132px;top:57px;width:16px;height:9px;background:var(--mut);opacity:.9;border-radius:62% 58% 12% 12%/95% 90% 10% 10%;box-shadow:inset 2px 2px 0 rgba(255,255,255,.22)}
-.th-man.kick .lg.b{transform:rotate(-68deg)}.th-man.kick .lg.a{transform:rotate(12deg)}
 .th-man.point .ar.a,.th-man.carry .ar.a{transform:rotate(-135deg)}
 .th-man.walk.point .ar.a,.th-man.walk.carry .ar.a{animation:none}
 .th-held{position:absolute;left:0;top:0;width:0;height:0;opacity:0;transform:scale(.2);transform-origin:21px 8px;transition:opacity .2s ease,transform .3s var(--t-ease)}
 .th-held.on{opacity:1;transform:none}
+.th-held.on.plant{transform:translate(14px,36px)}
+.lg-heart{position:absolute;width:11px;height:10px;margin:-5px 0 0 -5px;fill:#ff3d6e;opacity:0;pointer-events:none}
+.th-man .th-held svg{fill:initial;stroke:none;stroke-width:0;overflow:hidden}
 .th-held i{position:absolute;left:20px;top:-15px;width:2px;height:23px;border-radius:1px;background:var(--fg)}
 .th-held .hf{position:absolute;left:22px;top:-15px;width:22px;height:14px}
 .th-man.flip .th-held .hf{transform:scaleX(-1)}
@@ -769,38 +770,50 @@ async function langSwitch(to){
   const langs=["fa"].concat(SITE.ku!==0?["ku"]:[],SITE.en!==0?["en"]:[]);
   const st=document.createElement("div");
   st.className="thstage";st.setAttribute("dir","ltr");st.setAttribute("aria-hidden","true");
-  st.innerHTML=`<div class="th-disc"><span class="lt a"><span class="fl">${FLAG[from]}</span></span><span class="lt b"><span class="fl">${FLAG[to]}</span></span></div><div class="th-ground"></div><div class="lg-pole"></div><div class="lg-rock"></div>${langs.map((l,i)=>`<div class="lg-flag${l===from?" cur":""}" data-l="${l}" style="top:${12+i*16}px">${FLAG[l]}</div>`).join("")}<div class="lg-bub"></div><div class="th-clip"><div class="th-man">${TH_MAN}<div class="th-held"><i></i><div class="hf"><div class="fl">${FLAG[to]}</div></div></div></div></div>`;
+  st.innerHTML=`<div class="th-disc"><span class="lt a"><span class="fl">${FLAG[from]}</span></span><span class="lt b"><span class="fl">${FLAG[to]}</span></span></div><div class="th-ground"></div><div class="lg-pole"></div>${langs.map((l,i)=>`<div class="lg-flag${l===from?" cur":""}" data-l="${l}" style="top:${12+i*16}px">${FLAG[l]}</div>`).join("")}<div class="lg-bub"></div><div class="th-clip"><div class="th-man">${TH_MAN}<div class="th-held"><i></i><div class="hf"><div class="fl">${FLAG[to]}</div></div></div></div></div>`;
   document.body.appendChild(st);
   try{
-    const W=st.clientWidth,px=Math.round(W*.74),hx=px-26,sx=76,ex=152,man=st.querySelector(".th-man"),bub=st.querySelector(".lg-bub"),held=st.querySelector(".th-held"),rock=st.querySelector(".lg-rock");
+    const W=st.clientWidth,px=Math.round(W*.74),hx=px-26,sx=76,ex=130,man=st.querySelector(".th-man"),bub=st.querySelector(".lg-bub"),held=st.querySelector(".th-held");
     st.querySelector(".lg-pole").style.left=px+"px";
     st.querySelectorAll(".lg-flag").forEach(e=>e.style.left=(px+3)+"px");
     const T=(x,y,f)=>`translate(${x}px,${y}px)${f?" scaleX(-1)":""}`;
     const mv=(a,b,d,e)=>{const an=man.animate([{transform:a},{transform:b}],{duration:d,easing:e,fill:"forwards"});return an.finished.then(()=>{man.style.transform=b;an.cancel()})};
     man.style.transform=T(sx,0);
     st.getBoundingClientRect();st.classList.add("on");await thSleep(200);
-    const D=1450,E1="cubic-bezier(.2,.7,.4,1)",E2="cubic-bezier(.6,0,.8,.4)";
-    const an=man.animate([{transform:T(sx,0),offset:0,easing:"linear"},{transform:T(110,0),offset:.31,easing:E1},{transform:T(138,-18),offset:.45,easing:E2},{transform:T(166,0),offset:.59,easing:"linear"},{transform:T(hx,0),offset:1}],{duration:D,fill:"forwards"});
-    man.classList.add("walk");
-    await thSleep(.31*D);man.classList.remove("walk");man.classList.add("fall");
-    await thSleep(.28*D);man.classList.remove("fall");man.classList.add("walk");
-    await an.finished;man.style.transform=T(hx,0);an.cancel();man.classList.remove("walk");
+    man.classList.add("walk");await mv(T(sx,0),T(hx,0),1200,"ease-in-out");man.classList.remove("walk");
     man.classList.add("point");await thSleep(100);
     const flags=[...st.querySelectorAll(".lg-flag")];
     flags.forEach(e=>e.classList.add(e.dataset.l===to?"tgt":"dim"));
     await thSleep(200);
     flags.forEach(e=>{if(e.dataset.l===to)e.classList.add("gone")});
     held.classList.add("on");man.classList.add("carry");man.classList.remove("point");
-    await thSleep(150);
+    await thSleep(250);
     man.classList.add("flip","walk");
-    await mv(T(hx,0,1),T(ex,0,1),700,"ease-out");man.classList.remove("walk");
-    man.classList.add("kick");await thSleep(110);
-    rock.animate([{transform:"translate(0,0) rotate(0deg)",offset:0,easing:E1},{transform:"translate(-26px,-30px) rotate(-260deg)",offset:.45,easing:E2},{transform:"translate(-48px,0) rotate(-540deg)",offset:.8,easing:"ease-out"},{transform:"translate(-51px,-5px) rotate(-570deg)",offset:.9,easing:"ease-in"},{transform:"translate(-52px,0) rotate(-600deg)",offset:1}],{duration:680,fill:"forwards"});
-    await thSleep(260);man.classList.remove("kick");await thSleep(60);
+    await mv(T(hx,0,1),T(ex,0,1),1000,"ease-in-out");man.classList.remove("walk");
+    let rx=ex-8;
+    if(to==="ku"){
+      /* کوردی: پرچم را در زمین می‌کارد و سه بار برایش بوسه می‌فرستد */
+      await thSleep(60);
+      held.classList.add("plant");man.classList.remove("carry");
+      await thSleep(320);
+      const arm=man.querySelector(".ar.a"),r0=st.getBoundingClientRect();
+      for(let i=0;i<3;i++){
+        arm.animate([{transform:"rotate(-14deg)"},{transform:"rotate(-158deg)",offset:.42},{transform:"rotate(-96deg)",offset:.7},{transform:"rotate(-14deg)"}],{duration:420,easing:"ease-in-out"});
+        await thSleep(280);
+        const h=document.createElementNS("http://www.w3.org/2000/svg","svg");
+        h.setAttribute("viewBox","0 0 24 22");h.setAttribute("class","lg-heart");
+        h.innerHTML='<path d="M12 21C5 15 1 11.5 1 7a5.5 5.5 0 0 1 11-1.5A5.5 5.5 0 0 1 23 7c0 4.500-4 8-11 14z"/>';
+        h.style.left=(ex-2)+"px";h.style.top="33px";st.appendChild(h);
+        h.animate([{transform:"translate(0,0) scale(.5)",opacity:0},{transform:"translate(-8px,-6px) scale(1.1)",opacity:1,offset:.3},{transform:"translate(-26px,-12px) scale(1)",opacity:.9,offset:.75},{transform:"translate(-30px,-16px) scale(.6)",opacity:0}],{duration:650,easing:"ease-out",fill:"forwards"}).finished.then(()=>h.remove());
+        await thSleep(140);
+      }
+      await thSleep(110);
+      rx=ex-23;
+    }else await thSleep(120);
     bub.textContent=LG_HI[to];bub.dir=to==="en"?"ltr":"rtl";bub.classList.add("r");bub.style.left=(ex+14)+"px";bub.classList.add("on");
     await thSleep(380);
     const b=st.getBoundingClientRect();
-    await thVT(()=>{setLang(to);st.classList.add("sw")},b.left+ex-8,b.top+14);
+    await thVT(()=>{setLang(to);st.classList.add("sw")},b.left+rx,b.top+14);
     await thSleep(250);
   }catch(e){if(LANG!==to)setLang(to)}
   finally{st.classList.remove("on");await thSleep(380);st.remove();thBusy=false}
