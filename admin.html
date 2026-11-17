@@ -4,7 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
-<meta name="theme-color" content="#2b2118">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
 <title>مدیریت منو</title>
 <link rel="icon" href="images/admin-192.png">
 <link rel="manifest" href="admin.webmanifest">
@@ -110,6 +111,43 @@ body.noKu .l-ku{display:none!important}body.noEn .l-en{display:none!important}
 .trd>summary::before{content:"▸ "}.trd[open]>summary::before{content:"▾ "}
 .trd[open]{padding-bottom:8px}
 body.noEn.noKu .l-any{display:none!important}
+/* ---- ظاهر اینستاگرامی (هماهنگ با سایت) ---- */
+:root{--bg:#fff;--card:#fff;--ink:#1c1c1c;--mut:#737373;--line:#e6e6e6;--acc:#b87333;--soft:#f3f3f3;--ok:#1a9a45;--bad:#ed4956;--navbg:rgba(255,255,255,.92);--ig:linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5);color-scheme:light}
+@media(prefers-color-scheme:dark){:root{--bg:#000;--card:#000;--ink:#f5f5f5;--mut:#a3a3a3;--line:#262626;--soft:#1a1a1a;--navbg:rgba(0,0,0,.85);color-scheme:dark}}
+body{background:var(--bg)}
+header{background:var(--navbg);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);color:var(--ink);border-bottom:1px solid var(--line);padding:calc(10px + env(safe-area-inset-top)) 16px 10px}
+header h1{font-size:24px;font-weight:800;letter-spacing:.5px;background:linear-gradient(45deg,#e0a766,#b87333,#7a4a26);-webkit-background-clip:text;background-clip:text;color:transparent}
+header button{background:var(--soft);border:0;color:var(--ink);border-radius:9px;padding:5px 14px;font-weight:600}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px}
+.tabs{gap:0;margin:-14px -14px 14px;border-bottom:1px solid var(--line)}
+.tabs button{background:none;border:0;border-bottom:2px solid transparent;border-radius:0;padding:12px 4px;color:var(--mut);font-weight:600}
+.tabs button.on{background:none;color:var(--ink);border-bottom-color:var(--ink)}
+.btn{background:var(--acc);color:#fff;border-radius:9px;font-weight:600}
+.btn.sec{background:var(--soft);color:var(--ink)}
+.btn.bad{background:var(--soft);color:var(--bad)}
+.btn:active:not(:disabled){opacity:.7}
+input,select{background:var(--soft);color:var(--ink);border:1px solid transparent;border-radius:10px}
+input:focus,select:focus{outline:0;border-color:var(--acc);background:var(--bg)}
+.th{background:var(--soft);border:0;border-radius:8px}
+.add{background:var(--soft);border:0;color:var(--ink);border-radius:9px;font-weight:600;padding:9px}
+.cp{background:var(--soft)}
+.sw button{border-color:var(--bg)}
+.bar{background:var(--navbg);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-top:1px solid var(--line)}
+.gal{gap:2px}
+.gal div{border:0;border-radius:0}
+.toast{background:#262626;border-radius:12px}
+.toast.ok{background:var(--ok)}.toast.err{background:var(--bad)}
+.logo,.simg{border:3px solid transparent;padding:3px;background:linear-gradient(var(--bg),var(--bg)) padding-box,var(--ig) border-box}
+.simg{border-width:2px;padding:2px}
+.logo,.simg img{border-radius:50%}
+.st{background:var(--soft);color:var(--ok);border-color:var(--line)}
+.st.off{background:var(--soft);color:var(--bad);border-color:var(--line)}
+.lic{background:var(--soft);border-color:var(--line);color:var(--ok)}
+.fg button{background:var(--soft);border:0;color:var(--ink)}
+.fg button.on{background:var(--acc);color:#fff}
+.tg2 input:checked{background:var(--acc)}
+dialog{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:16px}
+.trd{border-color:var(--line)}
 </style>
 </head>
 <body>
