@@ -13,6 +13,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="مدیریت ئارگا">
+<script>try{var _t=localStorage.getItem("arga_admin_theme");if(_t==="dark"||_t==="light")document.documentElement.dataset.theme=_t}catch(e){}</script>
 <style>
 @font-face{font-family:"Vazirmatn";src:url(fonts/Vazirmatn-VF.woff2) format("woff2");font-weight:100 900;font-display:swap}
 @font-face{font-family:"Shabnam";src:url(fonts/Shabnam.woff2) format("woff2");font-weight:400;font-display:swap}
@@ -113,7 +114,12 @@ body.noKu .l-ku{display:none!important}body.noEn .l-en{display:none!important}
 body.noEn.noKu .l-any{display:none!important}
 /* ---- ظاهر اینستاگرامی (هماهنگ با سایت) ---- */
 :root{--bg:#fff;--card:#fff;--ink:#1c1c1c;--mut:#737373;--line:#e6e6e6;--acc:#b87333;--soft:#f3f3f3;--ok:#1a9a45;--bad:#ed4956;--navbg:rgba(255,255,255,.92);--ig:linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5);color-scheme:light}
-@media(prefers-color-scheme:dark){:root{--bg:#000;--card:#000;--ink:#f5f5f5;--mut:#a3a3a3;--line:#262626;--soft:#1a1a1a;--navbg:rgba(0,0,0,.85);color-scheme:dark}}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#000;--card:#000;--ink:#f5f5f5;--mut:#a3a3a3;--line:#262626;--soft:#1a1a1a;--navbg:rgba(0,0,0,.85);color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#000;--card:#000;--ink:#f5f5f5;--mut:#a3a3a3;--line:#262626;--soft:#1a1a1a;--navbg:rgba(0,0,0,.85);color-scheme:dark}
+header{justify-content:flex-start;gap:10px}
+header h1{margin-inline-end:12px}
+header .ic{width:34px;height:34px;padding:0;border-radius:50%;display:grid;place-items:center}
+header .ic svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
 body{background:var(--bg)}
 header{background:var(--navbg);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);color:var(--ink);border-bottom:1px solid var(--line);padding:calc(10px + env(safe-area-inset-top)) 16px 10px}
 header h1{font-size:24px;font-weight:800;letter-spacing:.5px;background:linear-gradient(45deg,#e0a766,#b87333,#7a4a26);-webkit-background-clip:text;background-clip:text;color:transparent}
@@ -169,7 +175,7 @@ html[dir=rtl] .hist .m{text-align:right}
 </style>
 </head>
 <body>
-<header><h1>مدیریت</h1><button id="logout" class="hide">خروج</button></header>
+<header><h1>مدیریت</h1><button id="logout" class="hide">خروج</button><button id="themeBtn" class="ic" type="button" aria-label="حالت تاریک / روشن"></button></header>
 <main>
 
 <section id="login" class="hide">
@@ -529,6 +535,191 @@ $("#cats").addEventListener("input",e=>{
   else if(f==="tag")i.tag=clean(e.target.value).slice(0,20);
   else i[f]=clean(e.target.value);
   bar();
+});
+/* ---- حالت تاریک / روشن ---- */
+const ICO_MOON='<svg viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg>',
+      ICO_SUN='<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"/></svg>';
+const curTheme=()=>document.documentElement.dataset.theme||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");
+function paintTheme(){
+  const t=curTheme();$("#themeBtn").innerHTML=t==="dark"?ICO_SUN:ICO_MOON;
+  document.querySelectorAll('meta[name="theme-color"]').forEach((m,k)=>{if(k)m.remove();else{m.removeAttribute("media");m.content=t==="dark"?"#000000":"#ffffff"}});
+}
+$("#themeBtn").onclick=()=>{const t=curTheme()==="dark"?"light":"dark";document.documentElement.dataset.theme=t;try{localStorage.setItem("arga_admin_theme",t)}catch(e){}paintTheme()};
+paintTheme();
+
+/* ---- ترجمه‌ی خودکار نام آیتم/دسته (فارسی ← انگلیسی و کوردی) ---- */
+const TR_RAW=`میلک شیک|Milkshake|میلک شەیک|میلک شەیکی|h
+شیک|Shake|شەیک|شەیکی|h
+فراپاچینو|Frappuccino|فراپاچینۆ|فراپاچینۆی|h
+فراپه|Frappe|فراپە|فراپەی|h
+شیر|Milk|شیر|شیری|h
+دمنوش|Herbal Tea|دەمکراو|دەمکراوی|h
+چای|Tea|چا|چای|h
+شربت|Sharbat|شەربەت|شەربەتی|h
+سیروپ|Syrup|شەربەت|شەربەتی|h
+اسموتی|Smoothie|سمووسی|سمووسیی|h
+موهیتو|Mojito|مۆهیتۆ|مۆهیتۆی|h
+لیموناد|Lemonade|لیمۆناد|لیمۆنادی|h
+کیک|Cake|کێک|کێکی|h
+قهوه|Coffee|قاوە|قاوەی|h
+آیس|Iced|ئایس||m
+هات|Hot|هات||m
+گرم|Hot|گەرم||a
+سرد|Cold|سارد||a
+بزرگ|Large|گەورە||a
+کوچک|Small|بچووک||a
+دبل|Double|دەبڵ||a
+ساده|Plain|ساکار||a
+ویژه|Special|تایبەت||a
+دلخواه|Custom|دڵخواز||a
+تازه|Fresh|تازە||a
+فرش|Fresh|فرێش||m
+نمکی|Salty|سویر||a
+ترک|Turkish|تورکی||a
+آرامش|Calm|ئارامی||a
+سلامت|Wellness|سەلامەتی||a
+لته|Latte|لاتێ
+اسپرسو|Espresso|ئێسپرێسۆ
+آمریکانو|Americano|ئامریکانۆ
+کاپوچینو|Cappuccino|کاپوچینۆ
+موکا|Mocha|مۆکا
+ماکیاتو|Macchiato|ماکیاتۆ
+تونیک|Tonic|تۆنیک
+هات چاکلت|Hot Chocolate|هات چاکلێت
+وایت چاکلت|White Chocolate|وایت چاکلێت
+چاکلت|Chocolate|چاکلێت
+شکلات|Chocolate|شکۆلات
+نوتلا|Nutella|نۆتێلا
+موز|Banana|مۆز
+توت فرنگی|Strawberry|توو فەرەنگی
+بادام زمینی|Peanut|بادەمی زەوی
+بادام|Almond|بادەم
+پسته|Pistachio|پستە
+لوتوس|Lotus|لۆتۆس
+کره بیسکویت|Cookie Butter|کەرەی بیسکۆیت
+بیسکویت|Cookie|بیسکۆیت
+کره|Butter|کەرە
+وانیل|Vanilla|ڤانیلا
+کارامل|Caramel|کارامێل
+کاکائو|Cocoa|کاکاو
+فندق|Hazelnut|بەندەق
+زعفران|Saffron|زەعفەران
+نعناع|Mint|پونگ
+دارچین|Cinnamon|دارچین
+هل|Cardamom|هێل
+عسل|Honey|هەنگوین
+زنجبیل|Ginger|زەنجەفیل
+لیمو|Lemon|لیمۆ
+پرتقال|Orange|پرتەقاڵ
+آلبالو|Sour Cherry|ئالبالوو
+هلو|Peach|هەڵۆ
+پیچ|Peach|پیچ
+انبه|Mango|ئەنبە
+آناناس|Pineapple|ئەنەناس
+انار|Pomegranate|هەنار
+سیب|Apple|سێو
+گیلاس|Cherry|گێلاس
+نارگیل|Coconut|نارگیل
+توت|Berry|توو
+تروپیکال|Tropical|تڕۆپیکاڵ
+خامه|Cream|کرێم
+بستنی|Ice Cream|بەستەنی
+ماسالا|Masala Chai|ماسالا
+مجنون|Majnoon|مەجنوون
+شیراز|Shiraz|شیراز
+نبات|Rock Candy|نەبات
+آب|Water|ئاو
+تی|Tea|تی
+بلو|Blue|بلوو
+اوشن|Ocean|ئۆشێن
+میدنایت|Midnight|میدنایت
+رز|Rose|ڕۆز
+رد|Red|ڕێد
+سان ست|Sunset|سانسێت
+آرگارین|Argarin|ئارگارین
+شه نوش|Shah Nush|شەنۆش`;
+const trNorm=t=>t.replace(/ي/g,"ی").replace(/ك/g,"ک").replace(/‌/g," ").replace(/\s+/g," ").trim();
+const TRD={};TR_RAW.split("\n").forEach(l=>{const a=l.split("|");TRD[trNorm(a[0])]={en:a[1],ku:a[2],kz:a[3]||a[2],ty:a[4]||""}});
+function trSeg(it){
+  const mods=it.filter(x=>x.ty==="m"),adjs=it.filter(x=>x.ty==="a"),core=it.filter(x=>x.ty!=="m"&&x.ty!=="a"&&x.and!==1);
+  let en,ku;
+  if(core.length>1&&core[0].ty==="h"){const fl=core.slice(1);en=fl.map(x=>x.en).join(" ")+" "+core[0].en;ku=core[0].kz+" "+fl.map(x=>x.ku).join(" و ")}
+  else{const j=it.filter(x=>x.ty!=="m"&&x.ty!=="a");en=j.map(x=>x.and===1?"&":x.en).join(" ").replace(/ & $/,"");ku=j.map(x=>x.and===1?"و":x.ku).join(" ")}
+  if(!core.length&&!adjs.length&&!mods.length)return null;
+  if(adjs.length)en=adjs.map(x=>x.en).join(" ")+" "+en;
+  if(mods.length){en=mods.map(x=>x.en).join(" ")+" "+en;ku=mods.map(x=>x.ku).join(" ")+" "+ku}
+  if(adjs.length)ku=ku+"ی "+adjs.map(x=>x.ku).join(" ");
+  return{en:en.trim(),ku:ku.trim()};
+}
+function trPart(text){
+  const tk=trNorm(text).split(" ").filter(Boolean);if(!tk.length)return{en:"",ku:""};
+  const out=[],segs=[];let i=0,conn=[];
+  const flush=()=>{const r=trSeg(out.splice(0));if(!r)return false;segs.push(r);return true};
+  while(i<tk.length){
+    let hit=null;
+    for(let n=Math.min(3,tk.length-i);n>0;n--){const d=TRD[tk.slice(i,i+n).join(" ")];if(d){hit=d;i+=n;break}}
+    if(hit){out.push(hit);continue}
+    const w=tk[i++];
+    if(w==="و"){out.push({and:1});continue}
+    if(w==="با"||w==="بدون"){if(!flush())return null;conn.push(w==="با"?["with","لەگەڵ"]:["without","بێ"]);continue}
+    if(/^[\x21-\x7E]+$/.test(w)){out.push({en:w,ku:w});continue}
+    if(/^[۰-۹0-9]+$/.test(w)){const e=w.replace(/[۰-۹]/g,c=>"۰۱۲۳۴۵۶۷۸۹".indexOf(c));out.push({en:e,ku:w});continue}
+    return null;
+  }
+  if(!flush())return null;
+  let en=segs[0].en,ku=segs[0].ku;
+  for(let k=1;k<segs.length;k++){en+=" "+conn[k-1][0]+" "+segs[k].en;ku+=" "+conn[k-1][1]+" "+segs[k].ku}
+  return{en,ku};
+}
+function trOffline(text){
+  const parts=trNorm(text).split(/(\([^)]*\))/).filter(x=>x.trim());let en=[],ku=[];
+  for(const q of parts){
+    const g=/^\(.*\)$/.test(q),r=trPart(g?q.slice(1,-1):q);if(!r)return null;
+    en.push(g?"("+r.en+")":r.en);ku.push(g?"("+r.ku+")":r.ku);
+  }
+  return{en:en.join(" "),ku:ku.join(" ")};
+}
+async function trOnline(text,tl){
+  const ctl=new AbortController(),t=setTimeout(()=>ctl.abort(),6000);
+  try{
+    const r=await fetch("https://translate.googleapis.com/translate_a/single?client=gtx&sl=fa&tl="+tl+"&dt=t&q="+encodeURIComponent(text),{signal:ctl.signal});
+    if(!r.ok)return"";const j=await r.json();return j[0].map(x=>x[0]).join("").trim();
+  }catch(e){return""}finally{clearTimeout(t)}
+}
+let trWarnAt=0;
+async function autoTr(o,fa,fields,setInput,after){
+  const nm=(o[fa]||"").trim();if(!nm)return;
+  const want=[];if(SITE.en!==0)want.push(["en","en"]);if(SITE.ku!==0)want.push(["ku","ckb"]);
+  const off=trOffline(nm);let failed=false,changed=false;
+  for(const [l,tl] of want){
+    const key=fields[l];
+    if(o[key]&&o[key]!==(o._au&&o._au[l]))continue;      // خودت نوشتی؛ دست نمی‌زنیم
+    const v=off?off[l]:await trOnline(nm,tl);
+    if((o[fa]||"").trim()!==nm)return;                    // وسط کار اسم عوض شد
+    if(!v){failed=true;if(o._au&&o[key]&&o[key]===o._au[l]){o[key]="";delete o._au[l];setInput(key,"");changed=true}continue}   // ترجمه‌ی خودکارِ قدیمی دیگر با اسم نمی‌خواند
+    o[key]=v;(o._au=o._au||{})[l]=v;changed=true;setInput(key,v);
+  }
+  if(changed){bar();after&&after()}
+  if(failed&&Date.now()-trWarnAt>60000){trWarnAt=Date.now();toast("ترجمه‌ی خودکار این اسم ممکن نشد؛ خودت بنویس.","err")}
+}
+let trTimer;
+$("#cats").addEventListener("input",e=>{
+  const el=e.target,isCat=el.dataset.cf==="t",isItem=el.dataset.f==="n";
+  if(!isCat&&!isItem)return;
+  clearTimeout(trTimer);
+  trTimer=setTimeout(()=>{
+    if(isCat){
+      const box=el.closest(".cat"),c=CATS[+box.dataset.c];
+      autoTr(c,"t",{en:"en",ku:"ku"},(k,v)=>{const inp=box.querySelector('input[data-cf="'+k+'"]');if(inp)inp.value=v});
+    }else{
+      const row=el.closest(".it"),i=CATS[+row.dataset.c].items[+row.dataset.i];
+      autoTr(i,"n",{en:"en",ku:"ku"},(k,v)=>{const inp=row.querySelector('input[data-f="'+k+'"]');if(inp)inp.value=v},()=>{
+        const sp=row.querySelector('span.mut[style*="--bad"]');if(!sp)return;
+        const m=[];if(SITE.en!==0&&!i.en)m.push("انگلیسی");if(SITE.ku!==0&&!i.ku)m.push("کوردی");
+        if(m.length)sp.textContent="بدون اسم "+m.join(" و ");else sp.remove();
+      });
+    }
+  },800);
 });
 $("#cats").addEventListener("toggle",e=>{const t=e.target;if(!t.classList||!t.classList.contains("trd"))return;const it=t.closest(".it"),cd=t.closest(".cat");if(it){const x=CATS[+it.dataset.c].items[+it.dataset.i];if(x)x._tr=t.open}else if(cd)CATS[+cd.dataset.c]._tr=t.open},true);
 $("#cats").addEventListener("toggle",e=>{const d=e.target.closest(".cat");if(d)CATS[+d.dataset.c]._open=d.open},true);
