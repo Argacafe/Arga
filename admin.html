@@ -148,6 +148,24 @@ input:focus,select:focus{outline:0;border-color:var(--acc);background:var(--bg)}
 .tg2 input:checked{background:var(--acc)}
 dialog{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:16px}
 .trd{border-color:var(--line)}
+/* ---- ریسپانسیو: متن طولانی صفحه را بهم نریزد ---- */
+html,body{max-width:100%;overflow-x:hidden}
+main,main>*,.card,.det,.fld,.g2>*,.row>*,.hist>*{min-width:0}
+.card,.it,.det,.lbl,.mut,p,h2,label{overflow-wrap:anywhere}
+img,input,select,textarea{max-width:100%}
+.row{flex-wrap:wrap}
+.row>input,.row>select{flex:1 1 90px;width:auto}
+.row>.pr{flex:none;width:90px}
+.row>.th,.row>.simg,.row>.unit,.row>.more,.row>.btn{flex:none}
+.hist{flex-wrap:nowrap;align-items:flex-start;gap:10px}
+.hist>.btn{flex:none;align-self:center}
+.hist .d{flex:1 1 0;min-width:0}
+.hist .m{white-space:normal;overflow:hidden;overflow-wrap:anywhere;text-overflow:clip;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;direction:ltr;text-align:start}
+html[dir=rtl] .hist .m{text-align:right}
+.tg2{flex-wrap:wrap}.tg2>span{flex:1 1 0;min-width:0}
+.bar span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.toast{overflow-wrap:anywhere}
+@media(max-width:360px){.g2{grid-template-columns:1fr}.pr{width:76px}}
 </style>
 </head>
 <body>
