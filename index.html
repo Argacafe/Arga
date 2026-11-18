@@ -308,7 +308,7 @@ svg.hb path{fill:#e0245e;stroke:currentColor;animation:heartRW 2.8s ease-in-out 
 #mirror .mr-bar{position:absolute;left:18px;right:18px;bottom:max(22px,env(safe-area-inset-bottom));display:flex;align-items:center;gap:12px;padding:10px 16px;border-radius:28px;z-index:2;direction:ltr}
 #mirror .mr-bar input{flex:1;accent-color:#fff}
 #mirror .mr-v{min-width:46px;font-size:13px;text-align:center}
-#mirror .mr-fx{position:absolute;left:0;right:0;bottom:calc(max(22px,env(safe-area-inset-bottom)) + 68px);display:flex;gap:8px;padding:4px 18px;overflow-x:auto;scrollbar-width:none;z-index:2;direction:rtl}
+#mirror .mr-fx{position:absolute;left:0;right:0;bottom:calc(max(22px,env(safe-area-inset-bottom)) + 68px);display:flex;gap:8px;padding:4px 18px;overflow-x:auto;scrollbar-width:none;z-index:2;direction:ltr}
 #mirror .mr-fx::-webkit-scrollbar{display:none}
 #mirror .mr-fx button{flex:none;border-radius:20px;padding:7px 15px;font:inherit;font-size:13px;cursor:pointer}
 #mirror .mr-fx button.on{background:rgba(255,255,255,.42);border-color:rgba(255,255,255,.75)}
@@ -879,10 +879,14 @@ $("#btnRes").onclick=()=>{
   openModal();
 };
 {const b=$("#btnShare"),U="https://www.isanyonethere.life/";let t=0,held=0,sx=0,sy=0;
-  const stop=()=>{clearTimeout(t);t=0};
-  b.addEventListener("pointerdown",e=>{sx=e.clientX;sy=e.clientY;held=0;stop();t=setTimeout(()=>{t=0;held=1;const w=window.open(U,"_blank");if(w){try{w.opener=null}catch(_){}}else location.href=U},3000)});
+  const stop=()=>{if(t){clearTimeout(t);t=0;unmelt()}};
+  const ME=()=>[...document.querySelectorAll("header.top,main#home,nav.bottom")];
+  const melt=()=>ME().forEach(m=>{m.style.transformOrigin="50% 0";m.style.transition="transform 3s cubic-bezier(.45,0,.9,.55),filter 3s ease-in,opacity 3s ease-in";m.style.transform="translateY(55vh) scaleY(1.8) skewX(-3deg)";m.style.filter="blur(4px) saturate(1.8) hue-rotate(-12deg)";m.style.opacity=".5"});
+  const unmelt=(fast)=>ME().forEach(m=>{m.style.transition=fast?"none":"transform .45s ease-out,filter .45s,opacity .45s";m.style.transform=m.style.filter=m.style.opacity="";if(fast)setTimeout(()=>{m.style.transition=m.style.transformOrigin=""},50);else setTimeout(()=>{m.style.transition=m.style.transformOrigin=""},500)});
+  
+  b.addEventListener("pointerdown",e=>{sx=e.clientX;sy=e.clientY;held=0;stop();try{b.setPointerCapture(e.pointerId)}catch(_){}melt();t=setTimeout(()=>{t=0;held=1;const w=window.open(U,"_blank");if(w){try{w.opener=null}catch(_){}unmelt(1)}else location.href=U},3000)});
   b.addEventListener("pointermove",e=>{if(t&&Math.hypot(e.clientX-sx,e.clientY-sy)>12)stop()});
-  ["pointerup","pointercancel","pointerleave"].forEach(n=>b.addEventListener(n,stop));
+  ["pointerup","pointercancel"].forEach(n=>b.addEventListener(n,stop));
   b.addEventListener("contextmenu",e=>e.preventDefault());
   b.addEventListener("click",e=>{if(held){held=0;e.stopImmediatePropagation();e.preventDefault()}},true)}
 $("#btnShare").onclick=async()=>{
@@ -892,7 +896,7 @@ $("#btnShare").onclick=async()=>{
   try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"user",width:{ideal:1920},height:{ideal:1080}},audio:false})}
   catch(e){toast(L("اجازه‌ی دوربین داده نشد","Camera permission denied","ڕێگە بە کامێرا نەدرا"));return}
   const el=document.createElement("div");el.id="mirror";
-  el.innerHTML='<video playsinline muted autoplay></video><button class="mr-x" aria-label="بستن">✕</button><div class="mr-fx"></div><div class="mr-bar"><span class="mr-v">1.0×</span><input type="range" min="1" max="10" step="0.05" value="1" aria-label="zoom"></div>';
+  el.innerHTML='<video playsinline muted autoplay></video><button class="mr-x" aria-label="Close">✕</button><div class="mr-fx"></div><div class="mr-bar"><span class="mr-v">1.0×</span><input type="range" min="1" max="10" step="0.05" value="1" aria-label="zoom"></div>';
   document.body.appendChild(el);document.documentElement.style.overflow="hidden";
   const v=el.querySelector("video"),rg=el.querySelector("input"),lab=el.querySelector(".mr-v");
   v.srcObject=stream;v.play().catch(()=>{});
@@ -900,7 +904,7 @@ $("#btnShare").onclick=async()=>{
   const lim=()=>{const mx=(z-1)*innerWidth/2,my=(z-1)*innerHeight/2;px=Math.max(-mx,Math.min(mx,px));py=Math.max(-my,Math.min(my,py))};
   const draw=()=>{lim();v.style.transform="translate("+px+"px,"+py+"px) scale("+(-z)+","+z+")";rg.value=z;lab.textContent=z.toFixed(1)+"×"};
   const setZ=n=>{z=Math.max(1,Math.min(10,n));draw()};
-  const FX=[[L("بدون افکت","Normal","بێ ئەفێکت"),"none"],[L("سیاه‌وسفید","B&W","ڕەشوسپی"),"grayscale(1) contrast(1.1)"],[L("قدیمی","Vintage","کۆن"),"sepia(.8) contrast(1.1) saturate(1.2)"],[L("گرم","Warm","گەرم"),"sepia(.25) saturate(1.5) hue-rotate(-10deg) brightness(1.05)"],[L("سرد","Cool","سارد"),"saturate(1.2) hue-rotate(18deg) brightness(1.03)"],[L("شاداب","Vivid","زیندوو"),"saturate(1.9) contrast(1.1)"],[L("نرم","Soft","نەرم"),"brightness(1.12) contrast(.92) saturate(1.1) blur(.6px)"],[L("نئون","Neon","نیۆن"),"hue-rotate(90deg) saturate(2.4) contrast(1.25)"],[L("نگاتیو","Negative","نێگەتیڤ"),"invert(1)"]];
+  const FX=[["Normal","none"],["B&W","grayscale(1) contrast(1.1)"],["Vintage","sepia(.8) contrast(1.1) saturate(1.2)"],["Warm","sepia(.25) saturate(1.5) hue-rotate(-10deg) brightness(1.05)"],["Cool","saturate(1.2) hue-rotate(18deg) brightness(1.03)"],["Vivid","saturate(1.9) contrast(1.1)"],["Soft","brightness(1.12) contrast(.92) saturate(1.1) blur(.6px)"],["Neon","hue-rotate(90deg) saturate(2.4) contrast(1.25)"],["Negative","invert(1)"]];
   const fx=el.querySelector(".mr-fx");
   fx.innerHTML=FX.map((f,k)=>'<button type="button" data-fx="'+k+'" class="'+(k?"":"on")+'">'+f[0]+'</button>').join("");
   fx.onclick=e=>{const b=e.target.closest("[data-fx]");if(!b)return;v.style.filter=FX[+b.dataset.fx][1];fx.querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b))};
