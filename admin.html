@@ -1014,8 +1014,11 @@ $("#hist").addEventListener("click",async e=>{
 async function load(){
   const repo=await gh("").then(r=>r.json());
   if(!repo.permissions||!repo.permissions.push){const e=new Error("این لایسنس اجازه‌ی نوشتن روی مخزن را ندارد.");e.status=403;throw e}
-  const files=await Promise.all([getText("index.html"),getText("sw.js")]);SRC=files[0];SW=files[1];
   HEAD=(await gh("/git/ref/heads/"+BR).then(r=>r.json())).object.sha;
+  const hc=await gh("/git/commits/"+HEAD).then(r=>r.json()),ht=await gh("/git/trees/"+hc.tree.sha).then(r=>r.json());
+  const blobText=async p=>{const f=ht.tree.find(x=>x.path===p);if(!f)throw new Error("فایل "+p+" پیدا نشد.");
+    const b=await gh("/git/blobs/"+f.sha).then(r=>r.json());return new TextDecoder().decode(b64u8(b.content.replace(/\n/g,"")))};
+  const files=await Promise.all([blobText("index.html"),blobText("sw.js")]);SRC=files[0];SW=files[1];
   parse(SRC);ORIG=Object.assign({},INFO);BASE=state();CATS[0]._open=true;
   $("#login").classList.add("hide");
   $("#app").classList.remove("hide");$("#bar").classList.remove("hide");$("#logout").classList.remove("hide");
