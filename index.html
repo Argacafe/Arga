@@ -301,6 +301,12 @@ header.top .ic button .i,header.top .ic button .ball{margin:0}
 svg.hb path{fill:#e0245e;stroke:currentColor;animation:heartRW 2.8s ease-in-out infinite}
 @keyframes heartRW{0%,100%{fill:#e0245e}50%{fill:#fff}}
 @media (prefers-reduced-motion:reduce){svg.hb path{animation:none}}
+#mirror{position:fixed;inset:0;z-index:300;background:#000;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none}
+#mirror video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform-origin:50% 50%;pointer-events:none}
+#mirror .mr-x{position:absolute;top:max(14px,env(safe-area-inset-top));left:14px;width:42px;height:42px;border-radius:50%;border:0;background:rgba(0,0,0,.45);color:#fff;font-size:20px;z-index:2}
+#mirror .mr-bar{position:absolute;left:18px;right:18px;bottom:max(22px,env(safe-area-inset-bottom));display:flex;align-items:center;gap:12px;background:rgba(0,0,0,.45);padding:10px 14px;border-radius:26px;color:#fff;z-index:2;direction:ltr}
+#mirror .mr-bar input{flex:1;accent-color:#fff}
+#mirror .mr-v{min-width:44px;font-size:13px;text-align:center}
 </style>
 </head>
 <body>
@@ -331,7 +337,7 @@ svg.hb path{fill:#e0245e;stroke:currentColor;animation:heartRW 2.8s ease-in-out 
     <a class="pri" id="btnCall" href="#">تماس</a>
     <a id="btnLoc" href="#" target="_blank" rel="noopener">آدرس</a>
     <button id="btnRes">رزرو</button>
-    <button id="btnShare" aria-label="اشتراک‌گذاری"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l3 3-3 3"/><path d="M4 11V9a4 4 0 0 1 4-4h12"/><path d="M7 22l-3-3 3-3"/><path d="M20 13v2a4 4 0 0 1-4 4H4"/></svg></button>
+    <button id="btnShare" aria-label="آینه"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="9.5" rx="6.2" ry="7.5"/><path d="M12 17v4.2M8.2 21.2h7.6M9 6.6a3.6 3.6 0 0 1 2.2-1.4"/></svg></button>
   </section>
 
   <div class="stories" id="stories"></div>
@@ -868,9 +874,35 @@ $("#btnRes").onclick=()=>{
   openModal();
 };
 $("#btnShare").onclick=async()=>{
-  const url=INFO.site||location.href.split("#")[0],data={title:INFO.name,text:INFO.name,url};
-  if(navigator.share){try{await navigator.share(data)}catch(e){}return}
-  try{await navigator.clipboard.writeText(url);toast("لینک کپی شد")}catch(e){toast(url)}
+  if(document.getElementById("mirror"))return;
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){toast(L("دوربین در این مرورگر پشتیبانی نمی‌شود","Camera is not supported here","کامێرا لێرە پشتگیری ناکرێت"));return}
+  let stream;
+  try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"user",width:{ideal:1920},height:{ideal:1080}},audio:false})}
+  catch(e){toast(L("اجازه‌ی دوربین داده نشد","Camera permission denied","ڕێگە بە کامێرا نەدرا"));return}
+  const el=document.createElement("div");el.id="mirror";
+  el.innerHTML='<video playsinline muted autoplay></video><button class="mr-x" aria-label="بستن">✕</button><div class="mr-bar"><span class="mr-v">1.0×</span><input type="range" min="1" max="5" step="0.05" value="1" aria-label="zoom"></div>';
+  document.body.appendChild(el);document.documentElement.style.overflow="hidden";
+  const v=el.querySelector("video"),rg=el.querySelector("input"),lab=el.querySelector(".mr-v");
+  v.srcObject=stream;v.play().catch(()=>{});
+  let z=1,px=0,py=0;
+  const lim=()=>{const mx=(z-1)*innerWidth/2,my=(z-1)*innerHeight/2;px=Math.max(-mx,Math.min(mx,px));py=Math.max(-my,Math.min(my,py))};
+  const draw=()=>{lim();v.style.transform="translate("+px+"px,"+py+"px) scale("+(-z)+","+z+")";rg.value=z;lab.textContent=z.toFixed(1)+"×"};
+  const setZ=n=>{z=Math.max(1,Math.min(5,n));draw()};
+  rg.oninput=()=>setZ(+rg.value);
+  el.addEventListener("wheel",e=>{e.preventDefault();setZ(z*(e.deltaY<0?1.1:.9))},{passive:false});
+  const pts=new Map();let d0=0,z0=1,sx=0,sy=0,ox=0,oy=0;
+  el.addEventListener("pointerdown",e=>{if(e.target.closest(".mr-x,.mr-bar"))return;pts.set(e.pointerId,[e.clientX,e.clientY]);el.setPointerCapture(e.pointerId);
+    if(pts.size===2){const [p,q]=[...pts.values()];d0=Math.hypot(p[0]-q[0],p[1]-q[1]);z0=z}else{sx=e.clientX;sy=e.clientY;ox=px;oy=py}});
+  el.addEventListener("pointermove",e=>{if(!pts.has(e.pointerId))return;pts.set(e.pointerId,[e.clientX,e.clientY]);
+    if(pts.size===2){const [p,q]=[...pts.values()];setZ(z0*Math.hypot(p[0]-q[0],p[1]-q[1])/d0)}
+    else if(z>1){px=ox+(e.clientX-sx);py=oy+(e.clientY-sy);draw()}});
+  const up=e=>{pts.delete(e.pointerId);if(pts.size===1){const [p]=[...pts.values()];sx=p[0];sy=p[1];ox=px;oy=py}};
+  el.addEventListener("pointerup",up);el.addEventListener("pointercancel",up);
+  el.addEventListener("dblclick",()=>setZ(z>1?1:2.5));
+  const close=()=>{stream.getTracks().forEach(t=>t.stop());el.remove();document.documentElement.style.overflow="";removeEventListener("keydown",key)};
+  const key=e=>{if(e.key==="Escape")close()};addEventListener("keydown",key);
+  el.querySelector(".mr-x").onclick=close;
+  draw();
 };
 (()=>{
   const WORDS=["Made","By","AI:","An","Idiot"],URL_="https://kurd.cc",HOLD=3000;
