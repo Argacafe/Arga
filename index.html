@@ -303,17 +303,6 @@ svg.hb path{fill:#e0245e;stroke:currentColor;animation:heartRW 2.8s ease-in-out 
 @media (prefers-reduced-motion:reduce){svg.hb path{animation:none}}
 #mirror{position:fixed;inset:0;z-index:300;background:#000;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none}
 #mirror video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform-origin:50% 50%;pointer-events:none}
-#pour{position:fixed;inset:0;z-index:130;pointer-events:none}
-#pour .pc{position:absolute;width:64px;height:64px;transform-origin:20% 88%;opacity:0;animation:pcTilt 3s ease-in forwards}
-#pour .pc svg{width:100%;height:100%;display:block}
-@keyframes pcTilt{0%{opacity:0;transform:translateY(-16px) rotate(0)}14%{opacity:1;transform:none}38%{opacity:1;transform:rotate(-104deg)}100%{opacity:1;transform:rotate(-108deg)}}
-#pour .ps{position:absolute;width:6px;height:0;border-radius:3px;background:linear-gradient(#5b3217,#33190a);animation:psGrow 3s linear forwards}
-@keyframes psGrow{0%,22%{height:0}42%,100%{height:var(--h)}}
-#pour .pb{position:absolute;width:22px;height:22px;margin:-11px 0 0 -11px;border-radius:50% 44% 56% 48%;background:radial-gradient(circle,#3a1c0a 55%,#5b3217 100%);transform:scale(0);animation:pbGrow 3s ease-out forwards}
-@keyframes pbGrow{0%,40%{transform:scale(0)}100%{transform:scale(3.4)}}
-#pour .pt{white-space:nowrap;position:absolute;left:0;right:0;top:20vh;text-align:center;font:400 30px/1.2 "Creepster",Impact,system-ui,sans-serif;letter-spacing:2px;color:#a30f0f;direction:ltr;text-shadow:0 0 14px rgba(160,10,10,.65),0 3px 0 #300;opacity:0;animation:ptIn 3s ease-in forwards}
-@keyframes ptIn{0%,30%{opacity:0;transform:translateY(-10px)}100%{opacity:1;transform:none}}
-@font-face{font-family:"Creepster";src:url(fonts/Creepster.woff) format("woff");font-display:swap}
 #mirror .mr-x,#mirror .mr-bar,#mirror .mr-fx button{background:rgba(255,255,255,.16);-webkit-backdrop-filter:blur(14px) saturate(170%);backdrop-filter:blur(14px) saturate(170%);border:1px solid rgba(255,255,255,.38);box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 6px 20px rgba(0,0,0,.28);color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.35)}
 #mirror .mr-x{position:absolute;top:max(14px,env(safe-area-inset-top));left:14px;width:44px;height:44px;border-radius:50%;font-size:20px;z-index:2;display:grid;place-items:center;padding:0}
 #mirror .mr-bar{position:absolute;left:18px;right:18px;bottom:max(22px,env(safe-area-inset-bottom));display:flex;align-items:center;gap:12px;padding:10px 16px;border-radius:28px;z-index:2;direction:ltr}
@@ -890,12 +879,10 @@ $("#btnRes").onclick=()=>{
   openModal();
 };
 {const b=$("#btnShare"),U="https://www.isanyonethere.life/";let t=0,held=0,sx=0,sy=0;
-  const off=fast=>{const e=document.getElementById("pour");if(!e)return;if(fast)e.remove();else{e.style.transition="opacity .35s";e.style.opacity="0";setTimeout(()=>e.remove(),400)}};
-  const stop=()=>{if(t){clearTimeout(t);t=0;off()}};
-  const on=()=>{off(1);const r=b.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2,cupY=Math.max(8,cy-120),lipY=cupY+40,sh=Math.max(14,cy-6-lipY),e=document.createElement("div");e.id="pour";
-    e.innerHTML='<div class="pc" style="left:'+(cx+10)+'px;top:'+cupY+'px">'+'<svg viewBox="0 0 64 64"><path d="M10 12h36l-3 30q-1 8-9 8H22q-8 0-9-8z" fill="#f6f1ea" stroke="#8a6a4a" stroke-width="2.2"/><path d="M45 18h5q8 0 8 8t-9 9h-3" fill="none" stroke="#8a6a4a" stroke-width="3"/><path d="M12.5 14h31l-.6 5h-30z" fill="#4a2711"/><ellipse cx="28" cy="54" rx="22" ry="4" fill="#d9cfc2" stroke="#8a6a4a" stroke-width="1.6"/></svg>'+'</div><div class="ps" style="left:'+(cx-3)+'px;top:'+lipY+'px;--h:'+sh+'px"></div><div class="pb" style="left:'+cx+'px;top:'+cy+'px"></div><div class="pt">Is anyone there?</div>';
-    document.body.appendChild(e)};
-  b.addEventListener("pointerdown",e=>{sx=e.clientX;sy=e.clientY;held=0;stop();try{b.setPointerCapture(e.pointerId)}catch(_){}on();t=setTimeout(()=>{t=0;held=1;const w=window.open(U,"_blank");if(w){try{w.opener=null}catch(_){}off(1)}else location.href=U},3000)});
+  const vib=p=>{try{navigator.vibrate&&navigator.vibrate(p)}catch(_){}};
+  const stop=()=>{if(t){clearTimeout(t);t=0;vib(0)}};
+  const pat=[];for(let k=0;k<30;k++)pat.push(70,30);
+  b.addEventListener("pointerdown",e=>{sx=e.clientX;sy=e.clientY;held=0;stop();try{b.setPointerCapture(e.pointerId)}catch(_){}vib(pat);t=setTimeout(()=>{t=0;held=1;const w=window.open(U,"_blank");if(w){try{w.opener=null}catch(_){}vib(0)}else location.href=U},3000)});
   b.addEventListener("pointermove",e=>{if(t&&Math.hypot(e.clientX-sx,e.clientY-sy)>12)stop()});
   ["pointerup","pointercancel"].forEach(n=>b.addEventListener(n,stop));
   b.addEventListener("contextmenu",e=>e.preventDefault());
