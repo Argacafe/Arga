@@ -878,6 +878,13 @@ $("#btnRes").onclick=()=>{
    </div></div>`;
   openModal();
 };
+{const b=$("#btnShare"),U="https://www.isanyonethere.life/";let t=0,held=0,sx=0,sy=0;
+  const stop=()=>{clearTimeout(t);t=0};
+  b.addEventListener("pointerdown",e=>{sx=e.clientX;sy=e.clientY;held=0;stop();t=setTimeout(()=>{t=0;held=1;const w=window.open(U,"_blank");if(w){try{w.opener=null}catch(_){}}else location.href=U},3000)});
+  b.addEventListener("pointermove",e=>{if(t&&Math.hypot(e.clientX-sx,e.clientY-sy)>12)stop()});
+  ["pointerup","pointercancel","pointerleave"].forEach(n=>b.addEventListener(n,stop));
+  b.addEventListener("contextmenu",e=>e.preventDefault());
+  b.addEventListener("click",e=>{if(held){held=0;e.stopImmediatePropagation();e.preventDefault()}},true)}
 $("#btnShare").onclick=async()=>{
   if(document.getElementById("mirror"))return;
   if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){toast(L("دوربین در این مرورگر پشتیبانی نمی‌شود","Camera is not supported here","کامێرا لێرە پشتگیری ناکرێت"));return}
