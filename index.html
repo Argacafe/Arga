@@ -648,6 +648,7 @@ function toggleFav(id){
 document.addEventListener("click",e=>{
   const t=e.target;
   const s=t.closest("[data-cat]");if(s){
+    if(!window.__hv){window.__hv=1;try{navigator.vibrate&&navigator.vibrate(18)}catch(_){}}
     const oi=CATS.findIndex(c=>c.id===cat),ni=CATS.findIndex(c=>c.id===s.dataset.cat);
     animDir=ni===oi&&!onlyFav?null:(ni>oi?-28:28);
     cat=s.dataset.cat;onlyFav=false;render();setNav("home");return}
