@@ -432,7 +432,7 @@ function applyLangTree(root){
   });
 }
 const nI=k=>LANG==="en"&&INFO[k+"_en"]?INFO[k+"_en"]:LANG==="ku"&&INFO[k+"_ku"]?INFO[k+"_ku"]:INFO[k];
-const INFO={"name":"کافه خونه ئارگا","hours":"هر روز ۱۰ صبح تا ۱۰ شب","address":"مریوان، چهارراه اصلی، خیابان باهنر","map":"https://maps.app.goo.gl/nutpnMqZqy9oqxxEA?g_st=ac","phone":"093676199xx","instagram":"Argacafe","name_en":"Arga Cafe","hours_en":"Every day, 10 AM to 10 PM","address_en":"Main Intersection (Chahâr Râh-e Asli) , Bahonar St.","site":"https://argacafe.pages.dev/","name_ku":"کافێی ماڵی ئارگا","hours_ku":"هەموو ڕۆژێک، ۱۰ی بەیانی تا ۱۰ی شەو","address_ku":"مەریوان، چوارڕێیانی سەرەکی، شەقامی باهونەر"};
+const INFO={"name": "کافه خونه ئارگا", "hours": "هر روز ۱۰ صبح تا ۱۰ شب", "address": "مریوان، چهارراه اصلی، خیابان باهنر", "map": "https://maps.app.goo.gl/nutpnMqZqy9oqxxEA?g_st=ac", "phone": "093676199xx", "instagram": "Argacafe", "name_en": "Arga Cafe", "hours_en": "Every day, 10 AM to 10 PM", "address_en": "Main Intersection (Chahâr Râh-e Asli) , Bahonar St.", "site": "https://argacafe.pages.dev/", "name_ku": "کافێی ماڵی ئارگا", "hours_ku": "هەموو ڕۆژێک، ۱۰ی بەیانی تا ۱۰ی شەو", "address_ku": "مەریوان، چوارڕێیانی سەرەکی، شەقامی باهونەر", "hl": "https://www.instagram.com/s/aGlnaGxpZ2h0OjE4MDA3MTMzODU1ODIzOTYw?story_media_id=3357059514325158303_60094313438&fqnt=NzBzcHR3OWlpNjVn"};
 const eh=t=>String(t).replace(/[&<>"']/g,c=>"&#"+c.charCodeAt(0)+";");
 const safeUrl=u=>/^https?:\/\//i.test(u)?u:"#";
 const telHref=()=>"tel:"+INFO.phone.replace(/[^\d+]/g,"");
