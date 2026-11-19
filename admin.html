@@ -297,7 +297,8 @@ html[dir=rtl] .hist .m{text-align:right}
       </details>
       <div class="fld"><div class="lbl">شماره تلفن</div><input data-i="phone" dir="ltr" inputmode="tel"></div>
       <div class="fld"><div class="lbl">شماره واتساپ</div><input data-i="wa" dir="ltr" inputmode="tel"></div>
-      <div class="fld" style="margin:0"><div class="lbl">آیدی اینستاگرام (بدون @)</div><input data-i="instagram" dir="ltr"></div>
+      <div class="fld"><div class="lbl">آیدی اینستاگرام (بدون @)</div><input data-i="instagram" dir="ltr"></div>
+      <div class="fld" style="margin:0"><div class="lbl">لینک هایلایت «قاب شما»</div><input data-i="hl" dir="ltr" placeholder="https://www.instagram.com/stories/highlights/..."></div>
     </div>
     <div class="card">
       <h2>نسخه‌های قبلی منو</h2>
@@ -383,7 +384,7 @@ function serStory(){
 }
 const serSite=()=>{const o=Object.assign({},SITE);if(!o.txt||!Object.keys(o.txt).length)delete o.txt;return "const SITE="+JSON.stringify(o)+";"};
 const serGal=()=>"const GALLERY="+JSON.stringify(GALLERY)+";";
-const serInfo=()=>{const o=Object.assign({},INFO);if(!o.wa)delete o.wa;return "const INFO="+JSON.stringify(o)+";"};
+const serInfo=()=>{const o=Object.assign({},INFO);if(!o.wa)delete o.wa;if(!o.hl)delete o.hl;return "const INFO="+JSON.stringify(o)+";"};
 const state=()=>serMenu()+serLocal()+serGal()+serInfo()+serStory()+serSite()+Object.keys(PENDING).join()+LOGOVER;
 const dirty=()=>state()!==BASE;
 
@@ -863,7 +864,7 @@ window.addEventListener("beforeunload",e=>{if(TOKEN&&CATS.length&&dirty()){e.pre
 
 function normalizeInfo(){
   INFO.name=(INFO.name||"").trim();INFO.hours=(INFO.hours||"").trim();INFO.address=(INFO.address||"").trim();
-  INFO.site=(INFO.site||"").trim();if(INFO.site&&!/^https?:\/\//i.test(INFO.site))INFO.site="https://"+INFO.site;INFO.map=(INFO.map||"").trim();INFO.phone=(INFO.phone||"").trim();INFO.wa=(INFO.wa||"").trim();
+  INFO.site=(INFO.site||"").trim();if(INFO.site&&!/^https?:\/\//i.test(INFO.site))INFO.site="https://"+INFO.site;INFO.map=(INFO.map||"").trim();INFO.phone=(INFO.phone||"").trim();INFO.wa=(INFO.wa||"").trim();INFO.hl=(INFO.hl||"").trim();
   let ig=(INFO.instagram||"").trim();ig=ig.replace(/^https?:\/\/(www\.)?instagram\.com\//i,"").replace(/[\/?#].*$/,"").replace(/^@/,"");
   INFO.instagram=ig;
 }
@@ -878,6 +879,7 @@ function validate(){
   const changed=k=>INFO[k]!==ORIG[k];
   if(changed("map")&&INFO.map&&!/^https?:\/\//i.test(INFO.map))return"لینک نقشه باید با https:// شروع شود.";
   if(changed("phone")&&INFO.phone&&INFO.phone.replace(/\D/g,"").length<5)return"شماره تلفن کوتاه است.";
+  if(changed("hl")&&INFO.hl&&!/^https:\/\/(www\.)?instagram\.com\//i.test(INFO.hl))return"لینک هایلایت باید با https://www.instagram.com/ شروع شود.";
   if(changed("wa")&&INFO.wa&&INFO.wa.replace(/\D/g,"").length<5)return"شماره واتساپ کوتاه است.";
   if(changed("instagram")&&!/^[A-Za-z0-9._]+$/.test(INFO.instagram))return"آیدی اینستاگرام درست نیست.";
   for(const c of CATS){
