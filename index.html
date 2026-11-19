@@ -898,6 +898,7 @@ async function langSwitch(to){
   finally{st.classList.remove("on");await thSleep(380);st.remove();thBusy=false}
 }
 
+if(SITE.hs===0)$("#btnFavTop").style.display="none";
 $("#btnFavTop").onclick=()=>{const u=INFO.hl||("https://www.instagram.com/"+encodeURIComponent(INFO.instagram||"")+"/");if(!/^https:\/\/(www\.)?instagram\.com\//i.test(u))return;const w=window.open(u,"_blank");if(w){try{w.opener=null}catch(e){}}else location.href=u};
 $("#q").addEventListener("input",e=>{query=e.target.value.trim();render()});
 function waNumber(){
@@ -1191,7 +1192,7 @@ if(dict())applyLangTree(document.body);
 <script>
 (function(){let T,shown=0,el;const IDLE=25000;
 const hide=()=>{if(el){el.classList.remove("on");const x=el;setTimeout(()=>x.remove(),700);el=null}};
-const show=()=>{const b=document.getElementById("btnShare");if(shown||!b||b.offsetParent===null||document.querySelector("dialog[open],.modal.on,#pick"))return arm();
+const show=()=>{if(SITE.hint===0)return;const b=document.getElementById("btnShare");if(shown||!b||b.offsetParent===null||document.querySelector("dialog[open],.modal.on,#pick"))return arm();
  shown=1;const r=b.getBoundingClientRect();el=document.createElement("div");el.id="holdHint";
  el.innerHTML='<span>Hold Me</span>';
  document.body.appendChild(el);const bc=r.left+r.width/2,by=r.top+r.height/2,sp=el.firstChild;
