@@ -346,7 +346,7 @@ svg.hb path{fill:#e0245e;stroke:currentColor;animation:heartRW 2.8s ease-in-out 
 #mirror .mr-fx button.on{background:rgba(255,255,255,.42);border-color:rgba(255,255,255,.75)}
 #holdHint{position:fixed;inset:0;z-index:45;pointer-events:none;opacity:0;transition:opacity 1.4s ease}
 #holdHint.on{opacity:1}
-#holdHint span{position:absolute;transform:translateX(-50%);white-space:nowrap;font:34px/1 Creepster,cursive;letter-spacing:2px;color:var(--accent);text-shadow:0 0 14px var(--accent);animation:hhb 1.6s ease-in-out infinite}
+#holdHint span{position:absolute;transform:translateX(-50%);white-space:nowrap;font:300 22px/1 "Vazirmatn",system-ui,sans-serif;letter-spacing:6px;text-transform:uppercase;color:#e53935;text-shadow:0 0 10px rgba(229,57,53,.55);animation:hhb 1.6s ease-in-out infinite}
 @keyframes hhb{0%,100%{opacity:.25}50%{opacity:1}}
 </style>
 </head>
@@ -1195,8 +1195,8 @@ const show=()=>{const b=document.getElementById("btnShare");if(shown||!b||b.offs
  shown=1;const r=b.getBoundingClientRect();el=document.createElement("div");el.id="holdHint";
  el.innerHTML='<span>Hold Me</span>';
  document.body.appendChild(el);const bc=r.left+r.width/2,by=r.top+r.height/2,sp=el.firstChild;
- el.style.background="radial-gradient(circle at "+bc+"px "+by+"px,rgba(0,0,0,0) 0,rgba(0,0,0,0) "+(r.width*.75)+"px,rgba(0,0,0,.86) "+(r.width*2)+"px)";
- sp.style.left=Math.min(innerWidth-70,Math.max(70,bc))+"px";sp.style.top=(r.top-52)+"px";
+ el.style.background="radial-gradient(circle at "+bc+"px "+by+"px,rgba(0,0,0,0) 0,rgba(0,0,0,0) "+(r.width*.55)+"px,rgba(0,0,0,.88) "+(r.width*1.35)+"px)";
+ sp.style.left=Math.min(innerWidth-100,Math.max(100,bc))+"px";sp.style.top=(r.top-52)+"px";
  void el.offsetWidth;el.classList.add("on");setTimeout(hide,12000)};
 const arm=()=>{clearTimeout(T);if(!shown)T=setTimeout(show,IDLE)};
 const act=()=>{hide();arm()};
