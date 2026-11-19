@@ -352,7 +352,7 @@ svg.hb path{fill:#e0245e;stroke:currentColor;animation:heartRW 2.8s ease-in-out 
   <div class="ic">
     <button id="btnFont" aria-label="تغییر فونت" title="تغییر فونت"><svg class="i" viewBox="0 0 24 24"><path d="M2.5 19L8 5l5.5 14M4.6 14h6.8"/><circle cx="17.3" cy="15.9" r="3.1"/><path d="M20.4 12.8V19"/></svg></button>
     <button id="btnTheme" aria-label="حالت تاریک / روشن" title="حالت تاریک / روشن"><svg class="i ic-moon" viewBox="0 0 24 24"><path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a6.8 6.8 0 0 0 9.8 9.8z"/></svg><svg class="i ic-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"/></svg></button>
-    <button id="btnFavTop" aria-label="علاقه‌مندی‌ها"><svg class="i" viewBox="0 0 24 24"><path d="M16.792 3.904A4.989 4.989 0 0 1 21.5 9.122c0 3.072-2.652 4.959-5.197 7.222-2.512 2.243-3.865 3.469-4.303 3.752-.477-.309-2.143-1.823-4.303-3.752C5.141 14.072 2.5 12.167 2.5 9.122a4.989 4.989 0 0 1 4.708-5.218 4.21 4.21 0 0 1 3.675 1.941c.84 1.175.98 1.763 1.12 1.763s.278-.588 1.11-1.766a4.17 4.17 0 0 1 3.679-1.938Z"/></svg></button>
+    <button id="btnFavTop" aria-label="قاب شما"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m11 17 2 2a1 1 0 1 0 3-3"/><path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4"/><path d="m21 3 1 11h-2"/><path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3"/><path d="M3 4h8"/></svg></button>
   </div>
 </header>
 
@@ -765,7 +765,7 @@ if(SITE.accent&&/^#[0-9a-f]{6}$/i.test(SITE.accent)&&SITE.accent.toLowerCase()!=
   const th=['<svg viewBox="0 0 24 24"><rect width="24" height="24" fill="#4aa3df"/><circle cx="12" cy="12" r="5" fill="#ffd33d"/><g stroke="#ffd33d" stroke-width="1.8" stroke-linecap="round"><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"/></g></svg>','<svg viewBox="0 0 24 24"><rect width="24" height="24" fill="#1c2541"/><path d="M17.5 14.6A6.6 6.6 0 1 1 9.4 6.5a5.2 5.2 0 0 0 8.1 8.1z" fill="#f4e9b8"/><circle cx="18" cy="6" r=".9" fill="#fff"/><circle cx="6" cy="18" r=".7" fill="#fff"/></svg>'];
   $("#btnTheme").innerHTML='<span class="ball" id="thBall">'+mk(th)+'</span>';
   const hs=document.createElement("style");hs.textContent="@keyframes ballSpin2{0%{transform:rotateY(-110deg);opacity:0}7.5%,42.5%{transform:rotateY(0);opacity:1}50%{transform:rotateY(110deg);opacity:0}100%{transform:rotateY(110deg);opacity:0}}#thBall .bf{animation-name:ballSpin2}";document.head.appendChild(hs);
-  const hp=$("#btnFavTop svg");if(hp)hp.classList.add("hb")}
+}
 {const fl=["fa"];if(SITE.ku!==0)fl.push("ku");if(SITE.en!==0)fl.push("en");
   const d=fl.length*2.4;
   $("#btnFont").innerHTML='<span class="ball">'+fl.map((c,n)=>'<span class="bf" style="animation-duration:'+d+'s;animation-delay:'+(n*2.4-d)+'s">'+FLAG[c]+'</span>').join("")+'</span>';
@@ -893,7 +893,7 @@ async function langSwitch(to){
   finally{st.classList.remove("on");await thSleep(380);st.remove();thBusy=false}
 }
 
-$("#btnFavTop").onclick=()=>document.querySelector('[data-nav="fav"]').click();
+$("#btnFavTop").onclick=()=>{const u=INFO.hl||("https://www.instagram.com/"+encodeURIComponent(INFO.instagram||"")+"/");if(!/^https:\/\/(www\.)?instagram\.com\//i.test(u))return;const w=window.open(u,"_blank");if(w){try{w.opener=null}catch(e){}}else location.href=u};
 $("#q").addEventListener("input",e=>{query=e.target.value.trim();render()});
 function waNumber(){
   let d=(INFO.wa||INFO.phone).replace(/\D/g,"");
