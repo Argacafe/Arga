@@ -305,6 +305,35 @@ svg.hb path{fill:#e0245e;stroke:currentColor;animation:heartRW 2.8s ease-in-out 
 #mirror video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform-origin:50% 50%;pointer-events:none}
 #scary{position:fixed;left:0;right:0;top:20vh;z-index:130;pointer-events:none;white-space:nowrap;text-align:center;font:400 32px/1.2 "Creepster",Impact,system-ui,sans-serif;letter-spacing:2px;color:#a30f0f;direction:ltr;text-shadow:0 0 14px rgba(160,10,10,.65),0 3px 0 #300;opacity:0}
 @font-face{font-family:"Creepster";src:url(fonts/Creepster.woff) format("woff");font-display:swap}
+.sd{padding:12px 14px 16px;user-select:none;-webkit-user-select:none}
+.sd{direction:ltr}
+.sd-hd{display:flex;align-items:center;margin-bottom:8px}
+.sd-hd h2{font-size:16px;margin:0;flex:1;text-align:center}
+.sd-lv{display:flex;gap:6px;justify-content:center;margin:4px 0 8px}
+.sd-lv button{padding:4px 12px;border-radius:14px;background:var(--chip);font-size:12.5px;color:var(--fg)}
+.sd-lv button.on{background:var(--accent);color:#fff}
+.sd-info{display:flex;justify-content:space-between;font-size:12.5px;color:var(--mut);margin-bottom:6px}
+.sd-grid{direction:ltr;display:grid;grid-template-columns:repeat(9,1fr);border:2px solid var(--fg);border-radius:6px;overflow:hidden;aspect-ratio:1}
+.sd-c{display:grid;place-items:center;font-size:clamp(15px,5vw,22px);border:1px solid var(--line);cursor:pointer;background:var(--bg);color:var(--accent);font-weight:700;min-width:0}
+.sd-c.g{color:var(--fg);font-weight:800}
+.sd-c.r2{border-bottom:2px solid var(--fg)}.sd-c.r5{border-bottom:2px solid var(--fg)}
+.sd-c.c2{border-right:2px solid var(--fg)}.sd-c.c5{border-right:2px solid var(--fg)}
+.sd-c.hl{background:var(--chip)}
+.sd-c.same{background:rgba(184,115,51,.28)}
+.sd-c.sel{background:rgba(184,115,51,.45)}
+.sd-c.bad{color:#e0314b}
+.sd-pad{direction:ltr;display:grid;grid-template-columns:repeat(9,1fr);gap:4px;margin-top:10px}
+.sd-pad button{padding:9px 0;border-radius:8px;background:var(--chip);font-size:17px;font-weight:700;color:var(--fg)}
+.sd-pad button:disabled{opacity:.3}
+.sd-act{display:flex;gap:6px;margin-top:8px}
+.sd-act button{flex:1;padding:9px 0;border-radius:8px;background:var(--chip);font-size:13px;color:var(--fg)}
+.sd-act button.pri{background:var(--accent);color:#fff}
+.sd-win.win{background:linear-gradient(90deg,#16c46a,#1e90ff);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+.sd-win{direction:ltr;text-align:center;padding:10px 0 2px;font-weight:800;color:var(--accent);display:none}
+#pick{position:fixed;z-index:140;min-width:158px;padding:6px;border-radius:16px;background:var(--navbg,rgba(255,255,255,.9));-webkit-backdrop-filter:blur(16px) saturate(160%);backdrop-filter:blur(16px) saturate(160%);border:1px solid var(--line);box-shadow:0 10px 30px rgba(0,0,0,.28);direction:ltr;transform-origin:0 0;animation:pickIn .16s ease-out}
+@keyframes pickIn{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:none}}
+#pick button{display:flex;align-items:center;gap:10px;width:100%;padding:11px 12px;border-radius:11px;font:600 15px system-ui,sans-serif;color:var(--fg);text-align:left}
+#pick button:active{background:var(--chip)}
 #mirror .mr-x,#mirror .mr-bar,#mirror .mr-fx button{background:rgba(255,255,255,.16);-webkit-backdrop-filter:blur(14px) saturate(170%);backdrop-filter:blur(14px) saturate(170%);border:1px solid rgba(255,255,255,.38);box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 6px 20px rgba(0,0,0,.28);color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.35)}
 #mirror .mr-x{position:absolute;top:max(14px,env(safe-area-inset-top));left:14px;width:44px;height:44px;border-radius:50%;font-size:20px;z-index:2;display:grid;place-items:center;padding:0}
 #mirror .mr-bar{position:absolute;left:18px;right:18px;bottom:max(22px,env(safe-area-inset-bottom));display:flex;align-items:center;gap:12px;padding:10px 16px;border-radius:28px;z-index:2;direction:ltr}
@@ -893,6 +922,77 @@ $("#btnRes").onclick=()=>{
   ["pointerup","pointercancel"].forEach(n=>b.addEventListener(n,stop));
   b.addEventListener("contextmenu",e=>e.preventDefault());
   b.addEventListener("click",e=>{if(held){held=0;e.stopImmediatePropagation();e.preventDefault()}},true)}
+/* sudoku */
+const SD={lv:"easy",sol:null,puz:null,cur:null,sel:-1,t0:0,secs:0,timer:null,done:false,lost:false,mistakes:0};
+const SD_MAX=3;
+const SD_LOSE=["Three mistakes. Go play Ludo instead 🎲","You lost. Maybe Mensch is more your speed.","Game over. Go play Ludo, it has dice. 🎲","That's it. Ludo is waiting for you.","Sudoku is not for everyone. Try Mensch 🎲"];
+const SD_JAB=["Wrong. Try again.","Seriously?","Nope. Think harder."];
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const SD_CL={easy:38,mid:31,hard:26};
+const SD_NM={easy:"Easy",mid:"Medium",hard:"Hard"};
+function sdShuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function sdOk(g,i,v){const r=Math.floor(i/9),c=i%9;for(let k=0;k<9;k++){if(g[r*9+k]===v||g[k*9+c]===v)return false}
+  const br=r-r%3,bc=c-c%3;for(let a=0;a<3;a++)for(let b=0;b<3;b++)if(g[(br+a)*9+bc+b]===v)return false;return true}
+function sdFill(g){const i=g.indexOf(0);if(i<0)return true;for(const v of sdShuffle([1,2,3,4,5,6,7,8,9])){if(sdOk(g,i,v)){g[i]=v;if(sdFill(g))return true;g[i]=0}}return false}
+function sdCount(g,lim){let best=-1,opts=null;for(let i=0;i<81;i++)if(!g[i]){const o=[];for(let v=1;v<=9;v++)if(sdOk(g,i,v))o.push(v);if(best<0||o.length<opts.length){best=i;opts=o;if(o.length<2)break}}
+  if(best<0)return 1;let n=0;for(const v of opts){g[best]=v;n+=sdCount(g,lim-n);g[best]=0;if(n>=lim)break}return n}
+function sdNew(lv){SD.lv=lv;const sol=Array(81).fill(0);sdFill(sol);const puz=sol.slice();
+  const order=sdShuffle([...Array(81).keys()]);let clues=81;const target=SD_CL[lv];
+  for(const i of order){if(clues<=target)break;const b=puz[i];puz[i]=0;if(sdCount(puz.slice(),2)!==1)puz[i]=b;else clues--}
+  SD.sol=sol;SD.puz=puz;SD.cur=puz.slice();SD.sel=-1;SD.secs=0;SD.mistakes=0;SD.done=false;SD.lost=false}
+function sdSave(){try{localStorage.setItem("arga_sudoku",JSON.stringify({lv:SD.lv,sol:SD.sol,puz:SD.puz,cur:SD.cur,secs:SD.secs,mistakes:SD.mistakes,done:SD.done,lost:SD.lost}))}catch(e){}}
+function sdLoad(){try{const d=JSON.parse(localStorage.getItem("arga_sudoku")||"null");if(d&&d.sol&&d.sol.length===81&&d.puz.length===81&&d.cur.length===81){Object.assign(SD,{lv:d.lv,sol:d.sol,puz:d.puz,cur:d.cur,secs:d.secs||0,mistakes:d.mistakes||0,done:!!d.done,lost:!!d.lost,sel:-1});return true}}catch(e){}return false}
+function sdFmt(t){return String(Math.floor(t/60)).padStart(2,"0")+":"+String(t%60).padStart(2,"0")}
+function sdMsg(t,k){const w=$("#sdWin");if(!w)return;w.style.display=t?"block":"none";w.textContent=t||"";w.className="sd-win"+(k==="win"?" win":"");w.style.color=k==="bad"||k===1?"#e0314b":""}
+function sdDelSave(){try{localStorage.removeItem("arga_sudoku")}catch(e){}}
+function sdHasSave(){try{return !!localStorage.getItem("arga_sudoku")}catch(e){return false}}
+function sdStop(){clearInterval(SD.timer);SD.timer=null}
+function sdStart(){sdStop();if(SD.done||SD.lost)return;SD.timer=setInterval(()=>{if(!$("#sdTime")||!$("#modal").classList.contains("show")){sdStop();return}SD.secs++;$("#sdTime").textContent=sdFmt(SD.secs);},1000)}
+function sdBad(i){const v=SD.cur[i];if(!v||SD.puz[i])return false;return v!==SD.sol[i]}
+function sdDraw(){
+  const g=SD.cur,sel=SD.sel,sv=sel>=0?g[sel]:0;let h="";
+  for(let i=0;i<81;i++){const r=Math.floor(i/9),c=i%9;let cl="sd-c";
+    if(SD.puz[i])cl+=" g";if(r%3===2&&r<8)cl+=" r"+(r===2?2:5);if(c%3===2&&c<8)cl+=" c"+(c===2?2:5);
+    if(sel>=0){const sr=Math.floor(sel/9),sc=sel%9;if(i===sel)cl+=" sel";else if(r===sr||c===sc||(Math.floor(r/3)===Math.floor(sr/3)&&Math.floor(c/3)===Math.floor(sc/3)))cl+=" hl";if(sv&&g[i]===sv&&i!==sel)cl+=" same"}
+    if(sdBad(i))cl+=" bad";
+    h+=`<div class="${cl}" data-sd="${i}">${g[i]||""}</div>`}
+  $("#sdGrid").innerHTML=h;
+  const cnt=Array(10).fill(0);g.forEach(v=>{if(v)cnt[v]++});
+  $$("#sdPad button[data-n]").forEach(b=>b.disabled=cnt[+b.dataset.n]>=9);
+}
+const SD_WIN=["Oh. You solved it. Cool, I guess.","Done. Not that it matters.","Solved. Nice. Or whatever.","Okay, fine. You did it."];
+function sdWinCheck(){if(SD.cur.every((v,i)=>v===SD.sol[i])){SD.done=true;sdStop();sdDraw();sdMsg(pick(SD_WIN)+" ("+sdFmt(SD.secs)+")","win")}}
+function sdSet(v){const i=SD.sel;if(i<0||SD.puz[i]||SD.done||SD.lost)return;
+  SD.cur[i]=v;let bad=false;if(v&&v!==SD.sol[i]){bad=true;SD.mistakes++;$("#sdMis").textContent=SD.mistakes+"/"+SD_MAX}
+  if(bad&&SD.mistakes>=SD_MAX){SD.lost=true;sdStop()}
+  sdDraw();
+  if(SD.lost)sdMsg(pick(SD_LOSE),"bad");else if(bad)sdMsg(pick(SD_JAB),"bad");else sdMsg("");
+  sdWinCheck()}
+function openSudoku(){
+  if(!SD.sol&&!sdLoad())sdNew("easy");
+  $("#card").innerHTML=`<div class="sd"><div class="sd-hd"><button data-close style="font-size:22px" aria-label="Close">✕</button><h2>Sudoku</h2><span style="width:22px"></span></div>
+   <div class="sd-lv">${Object.keys(SD_NM).map(k=>`<button data-lv="${k}" class="${SD.lv===k?"on":""}">${SD_NM[k]}</button>`).join("")}</div>
+   <div class="sd-info"><span>Time: <b id="sdTime">${sdFmt(SD.secs)}</b></span><span>Mistakes: <b id="sdMis">${SD.mistakes}/${SD_MAX}</b></span></div>
+   <div class="sd-grid" id="sdGrid"></div>
+   <div class="sd-pad" id="sdPad">${[1,2,3,4,5,6,7,8,9].map(n=>`<button data-n="${n}">${n}</button>`).join("")}</div>
+   <div class="sd-act"><button data-sa="erase">Erase</button><button data-sa="hint">Hint</button><button class="pri" data-sa="new">New game</button></div>
+   <div class="sd-act"><button data-sa="save">Save</button><button data-sa="delsave">Delete save</button></div>
+   <div class="sd-win" id="sdWin"></div></div>`;
+  openModal();sdDraw();sdStart();
+  if(SD.done)sdMsg("Already solved. Tap New game.","win");else if(SD.lost)sdMsg(pick(SD_LOSE),"bad")
+}
+$("#card").addEventListener("click",e=>{
+  const t=e.target;if(!t.closest(".sd"))return;
+  const c=t.closest("[data-sd]");if(c){SD.sel=+c.dataset.sd;sdDraw();return}
+  const n=t.closest("[data-n]");if(n){sdSet(+n.dataset.n);return}
+  const lv=t.closest("[data-lv]");if(lv){sdNew(lv.dataset.lv);openSudoku();return}
+  const a=t.closest("[data-sa]");if(!a)return;
+  if(a.dataset.sa==="erase")sdSet(0);
+  else if(a.dataset.sa==="new"){sdNew(SD.lv);openSudoku()}
+  else if(a.dataset.sa==="hint")sdMsg("Are you fucking serious 😐")
+  else if(a.dataset.sa==="save"){sdSave();sdMsg("Saved ✓")}
+  else if(a.dataset.sa==="delsave"){sdDelSave();sdMsg("Save deleted")}
+});
 $("#btnShare").onclick=async()=>{
   if(document.getElementById("mirror"))return;
   if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){toast(L("دوربین در این مرورگر پشتیبانی نمی‌شود","Camera is not supported here","کامێرا لێرە پشتگیری ناکرێت"));return}
@@ -928,6 +1028,13 @@ $("#btnShare").onclick=async()=>{
   el.querySelector(".mr-x").onclick=close;
   draw();
 };
+{const mf=$("#btnShare").onclick,btn=$("#btnShare");
+  const closeP=()=>{const p=document.getElementById("pick");if(p)p.remove()};
+  btn.onclick=()=>{if(document.getElementById("pick")){closeP();return}
+    const r=btn.getBoundingClientRect(),p=document.createElement("div");p.id="pick";
+    p.innerHTML='<button data-pk="m">🪞 Mirror</button><button data-pk="s">🔢 Sudoku</button>';
+    p.style.top=(r.bottom+8)+"px";p.style.left=Math.max(8,Math.min(r.left,innerWidth-170))+"px";document.body.appendChild(p)};
+  document.addEventListener("click",e=>{const p=document.getElementById("pick");if(!p)return;const k=e.target.closest("[data-pk]");if(k){e.stopPropagation();closeP();k.dataset.pk==="m"?mf():openSudoku();return}if(!e.target.closest("#btnShare"))closeP()},true)}
 (()=>{
   const WORDS=["Made","By","AI:","An","Idiot"],URL_="https://kurd.cc",HOLD=3000;
   const reduce=()=>matchMedia("(prefers-reduced-motion:reduce)").matches;
