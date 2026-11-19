@@ -896,7 +896,7 @@ async function langSwitch(to){
 $("#btnFavTop").onclick=()=>document.querySelector('[data-nav="fav"]').click();
 $("#q").addEventListener("input",e=>{query=e.target.value.trim();render()});
 function waNumber(){
-  let d=INFO.phone.replace(/\D/g,"");
+  let d=(INFO.wa||INFO.phone).replace(/\D/g,"");
   if(d.startsWith("00"))d=d.slice(2);else if(d.startsWith("0"))d="98"+d.slice(1);
   return d;
 }

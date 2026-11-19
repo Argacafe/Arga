@@ -292,6 +292,7 @@ html[dir=rtl] .hist .m{text-align:right}
       <div class="fld l-ku"><div class="lbl">ساعت کاری (کوردی)</div><input data-i="hours_ku"></div>
       <div class="fld l-ku"><div class="lbl">آدرس (کوردی)</div><input data-i="address_ku"></div>
       <div class="fld"><div class="lbl">شماره تلفن</div><input data-i="phone" dir="ltr" inputmode="tel"></div>
+      <div class="fld"><div class="lbl">شماره واتساپ</div><input data-i="wa" dir="ltr" inputmode="tel"></div>
       <div class="fld" style="margin:0"><div class="lbl">آیدی اینستاگرام (بدون @)</div><input data-i="instagram" dir="ltr"></div>
     </div>
     <div class="card">
@@ -378,7 +379,7 @@ function serStory(){
 }
 const serSite=()=>{const o=Object.assign({},SITE);if(!o.txt||!Object.keys(o.txt).length)delete o.txt;return "const SITE="+JSON.stringify(o)+";"};
 const serGal=()=>"const GALLERY="+JSON.stringify(GALLERY)+";";
-const serInfo=()=>"const INFO="+JSON.stringify(INFO)+";";
+const serInfo=()=>{const o=Object.assign({},INFO);if(!o.wa)delete o.wa;return "const INFO="+JSON.stringify(o)+";"};
 const state=()=>serMenu()+serLocal()+serGal()+serInfo()+serStory()+serSite()+Object.keys(PENDING).join()+LOGOVER;
 const dirty=()=>state()!==BASE;
 
@@ -826,7 +827,7 @@ $("#gal").addEventListener("click",async e=>{
 $("#infoView").addEventListener("input",e=>{
   const k=e.target.dataset.i;if(!k)return;
   let v=clean(e.target.value);
-  if(k==="phone")v=enDigits(v);
+  if(k==="phone"||k==="wa")v=enDigits(v);
   INFO[k]=v;bar();
 });
 $("#swLock").onchange=e=>{SITE.lock=e.target.checked?1:0;bar();renderInfo()};
@@ -858,7 +859,7 @@ window.addEventListener("beforeunload",e=>{if(TOKEN&&CATS.length&&dirty()){e.pre
 
 function normalizeInfo(){
   INFO.name=(INFO.name||"").trim();INFO.hours=(INFO.hours||"").trim();INFO.address=(INFO.address||"").trim();
-  INFO.site=(INFO.site||"").trim();if(INFO.site&&!/^https?:\/\//i.test(INFO.site))INFO.site="https://"+INFO.site;INFO.map=(INFO.map||"").trim();INFO.phone=(INFO.phone||"").trim();
+  INFO.site=(INFO.site||"").trim();if(INFO.site&&!/^https?:\/\//i.test(INFO.site))INFO.site="https://"+INFO.site;INFO.map=(INFO.map||"").trim();INFO.phone=(INFO.phone||"").trim();INFO.wa=(INFO.wa||"").trim();
   let ig=(INFO.instagram||"").trim();ig=ig.replace(/^https?:\/\/(www\.)?instagram\.com\//i,"").replace(/[\/?#].*$/,"").replace(/^@/,"");
   INFO.instagram=ig;
 }
@@ -873,6 +874,7 @@ function validate(){
   const changed=k=>INFO[k]!==ORIG[k];
   if(changed("map")&&INFO.map&&!/^https?:\/\//i.test(INFO.map))return"لینک نقشه باید با https:// شروع شود.";
   if(changed("phone")&&INFO.phone&&INFO.phone.replace(/\D/g,"").length<5)return"شماره تلفن کوتاه است.";
+  if(changed("wa")&&INFO.wa&&INFO.wa.replace(/\D/g,"").length<5)return"شماره واتساپ کوتاه است.";
   if(changed("instagram")&&!/^[A-Za-z0-9._]+$/.test(INFO.instagram))return"آیدی اینستاگرام درست نیست.";
   for(const c of CATS){
     c.t=c.t.trim();c.en=(c.en||"").trim();c.ku=(c.ku||"").trim();c.e=c.e.trim()||"🍽️";
