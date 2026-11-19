@@ -1190,7 +1190,7 @@ if(LANG!=="fa"){document.title=L("","Arga Cafe | Menu","کافێی Arga | مێن
 if(dict())applyLangTree(document.body);
 </script>
 <script>
-(function(){let T,shown=0,el;const IDLE=25000;
+(function(){let T,shown=0,el;const IDLE=Math.max(5,Math.min(600,+SITE.hintSec||25))*1000;
 const hide=()=>{if(el){el.classList.remove("on");const x=el;setTimeout(()=>x.remove(),700);el=null}};
 const show=()=>{if(SITE.hint===0)return;const b=document.getElementById("btnShare");if(shown||!b||b.offsetParent===null||document.querySelector("dialog[open],.modal.on,#pick"))return arm();
  shown=1;const r=b.getBoundingClientRect();el=document.createElement("div");el.id="holdHint";
