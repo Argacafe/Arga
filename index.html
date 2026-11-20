@@ -351,8 +351,8 @@ svg.hb path{fill:#e0245e;stroke:currentColor;animation:heartRW 2.8s ease-in-out 
 .nf{padding:12px 14px 18px;direction:rtl;text-align:right}
 .nf-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}.nf-hd h2{margin:0;font-size:18px}
 .nf-msg{display:none;margin:0 0 8px;padding:8px 12px;border-radius:10px;background:#ed4956;color:#fff;font-size:13.5px;text-align:center}.nf-msg.on{display:block}
-.nf-paper{position:relative;border-radius:10px;padding:14px 14px 16px;color:#1b2a4a;background:url(images/paper.jpg) center/cover,repeating-linear-gradient(#fdfaf0 0,#fdfaf0 31px,#bcd2ea 31px,#bcd2ea 32px);box-shadow:0 2px 12px rgba(0,0,0,.18),inset 0 0 0 1px rgba(0,0,0,.05);overflow:hidden}
-.nf-paper:before{content:"";position:absolute;top:0;bottom:0;inset-inline-end:34px;width:2px;background:rgba(214,60,60,.45);pointer-events:none}
+.nf-paper{position:relative;border-radius:10px;padding:14px 14px 16px;color:#1b2a4a;background:#f6f2e6;box-shadow:0 2px 12px rgba(0,0,0,.18),inset 0 0 0 1px rgba(0,0,0,.05);overflow:hidden}
+
 .nf-paper>*{position:relative}
 .nf-l{display:block;font-size:13px;margin:8px 0 3px;opacity:.75}
 .nf input,.nf select{width:100%;font:inherit;font-size:16px;color:#1b2a4a;background:rgba(255,255,255,.7);border:0;border-bottom:2px solid #4a6a9a;border-radius:6px;padding:8px 10px}
@@ -371,9 +371,9 @@ svg.hb path{fill:#e0245e;stroke:currentColor;animation:heartRW 2.8s ease-in-out 
 .nf-cat{margin-top:14px}.nf-cat h3{margin:0 0 4px;font-size:15px;border-bottom:2px solid #4a6a9a;display:inline-block}
 .nf-ans{display:flex;gap:8px;align-items:baseline;padding:4px 6px;border-radius:7px;font-size:14.5px}.nf-ans span{flex:none;width:76px;opacity:.7;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.nf-ans b{flex:1;font-weight:600}.nf-ans i{font-style:normal;font-weight:800}
 .nf-ans.g i{color:#2a7f4a}.nf-ans.a i{color:#c27a00}.nf-ans.z{opacity:.55}.nf-ans.z b{text-decoration:line-through}.nf-ans.tap{cursor:pointer}.nf-ans.tap:active{background:rgba(0,0,0,.08)}
-.np-w{overflow-x:auto;margin:6px -6px;-webkit-overflow-scrolling:touch}.np-s{position:relative;width:760px;aspect-ratio:896/1200;background:url(images/paper-orig.jpg) center/100% 100%;border-radius:6px;box-shadow:0 1px 8px rgba(0,0,0,.2)}
-.np-c,.np-n{position:absolute;display:flex;align-items:center;justify-content:center;font-style:normal;font-weight:400;color:#1b2a4a;font-size:12.5px;line-height:1.05;text-align:center;overflow:hidden}.np-c s{text-decoration:none;word-break:break-all;max-height:100%}
-.np-c.g s{color:#1d5fb8}.np-c.a s{color:#c27a00}.np-c.z s{color:#999;text-decoration:line-through}.np-c.pt s{font-weight:800;font-size:15px;color:#a03030}.np-n{font-size:10px;opacity:.55}
+.np-w{overflow-x:auto;margin:6px -6px;-webkit-overflow-scrolling:touch;cursor:zoom-in}.np-w.zoom{cursor:zoom-out}.np-s{position:relative;width:100%;aspect-ratio:896/780;container-type:inline-size;background:url(images/paper-orig.jpg) top/100% auto no-repeat #f3efe3;border-radius:6px;box-shadow:0 1px 8px rgba(0,0,0,.2)}.np-w.zoom .np-s{width:210%}
+.np-c,.np-n{position:absolute;display:flex;align-items:center;justify-content:center;font-style:normal;font-weight:400;color:#1b2a4a;font-size:3cqw;line-height:1.05;text-align:center;overflow:hidden}.np-c s{text-decoration:none;word-break:break-all;max-height:100%}
+.np-c.g s{color:#1d5fb8}.np-c.a s{color:#c27a00}.np-c.z s{color:#999;text-decoration:line-through}.np-c.pt s{font-weight:800;font-size:3.6cqw;color:#a03030}.np-n{font-size:2.2cqw;opacity:.55}
 .np-lg{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:12.5px;opacity:.8;margin-bottom:6px}
 .nf-win{text-align:center;font:800 26px/1.5 inherit;font-family:inherit;margin-bottom:8px}
 #pick button+button{margin-top:2px}
@@ -1310,7 +1310,7 @@ const rank=(s,withRound)=>s.players.map(p=>({...p,tot:p.score+(withRound&&s.tota
 
 const PE=[880,805,717,648,580,512,441,357,280,209,145,70];
 function paperHtml(rows,hdr){
-  const P=v=>(v/896*100).toFixed(3)+"%",Q=v=>(v/1200*100).toFixed(3)+"%",RH=46.4,T0=150;
+  const P=v=>(v/896*100).toFixed(3)+"%",Q=v=>(v/780*100).toFixed(3)+"%",RH=46.4,T0=150;
   let h="";
   rows.forEach((r,ri)=>{
     const top=T0+ri*RH;
@@ -1386,6 +1386,7 @@ function drawDone(s){
 }
 
 /* ---------- events ---------- */
+$("#card").addEventListener("click",e=>{const w=e.target.closest&&e.target.closest(".np-w");if(w){w.classList.toggle("zoom");w.scrollLeft=w.scrollWidth}});
 $("#card").addEventListener("input",e=>{
   const i=e.target.closest&&e.target.closest(".nf-line input");if(!i)return;
   N.mine[+i.dataset.i]=i.value;{const lv=$("#nfLive");if(lv)lv.innerHTML=livePaper()}checkFilled();clearTimeout(N.save);N.save=setTimeout(flush,350);
