@@ -348,6 +348,31 @@ svg.hb path{fill:#e0245e;stroke:currentColor;animation:heartRW 2.8s ease-in-out 
 #holdHint.on{opacity:1}
 #holdHint span{position:absolute;transform:translateX(-50%);white-space:nowrap;font:300 22px/1 "Vazirmatn",system-ui,sans-serif;letter-spacing:6px;text-transform:uppercase;color:#e53935;text-shadow:0 0 10px rgba(229,57,53,.55);animation:hhb 1.6s ease-in-out infinite}
 @keyframes hhb{0%,100%{opacity:.25}50%{opacity:1}}
+.nf{padding:12px 14px 18px;direction:rtl;text-align:right}
+.nf-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}.nf-hd h2{margin:0;font-size:18px}
+.nf-msg{display:none;margin:0 0 8px;padding:8px 12px;border-radius:10px;background:#ed4956;color:#fff;font-size:13.5px;text-align:center}.nf-msg.on{display:block}
+.nf-paper{position:relative;border-radius:10px;padding:14px 14px 16px;color:#1b2a4a;background:url(images/paper.jpg) center/cover,repeating-linear-gradient(#fdfaf0 0,#fdfaf0 31px,#bcd2ea 31px,#bcd2ea 32px);box-shadow:0 2px 12px rgba(0,0,0,.18),inset 0 0 0 1px rgba(0,0,0,.05);overflow:hidden}
+.nf-paper:before{content:"";position:absolute;top:0;bottom:0;inset-inline-end:34px;width:2px;background:rgba(214,60,60,.45);pointer-events:none}
+.nf-paper>*{position:relative}
+.nf-l{display:block;font-size:13px;margin:8px 0 3px;opacity:.75}
+.nf input,.nf select{width:100%;font:inherit;font-size:16px;color:#1b2a4a;background:rgba(255,255,255,.7);border:0;border-bottom:2px solid #4a6a9a;border-radius:6px;padding:8px 10px}
+.nf-b{display:block;width:100%;margin-top:12px;padding:11px;border-radius:12px;border:2px solid #1b2a4a;background:transparent;color:#1b2a4a;font:700 15px inherit;font-family:inherit}
+.nf-b.pri{background:#1b2a4a;color:#fdfaf0}.nf-b:disabled{opacity:.35}.nf-b:active:not(:disabled){transform:scale(.98)}
+.nf-or{text-align:center;margin:12px 0 0;opacity:.6;font-size:13px}
+.nf-code{text-align:center;margin-bottom:8px}.nf-code b{display:block;font-size:46px;letter-spacing:8px;line-height:1.3}.nf-code small{display:block;opacity:.65;font-size:12.5px}
+.nf-chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}.nf-chip{padding:4px 11px;border-radius:99px;background:rgba(27,42,74,.1);font-size:14px}.nf-chip.off{opacity:.4}
+.nf-sub{margin:12px 0 4px;font-weight:700;font-size:14px}.nf-wait{margin:14px 0 6px;text-align:center;opacity:.7;font-size:14px}.nf-hint{font-size:12px;opacity:.6;margin:4px 0 8px}
+.nf-link{display:block;margin:14px auto 0;background:none;border:0;color:#a03030;font:inherit;font-size:13px;text-decoration:underline}
+.nf-top{display:flex;align-items:center;gap:14px;margin-bottom:6px}
+.nf-letter{flex:none;width:76px;height:76px;border-radius:50%;border:3px solid #a03030;color:#a03030;display:grid;place-items:center;font:800 44px/1 inherit;font-family:inherit;transform:rotate(-6deg);background:rgba(255,255,255,.5)}.nf-letter.sm{width:52px;height:52px;font-size:30px;margin:0 auto 4px}
+.nf-info{flex:1;text-align:center}.nf-clock{font:800 34px/1.1 inherit;font-family:inherit}.nf-clock.hot{color:#c0392b;animation:nfp .6s ease-in-out infinite alternate}@keyframes nfp{to{opacity:.4}}.nf-bar{font-size:13px;opacity:.75;min-height:18px}
+.nf-line{display:flex;align-items:center;gap:10px;min-height:44px;border-bottom:1px solid rgba(74,106,154,.35)}.nf-line span{flex:none;width:64px;font-weight:700;font-size:14px;opacity:.85}.nf-line input{background:transparent;border:0;border-radius:0;padding:8px 4px;font-size:17px}.nf-line input:focus{outline:0;background:rgba(255,255,255,.55)}.nf-line.bad input{color:#c0392b}
+.nf-tbl{margin:6px 0}.nf-row{display:flex;gap:10px;align-items:baseline;padding:4px 2px;border-bottom:1px dashed rgba(27,42,74,.25)}.nf-row b{flex:1}.nf-row em{font-style:normal;color:#2a7f4a;font-size:13px}.nf-row i{font-style:normal;font-weight:800;min-width:34px;text-align:left}.nf-row.me{background:rgba(255,230,120,.4)}
+.nf-cat{margin-top:14px}.nf-cat h3{margin:0 0 4px;font-size:15px;border-bottom:2px solid #4a6a9a;display:inline-block}
+.nf-ans{display:flex;gap:8px;align-items:baseline;padding:4px 6px;border-radius:7px;font-size:14.5px}.nf-ans span{flex:none;width:76px;opacity:.7;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.nf-ans b{flex:1;font-weight:600}.nf-ans i{font-style:normal;font-weight:800}
+.nf-ans.g i{color:#2a7f4a}.nf-ans.a i{color:#c27a00}.nf-ans.z{opacity:.55}.nf-ans.z b{text-decoration:line-through}.nf-ans.tap{cursor:pointer}.nf-ans.tap:active{background:rgba(0,0,0,.08)}
+.nf-win{text-align:center;font:800 26px/1.5 inherit;font-family:inherit;margin-bottom:8px}
+#pick button+button{margin-top:2px}
 </style>
 </head>
 <body>
@@ -1038,12 +1063,14 @@ $("#btnShare").onclick=async()=>{
   const closeP=()=>{const p=document.getElementById("pick");if(p)p.remove()};
   const MIR='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="9.3" rx="6.3" ry="7" fill="currentColor" fill-opacity=".1"/><path d="M8.9 7.4a3.7 3.7 0 0 1 2.3-2" stroke-width="1.6"/><path d="M12 16.3v4.4M9 21h6"/><path d="M20 3v3M18.5 4.5h3" stroke-width="1.4"/></svg>';
   if(SITE.ic===1)btn.innerHTML=MIR,btn.setAttribute("aria-label","Mirror");
-  const wM=SITE.mir!==0,wS=SITE.sud!==0;if(!wM&&!wS)btn.style.display="none";
-  btn.onclick=()=>{if(wM&&!wS){mf();return}if(wS&&!wM){openSudoku();return}if(document.getElementById("pick")){closeP();return}
+  const wM=SITE.mir!==0,wS=SITE.sud!==0,wN=SITE.nf!==0&&!!SITE.nfApi;if(!wM&&!wS&&!wN)btn.style.display="none";
+  const OPT=[];if(wM)OPT.push(["m","🪞 Mirror"]);if(wS)OPT.push(["s","🔢 Sudoku"]);if(wN)OPT.push(["n","📝 اسم و فامیل"]);
+  const run=k=>k==="m"?mf():k==="s"?openSudoku():window.openNameFamily&&window.openNameFamily();
+  btn.onclick=()=>{if(OPT.length===1){run(OPT[0][0]);return}if(document.getElementById("pick")){closeP();return}
     const r=btn.getBoundingClientRect(),p=document.createElement("div");p.id="pick";
-    p.innerHTML='<button data-pk="m">🪞 Mirror</button><button data-pk="s">🔢 Sudoku</button>';
+    p.innerHTML=OPT.map(o=>'<button data-pk="'+o[0]+'">'+o[1]+'</button>').join("");
     p.style.top=(r.bottom+8)+"px";p.style.left=Math.max(8,Math.min(r.left,innerWidth-170))+"px";document.body.appendChild(p)};
-  document.addEventListener("click",e=>{const p=document.getElementById("pick");if(!p)return;const k=e.target.closest("[data-pk]");if(k){e.stopPropagation();closeP();k.dataset.pk==="m"?mf():openSudoku();return}if(!e.target.closest("#btnShare"))closeP()},true)}
+  document.addEventListener("click",e=>{const p=document.getElementById("pick");if(!p)return;const k=e.target.closest("[data-pk]");if(k){e.stopPropagation();closeP();run(k.dataset.pk);return}if(!e.target.closest("#btnShare"))closeP()},true)}
 (()=>{
   const WORDS=["Made","By","AI:","An","Idiot"],URL_="https://kurd.cc",HOLD=3000;
   const reduce=()=>matchMedia("(prefers-reduced-motion:reduce)").matches;
@@ -1188,6 +1215,179 @@ if(SITE.foot===0){const f=document.querySelector(".neon-foot");if(f)f.remove()}
 render();
 if(LANG!=="fa"){document.title=L("","Arga Cafe | Menu","کافێی Arga | مێنیو");setBio()}
 if(dict())applyLangTree(document.body);
+</script>
+<script>
+(()=>{
+const API=(SITE.nfApi||"").replace(/\/+$/,"");
+if(!API||SITE.nf===0)return;
+const K="arga_nf",NAME_K="arga_nf_name",CATS=["اسم","فامیل","میوه","رنگ","شهر","کشور","ماشین","حیوان","اشیا","غذا","شغل"];
+const fa=n=>String(n).replace(/\d/g,d=>"۰۱۲۳۴۵۶۷۸۹"[d]);
+const norm=s=>String(s||"").replace(/[ً-ٰٟ‌‍‏‎\s]/g,"").replace(/[آأإ]/g,"ا").replace(/ي/g,"ی").replace(/ك/g,"ک").replace(/ة/g,"ه");
+const store={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}},del(k){try{localStorage.removeItem(k)}catch(e){}}};
+const N={s:null,view:"",key:"",off:0,poll:0,save:0,tick:0,busy:0,err:0,mine:Array(11).fill(""),ses:store.get(K)};
+const ROOT=()=>$("#modal").classList.contains("show")?$("#card .nf"):null;
+const alive=()=>$("#modal").classList.contains("show")&&(!N.view||$("#card .nf"));
+async function call(path,body){
+  const ctl=new AbortController(),t=setTimeout(()=>ctl.abort(),8000);
+  try{
+    const r=await fetch(API+path,body?{method:"POST",body:JSON.stringify(body),signal:ctl.signal}:{signal:ctl.signal});
+    const j=await r.json().catch(()=>({error:"bad"}));if(!r.ok&&!j.error)j.error="http";return j;
+  }catch(e){return{error:"net"}}finally{clearTimeout(t)}
+}
+const ERR={net:"اتصال برقرار نشد.",room:"اتاقی با این کد پیدا نشد.",taken:"این اسم در اتاق هست. اسم دیگری بنویس.",full:"اتاق پر است.",started:"بازی شروع شده و دیگر نمی‌شود وارد شد.",name:"اسمت را بنویس.",incomplete:"همه‌ی خانه‌ها را پر کن.",busy:"سرور شلوغ است. دوباره امتحان کن.",host:"فقط اتاق‌دار می‌تواند.",state:"الان نمی‌شود."};
+const msg=e=>ERR[e]||"مشکلی پیش آمد.";
+const toastNf=t=>{const b=ROOT()&&ROOT().querySelector(".nf-msg");if(b){b.textContent=t;b.classList.add("on");clearTimeout(N.mt);N.mt=setTimeout(()=>b.classList.remove("on"),3500)}};
+
+function shell(inner,title){
+  const card=$("#card");
+  const was=$("#modal").classList.contains("show");
+  card.innerHTML=`<div class="nf" dir="rtl"><div class="nf-hd"><button data-close aria-label="بستن" style="font-size:22px">✕</button><h2>${title||"اسم و فامیل"}</h2><span style="width:22px"></span></div><div class="nf-msg"></div><div class="nf-body">${inner}</div></div>`;
+  if(!was)openModal();
+}
+function stopAll(){clearInterval(N.poll);clearInterval(N.tick);N.poll=N.tick=0}
+function leaveLocal(){stopAll();store.del(K);N.ses=null;N.s=null;N.view="";N.key=""}
+
+/* ---------- entry ---------- */
+function entry(){
+  stopAll();N.view="entry";
+  shell(`<div class="nf-paper"><label class="nf-l">اسم تو</label><input id="nfName" maxlength="16" autocomplete="off" value="${eh(store.get(NAME_K)||"")}" placeholder="مثلاً سارا">
+   <button class="nf-b pri" id="nfCreate">ساخت اتاق جدید</button>
+   <div class="nf-or">یا</div>
+   <label class="nf-l">کد اتاق</label><input id="nfCode" inputmode="numeric" maxlength="4" autocomplete="off" dir="ltr" placeholder="۱۲۳۴" style="text-align:center;letter-spacing:6px">
+   <button class="nf-b" id="nfJoin">ورود به اتاق</button></div>`);
+}
+async function enter(kind){
+  if(N.busy)return;
+  const name=($("#nfName").value||"").trim().replace(/[<>]/g,"");
+  if(!name){toastNf(msg("name"));return}
+  store.set(NAME_K,name);
+  let r;N.busy=1;
+  try{
+    if(kind==="create")r=await call("/api/create",{name});
+    else{
+      const code=($("#nfCode").value||"").replace(/[۰-۹]/g,d=>"۰۱۲۳۴۵۶۷۸۹".indexOf(d)).replace(/\D/g,"");
+      if(code.length!==4){toastNf("کد اتاق چهار رقم است.");return}
+      r=await call("/api/join",{code,name,again:1});
+    }
+  }finally{N.busy=0}
+  if(r.error){toastNf(msg(r.error));return}
+  N.ses={code:r.code,pid:r.pid};store.set(K,N.ses);start();
+}
+
+/* ---------- loop ---------- */
+function start(){
+  N.mine=Array(11).fill("");N.view="";N.key="";
+  stopAll();openLayer($("#modal"));refresh();
+  N.poll=setInterval(()=>{if(!alive()){stopAll();return}refresh()},1300);
+  N.tick=setInterval(()=>{if(!alive()){stopAll();return}clock()},250);
+}
+async function refresh(){
+  if(!N.ses)return;
+  const s=await call("/api/state?code="+N.ses.code+"&pid="+N.ses.pid);
+  if(!alive()){stopAll();return}
+  if(s.error==="room"||s.error==="player"){leaveLocal();entry();toastNf("اتاق بسته شده است.");return}
+  if(s.error){if(++N.err>3)toastNf(msg(s.error));return}
+  N.err=0;N.s=s;N.off=s.now-Date.now();draw(s);
+}
+const srv=()=>Date.now()+N.off;
+
+/* ---------- drawing ---------- */
+function draw(s){
+  const v=s.st==="ending"?"play":s.st,key=v+":"+s.rnd+":"+(v==="review"?JSON.stringify([s.cells,s.totals]):v==="lobby"||v==="done"?JSON.stringify(s.players.map(p=>[p.pid,p.name,p.score,p.on])):"");
+  if(v==="play"){
+    if(N.view!=="play"||N.rk!==s.rnd){N.rk=s.rnd;N.mine=(s.mine&&s.mine.length?s.mine.slice():Array(11).fill(""));drawPlay(s)}
+    N.view="play";N.key=key;statusBar(s);return;
+  }
+  if(key===N.key)return;
+  N.key=key;N.view=v;
+  if(v==="lobby")drawLobby(s);else if(v==="review")drawReview(s);else if(v==="done")drawDone(s);
+}
+const rank=(s,withRound)=>s.players.map(p=>({...p,tot:p.score+(withRound&&s.totals?s.totals[p.pid]||0:0),rd:s.totals?s.totals[p.pid]||0:0})).sort((a,b)=>b.tot-a.tot);
+function playersChips(s){return s.players.map(p=>`<span class="nf-chip${p.on?"":" off"}">${p.pid===s.hostPid?"👑 ":""}${eh(p.name)}</span>`).join("")}
+function scoreTable(s,withRound){
+  const r=rank(s,withRound);
+  return `<div class="nf-tbl">${r.map((p,i)=>`<div class="nf-row${p.pid===s.you?" me":""}"><span>${fa(i+1)}</span><b>${eh(p.name)}</b>${withRound?`<em>+${fa(p.rd)}</em>`:""}<i>${fa(p.tot)}</i></div>`).join("")}</div>`;
+}
+function drawLobby(s){
+  const next=s.rnd+1;
+  shell(`<div class="nf-paper"><div class="nf-code"><small>کد اتاق</small><b dir="ltr">${fa(s.code)}</b><small>این کد را به بقیه بگو</small></div>
+    <div class="nf-chips">${playersChips(s)}</div>
+    ${s.rnd?`<div class="nf-sub">امتیاز تا اینجا</div>${scoreTable(s,false)}`:""}
+    ${s.host?`<div class="nf-sub">مدت هر دور</div><select id="nfSecs"><option value="0">بدون زمان (با «تمام»)</option>${[60,90,120,180,240].map(x=>`<option value="${x}"${x===(+store.get("arga_nf_secs")||120)?" selected":""}>${fa(x)} ثانیه</option>`).join("")}</select>
+      <button class="nf-b pri" id="nfStart">شروع دور ${fa(next)}</button>${s.rnd?`<button class="nf-b" id="nfEnd">پایان بازی</button>`:""}`
+      :`<div class="nf-wait">منتظر شروع دور ${fa(next)} توسط اتاق‌دار…</div>`}
+    <button class="nf-link" id="nfLeave">${s.host?"بستن اتاق":"خروج از اتاق"}</button></div>`);
+}
+function drawPlay(s){
+  shell(`<div class="nf-paper">
+    <div class="nf-top"><div class="nf-letter">${eh(s.letter)}</div><div class="nf-info"><div id="nfClock" class="nf-clock"></div><div id="nfBar" class="nf-bar"></div></div></div>
+    <div class="nf-sheet">${CATS.map((c,i)=>`<label class="nf-line"><span>${c}</span><input data-i="${i}" maxlength="40" autocomplete="off" autocorrect="off" spellcheck="false" value="${eh(N.mine[i]||"")}" placeholder="${eh(s.letter)}…"></label>`).join("")}</div>
+    <button class="nf-b pri" id="nfStop" disabled>تمام!</button></div>`,"حرف "+s.letter);
+  checkFilled();
+}
+function statusBar(s){
+  const b=$("#nfBar");if(!b)return;
+  const n=s.players.length,d=(s.done||[]).length;
+  if(s.st==="ending"){const who=s.players.find(p=>p.pid===s.stopBy);b.textContent=(who?who.name:"یک نفر")+" تمام زد!"}
+  else b.textContent=fa(d)+" از "+fa(n)+" نفر تمام کرده‌اند";
+  clock();
+}
+function clock(){
+  const s=N.s;if(!s||N.view!=="play")return;
+  const el=$("#nfClock");if(!el)return;
+  let left=null;
+  if(s.st==="ending")left=s.deadline-srv();
+  else if(s.secs)left=s.deadline-3000-srv();
+  const ended=left!==null&&left<=0;
+  el.textContent=left===null?"":fa(Math.max(0,Math.ceil(left/1000)));
+  el.classList.toggle("hot",left!==null&&left<=10000);
+  document.querySelectorAll(".nf-line input").forEach(i=>i.disabled=!!ended);
+  if(ended&&!N.flushed){N.flushed=1;flush()}
+  if(!ended)N.flushed=0;
+  $("#nfStop")&&(s.st==="ending"?($("#nfStop").style.display="none"):0);
+}
+function checkFilled(){
+  const L=norm(N.s&&N.s.letter),ok=N.mine.every(x=>norm(x).length>=2&&norm(x)[0]===L);
+  const b=$("#nfStop");if(b)b.disabled=!ok;
+  document.querySelectorAll(".nf-line").forEach((l,i)=>{const n=norm(N.mine[i]);l.classList.toggle("bad",!!n&&n[0]!==L)});
+}
+function flush(){clearTimeout(N.save);return N.ses?call("/api/save",{code:N.ses.code,pid:N.ses.pid,answers:N.mine}):0}
+function drawReview(s){
+  const rows=CATS.map((c,ci)=>`<div class="nf-cat"><h3>${c}</h3>${s.players.map(p=>{
+    const x=s.cells[p.pid][ci],cls=x.ok?(x.pts===10?"g":"a"):"z",why=x.why==="empty"?"خالی":x.why==="letter"?"حرف اشتباه":x.why==="short"?"کوتاه":x.why==="veto"?"رد شد":"";
+    return `<div class="nf-ans ${cls}${s.host&&x.t?" tap":""}" ${s.host&&x.t&&x.why!=="letter"&&x.why!=="short"?`data-v="${p.pid}:${ci}"`:""}><span>${eh(p.name)}</span><b>${x.t?eh(x.t):"—"}</b><i>${x.ok?fa(x.pts):why||"۰"}</i></div>`}).join("")}</div>`).join("");
+  shell(`<div class="nf-paper"><div class="nf-letter sm">${eh(s.letter)}</div><div class="nf-sub">نتیجه‌ی دور ${fa(s.rnd)}</div>${scoreTable(s,true)}
+    ${s.host?`<div class="nf-hint">برای باطل کردن یک جواب، روی آن بزن.</div>`:""}${rows}
+    ${s.host?`<button class="nf-b pri" id="nfNext">دور بعد</button><button class="nf-b" id="nfEnd">پایان بازی</button>`:`<div class="nf-wait">منتظر اتاق‌دار…</div>`}</div>`,"نتیجه");
+}
+function drawDone(s){
+  const r=rank(s,false),top=r[0],tie=r.filter(p=>p.tot===top.tot).map(p=>eh(p.name)).join(" و ");
+  shell(`<div class="nf-paper"><div class="nf-win">🏆<br>${tie}</div>${scoreTable(s,false)}<button class="nf-b pri" id="nfLeave">خروج</button></div>`,"پایان بازی");
+}
+
+/* ---------- events ---------- */
+$("#card").addEventListener("input",e=>{
+  const i=e.target.closest&&e.target.closest(".nf-line input");if(!i)return;
+  N.mine[+i.dataset.i]=i.value;checkFilled();clearTimeout(N.save);N.save=setTimeout(flush,350);
+});
+$("#card").addEventListener("click",async e=>{
+  const t=e.target;if(!t.closest(".nf"))return;
+  const id=t.closest("button")&&t.closest("button").id;
+  if(id==="nfCreate")return enter("create");
+  if(id==="nfJoin")return enter("join");
+  if(id==="nfLeave"){if(N.ses)await call("/api/leave",{code:N.ses.code,pid:N.ses.pid});leaveLocal();entry();return}
+  if(id==="nfStart"){const secs=+$("#nfSecs").value;store.set("arga_nf_secs",secs);const r=await call("/api/start",{...N.ses,secs});if(r.error)toastNf(msg(r.error));else refresh();return}
+  if(id==="nfStop"){await flush();const r=await call("/api/stop",N.ses);if(r.error)toastNf(msg(r.error));else refresh();return}
+  if(id==="nfNext"){const r=await call("/api/next",N.ses);if(r.error)toastNf(msg(r.error));else refresh();return}
+  if(id==="nfEnd"){const r=await call("/api/end",N.ses);if(r.error)toastNf(msg(r.error));else refresh();return}
+  const v=t.closest("[data-v]");
+  if(v){const[p,c]=v.dataset.v.split(":");const r=await call("/api/veto",{...N.ses,target:p,cat:+c});if(r.error)toastNf(msg(r.error));else refresh()}
+});
+
+/* ---------- public ---------- */
+window.openNameFamily=()=>{if(N.ses){start()}else entry()};
+window.hasNameFamily=true;
+})();
 </script>
 <script>
 (function(){let T,shown=0,el;const IDLE=Math.max(5,Math.min(600,+SITE.hintSec||25))*1000;
