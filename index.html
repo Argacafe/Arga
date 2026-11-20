@@ -374,6 +374,9 @@ svg.hb path{fill:#e0245e;stroke:currentColor;animation:heartRW 2.8s ease-in-out 
 .np-w{overflow-x:auto;margin:6px -6px;-webkit-overflow-scrolling:touch;cursor:zoom-in}.np-w.zoom{cursor:zoom-out}.np-s{position:relative;width:100%;aspect-ratio:896/780;container-type:inline-size;background:url(images/paper-orig.jpg) top/100% auto no-repeat #f3efe3;border-radius:6px;box-shadow:0 1px 8px rgba(0,0,0,.2)}.np-w.zoom .np-s{width:210%}
 .np-c,.np-n{position:absolute;display:flex;align-items:center;justify-content:center;font-style:normal;font-weight:400;color:#1b2a4a;font-size:3cqw;line-height:1.05;text-align:center;overflow:hidden}.np-c s{text-decoration:none;word-break:break-all;max-height:100%}
 .np-c.g s{color:#1d5fb8}.np-c.a s{color:#c27a00}.np-c.z s{color:#999;text-decoration:line-through}.np-c.pt s{font-weight:800;font-size:3.6cqw;color:#a03030}.np-n{font-size:2.2cqw;opacity:.55}
+.np-ov{position:absolute;inset:0;pointer-events:none;color:#d62828;font-family:inherit}.np-red{position:absolute;right:2.5cqw;top:.8cqw;width:13cqw;height:10cqw;display:grid;place-items:center;border:.8cqw solid #d62828;border-radius:52% 48% 55% 45%/48% 56% 44% 52%;transform:rotate(-7deg)}.np-red:after{content:"";position:absolute;inset:-1cqw -.5cqw -.6cqw -1cqw;border:.45cqw solid rgba(214,40,40,.55);border-radius:46% 54% 50% 50%/55% 45% 55% 45%;transform:rotate(5deg)}
+.np-lt{font-size:7.5cqw;font-weight:800;line-height:1;transform:rotate(4deg)}
+.np-cn{position:absolute;right:19cqw;top:1.6cqw;display:flex;align-items:center;gap:1.2cqw;transform:rotate(-3deg);white-space:nowrap}.np-cn b{font-size:5.5cqw;font-weight:800;line-height:1}.np-cn i{font-style:normal;font-size:2.8cqw}.np-cn span{display:flex;gap:.7cqw;margin-inline-start:.8cqw}.np-cn u{width:1.9cqw;height:1.9cqw;border:.45cqw solid #d62828;border-radius:50%;opacity:.5}.np-cn u.on{background:#d62828;opacity:1}
 .np-lg{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:12.5px;opacity:.8;margin-bottom:6px}
 .nf-win{text-align:center;font:800 26px/1.5 inherit;font-family:inherit;margin-bottom:8px}
 #pick button+button{margin-top:2px}
@@ -1310,7 +1313,7 @@ function draw(s){
 const rank=(s,withRound)=>s.players.map(p=>({...p,tot:p.score+(withRound&&s.totals?s.totals[p.pid]||0:0),rd:s.totals?s.totals[p.pid]||0:0})).sort((a,b)=>b.tot-a.tot);
 
 const PE=[880,805,717,648,580,512,441,357,280,209,145,70];
-function paperHtml(rows,hdr){
+function paperHtml(rows,ov){
   const P=v=>(v/896*100).toFixed(3)+"%",Q=v=>(v/780*100).toFixed(3)+"%",RH=46.4,T0=150;
   let h="";
   rows.forEach((r,ri)=>{
@@ -1320,7 +1323,7 @@ function paperHtml(rows,hdr){
       h+=`<b class="np-c ${c.c||""}" style="top:${Q(top)};height:${Q(RH)};left:${P(PE[ci+1])};width:${P(PE[ci]-PE[ci+1])}"><s>${eh(c.t||"")}</s></b>`;
     });
   });
-  return `<div class="np-w"><div class="np-s">${h}</div></div><div class="np-lg">${rows.map((r,i)=>`<span>${fa(i+1)}. ${eh(r.name)}</span>`).join("")}</div>`;
+  return `<div class="np-w"><div class="np-s">${h}${ov||""}</div></div><div class="np-lg">${rows.map((r,i)=>`<span>${fa(i+1)}. ${eh(r.name)}</span>`).join("")}</div>`;
 }
 function playersChips(s){return s.players.map(p=>`<span class="nf-chip${p.on?"":" off"}">${p.pid===s.hostPid?"👑 ":""}${eh(p.name)}</span>`).join("")}
 function scoreTable(s,withRound){
@@ -1337,10 +1340,11 @@ function drawLobby(s){
       :`<div class="nf-wait">منتظر شروع دور ${fa(next)} توسط اتاق‌دار…</div>`}
     <button class="nf-link" id="nfLeave">${s.host?"بستن اتاق":"خروج از اتاق"}</button></div>`);
 }
-function livePaper(){return paperHtml([{name:"شما",pts:null,cells:CATS.map((_,i)=>({t:N.mine[i]||""}))}])}
+const ovLetter=(l,cnt)=>`<div class="np-ov"><div class="np-red"><span class="np-lt">${eh(l)}</span></div>${cnt?`<div class="np-cn" id="npCnt"></div>`:""}</div>`;
+function livePaper(){return paperHtml([{name:"شما",pts:null,cells:CATS.map((_,i)=>({t:N.mine[i]||""}))}],ovLetter(N.s&&N.s.letter,1))}
 function drawPlay(s){
   shell(`<div class="nf-paper">
-    <div class="nf-top"><div class="nf-letter">${eh(s.letter)}</div><div class="nf-info"><div id="nfClock" class="nf-clock"></div><div id="nfBar" class="nf-bar"></div></div></div>
+    <div class="nf-top"><div class="nf-info"><div id="nfClock" class="nf-clock"></div><div id="nfBar" class="nf-bar"></div></div></div>
     <div id="nfLive">${livePaper()}</div><div class="nf-sheet">${CATS.map((c,i)=>`<label class="nf-line"><span>${c}</span><input data-i="${i}" maxlength="40" autocomplete="off" autocorrect="off" spellcheck="false" value="${eh(N.mine[i]||"")}" placeholder="${eh(s.letter)}…"></label>`).join("")}</div>
     <button class="nf-b pri" id="nfStop" disabled>تمام!</button><button class="nf-b" id="nfAgree">🤝 چیزی پیدا نکردیم، توافق برای پایان دور</button><div class="nf-hint" id="nfAgreeN"></div></div>`,"حرف "+s.letter);
   checkFilled();
@@ -1349,7 +1353,8 @@ function statusBar(s){
   const b=$("#nfBar");if(!b)return;
   const n=s.players.length,d=(s.done||[]).length;
   if(s.st==="ending"){const who=s.players.find(p=>p.pid===s.stopBy);b.textContent=(who?who.name:"یک نفر")+" تمام زد!"}
-  else b.textContent=fa(d)+" از "+fa(n)+" نفر تمام کرده‌اند";
+  else b.textContent="";
+  {const c=$("#npCnt");if(c)c.innerHTML=`<b>${fa(d)}</b><i>از</i><b>${fa(n)}</b><span>${Array.from({length:n},(_,k)=>`<u class="${k<d?"on":""}"></u>`).join("")}</span>`}
   {const ag=s.agree||[],me=ag.includes(s.you),bt=$("#nfAgree"),hn=$("#nfAgreeN");if(bt){bt.textContent=me?"✓ موافقم (برای پس‌گرفتن بزن)":"🤝 چیزی پیدا نکردیم، توافق برای پایان دور";bt.style.display=s.st==="ending"?"none":"";bt.classList.toggle("pri",me)}if(hn)hn.textContent=ag.length?fa(ag.length)+" از "+fa(n)+" نفر موافق پایان دور هستند. وقتی همه موافق باشند دور تمام می‌شود.":""}
   clock();
 }
@@ -1378,7 +1383,7 @@ function drawReview(s){
     const x=s.cells[p.pid][ci],cls=x.ok?(x.pts===10?"g":"a"):"z",why=x.why==="empty"?"خالی":x.why==="letter"?"حرف اشتباه":x.why==="short"?"کوتاه":x.why==="veto"?"رد شد":"";
     return `<div class="nf-ans ${cls}${s.host&&x.t?" tap":""}" ${s.host&&x.t&&x.why!=="letter"&&x.why!=="short"?`data-v="${p.pid}:${ci}"`:""}><span>${eh(p.name)}</span><b>${x.t?eh(x.t):"—"}</b><i>${x.ok?fa(x.pts):why||"۰"}</i></div>`}).join("")}</div>`).join("");
   const prow=s.players.map(p=>({name:p.name,pts:s.totals[p.pid]||0,cells:s.cells[p.pid].map(x=>({t:x.t,c:x.ok?(x.pts===10?"g":"a"):"z"}))}));
-  shell(`<div class="nf-paper"><div class="nf-letter sm">${eh(s.letter)}</div><div class="nf-sub">نتیجه‌ی دور ${fa(s.rnd)}</div>${paperHtml(prow)}${scoreTable(s,true)}
+  shell(`<div class="nf-paper"><div class="nf-sub">نتیجه‌ی دور ${fa(s.rnd)}</div>${paperHtml(prow,ovLetter(s.letter,0))}${scoreTable(s,true)}
     ${s.host?`<div class="nf-hint">برای باطل کردن یک جواب، روی آن بزن.</div>`:""}${rows}
     ${s.host?`<button class="nf-b pri" id="nfNext">دور بعد</button><button class="nf-b" id="nfEnd">پایان بازی</button>`:`<div class="nf-wait">منتظر اتاق‌دار…</div>`}</div>`,"نتیجه");
 }
