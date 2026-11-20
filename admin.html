@@ -244,6 +244,8 @@ html[dir=rtl] .hist .m{text-align:right}
       <label class="tg2"><span>آینه (سلفی)</span><input type="checkbox" id="swMir"></label>
       <label class="tg2"><span>بازی سودوکو</span><input type="checkbox" id="swSud"></label>
       <p class="mut" style="margin:0 0 10px;font-size:12px">اگر هر دو فعال باشند، با زدن دکمه پنجره‌ی انتخاب باز می‌شود. اگر فقط یکی فعال باشد، دکمه مستقیم همان را باز می‌کند. اگر هر دو خاموش باشند، دکمه از صفحه برداشته می‌شود.</p>
+      <label class="tg2"><span>بازی اسم و فامیل (چندنفره)</span><input type="checkbox" id="swNf"></label>
+      <div id="nfOpts" style="margin:0 0 12px"><div class="lbl">آدرس سرور بازی (Worker)</div><input id="nfApi" dir="ltr" placeholder="https://arga-game.xxx.workers.dev"><p class="mut" style="margin:4px 0 0;font-size:12px">تا این آدرس پر نشود، بازی در سایت نشان داده نمی‌شود.</p></div>
       <label class="tg2"><span>دکمه‌ی دست‌دادن (هایلایت «قاب شما»، بالای صفحه)</span><input type="checkbox" id="swHs"></label>
       <label class="tg2"><span>اسکرین سیور («Hold Me»)</span><input type="checkbox" id="swHint"></label>
       <div id="hintOpts" style="display:flex;align-items:center;gap:8px;margin:0 0 12px"><span class="mut" style="flex:1">بعد از چند ثانیه بی‌حرکتی بیاید؟</span><input id="hintSec" type="number" inputmode="numeric" min="5" max="600" dir="ltr" style="width:84px;text-align:center"><span class="mut">ثانیه</span></div>
@@ -470,7 +472,7 @@ document.addEventListener("input",e=>{
 });
 function renderInfo(){renderTxt();
   document.querySelectorAll("[data-i]").forEach(el=>{el.value=INFO[el.dataset.i]||""});
-  $("#swFoot").checked=SITE.foot!==0;$("#swEn").checked=SITE.en!==0;$("#swFx").checked=SITE.fx===1;$("#swLock").checked=SITE.lock!==0;$("#swMir").checked=SITE.mir!==0;$("#swSud").checked=SITE.sud!==0;$("#swHs").checked=SITE.hs!==0;$("#swHint").checked=SITE.hint!==0;$("#hintOpts").style.display=SITE.hint!==0?"flex":"none";$("#hintSec").value=SITE.hintSec||25;document.querySelectorAll("#icPick [data-ic]").forEach(b=>{const on=(+b.dataset.ic)===(SITE.ic===1?1:0);b.style.outline=on?"2px solid var(--acc)":"none";b.style.outlineOffset="1px"});
+  $("#swFoot").checked=SITE.foot!==0;$("#swEn").checked=SITE.en!==0;$("#swFx").checked=SITE.fx===1;$("#swLock").checked=SITE.lock!==0;$("#swMir").checked=SITE.mir!==0;$("#swSud").checked=SITE.sud!==0;$("#swHs").checked=SITE.hs!==0;$("#swNf").checked=SITE.nf!==0;$("#nfOpts").style.display=SITE.nf!==0?"":"none";$("#nfApi").value=SITE.nfApi||"";$("#swHint").checked=SITE.hint!==0;$("#hintOpts").style.display=SITE.hint!==0?"flex":"none";$("#hintSec").value=SITE.hintSec||25;document.querySelectorAll("#icPick [data-ic]").forEach(b=>{const on=(+b.dataset.ic)===(SITE.ic===1?1:0);b.style.outline=on?"2px solid var(--acc)":"none";b.style.outlineOffset="1px"});
   $("#lockOpts").style.display=SITE.lock!==0?"flex":"none";
   $("#lockPrev").style.display=SITE.lockImg?"":"none";if(SITE.lockImg)$("#lockPrev").src=src_(SITE.lockImg);
   $("#lockEmoji").value=SITE.lockEmoji||"";$("#lockEmoji").style.display=SITE.lockImg?"none":"";$("#lockDel").style.display=SITE.lockImg?"":"none";$("#swKu").checked=SITE.ku!==0;document.body.classList.toggle("noEn",SITE.en===0);document.body.classList.toggle("noKu",SITE.ku===0);$("#swEgg").checked=SITE.egg!==0;
@@ -845,6 +847,8 @@ $("#lockDel").onclick=()=>{SITE.lockImg="";bar();renderInfo()};
 $("#lockEmoji").oninput=e=>{SITE.lockEmoji=e.target.value.trim();bar()};
 $("#swMir").onchange=e=>{SITE.mir=e.target.checked?1:0;bar()};
 $("#swSud").onchange=e=>{SITE.sud=e.target.checked?1:0;bar()};
+$("#swNf").onchange=e=>{SITE.nf=e.target.checked?1:0;bar();renderInfo()};
+$("#nfApi").oninput=e=>{SITE.nfApi=e.target.value.trim().replace(/\/+$/,"");if(!SITE.nfApi)delete SITE.nfApi;bar()};
 $("#swHs").onchange=e=>{SITE.hs=e.target.checked?1:0;bar()};
 $("#swHint").onchange=e=>{SITE.hint=e.target.checked?1:0;bar();renderInfo()};
 $("#hintSec").oninput=e=>{const v=Math.round(+enDigits(e.target.value));if(v>=5&&v<=600){SITE.hintSec=v;bar()}};
@@ -886,6 +890,7 @@ function validate(){
   if(changed("map")&&INFO.map&&!/^https?:\/\//i.test(INFO.map))return"لینک نقشه باید با https:// شروع شود.";
   if(changed("phone")&&INFO.phone&&INFO.phone.replace(/\D/g,"").length<5)return"شماره تلفن کوتاه است.";
   if(changed("hl")&&INFO.hl&&!/^https:\/\/(www\.)?instagram\.com\//i.test(INFO.hl))return"لینک هایلایت باید با https://www.instagram.com/ شروع شود.";
+  if(SITE.nfApi&&!/^https:\/\/[^\s]+$/i.test(SITE.nfApi))return"آدرس سرور بازی باید با https:// شروع شود.";
   if(changed("wa")&&INFO.wa&&INFO.wa.replace(/\D/g,"").length<5)return"شماره واتساپ کوتاه است.";
   if(changed("instagram")&&!/^[A-Za-z0-9._]+$/.test(INFO.instagram))return"آیدی اینستاگرام درست نیست.";
   for(const c of CATS){
