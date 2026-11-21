@@ -1071,7 +1071,7 @@ $("#btnShare").onclick=async()=>{
   const MIR='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="9.3" rx="6.3" ry="7" fill="currentColor" fill-opacity=".1"/><path d="M8.9 7.4a3.7 3.7 0 0 1 2.3-2" stroke-width="1.6"/><path d="M12 16.3v4.4M9 21h6"/><path d="M20 3v3M18.5 4.5h3" stroke-width="1.4"/></svg>';
   if(SITE.ic===1)btn.innerHTML=MIR,btn.setAttribute("aria-label","Mirror");
   const wM=SITE.mir!==0,wS=SITE.sud!==0,wN=SITE.nf!==0&&!!SITE.nfApi;if(!wM&&!wS&&!wN)btn.style.display="none";
-  const OPT=[];if(wM)OPT.push(["m","🪞 Mirror"]);if(wS)OPT.push(["s","🔢 Sudoku"]);if(wN)OPT.push(["n","📝 اسم و فامیل"]);
+  const OPT=[];if(wM)OPT.push(["m","🪞 Mirror"]);if(wS)OPT.push(["s","🔢 Sudoku"]);if(wN)OPT.push(["n","📝 اسم و شهرت"]);
   const run=k=>k==="m"?mf():k==="s"?openSudoku():window.openNameFamily&&window.openNameFamily();
   btn.onclick=()=>{if(OPT.length===1){run(OPT[0][0]);return}if(document.getElementById("pick")){closeP();return}
     const r=btn.getBoundingClientRect(),p=document.createElement("div");p.id="pick";
@@ -1248,7 +1248,7 @@ const toastNf=t=>{const b=ROOT()&&ROOT().querySelector(".nf-msg");if(b){b.textCo
 function shell(inner,title){
   const card=$("#card");
   const was=$("#modal").classList.contains("show");
-  card.innerHTML=`<div class="nf" dir="rtl"><div class="nf-hd"><button data-close aria-label="بستن" style="font-size:22px">✕</button><h2>${title||"اسم و فامیل"}</h2><span style="width:22px"></span></div><div class="nf-msg"></div><div class="nf-body">${inner}</div></div>`;
+  card.innerHTML=`<div class="nf" dir="rtl"><div class="nf-hd"><button data-close aria-label="بستن" style="font-size:22px">✕</button><h2>${title||"اسم و شهرت"}</h2><span style="width:22px"></span></div><div class="nf-msg"></div><div class="nf-body">${inner}</div></div>`;
   $("#modal").classList.add("nfx");
   if(!was)openModal();
 }
@@ -1404,7 +1404,7 @@ $("#card").addEventListener("click",async e=>{
   if(id==="nfCreate")return enter("create");
   if(id==="nfJoin")return enter("join");
   if(id==="nfLeave"){if(N.ses)await call("/api/leave",{code:N.ses.code,pid:N.ses.pid});leaveLocal();entry();return}
-  if(id==="nfInvite"){const u=location.origin+location.pathname+"?game=nf&room="+t.closest("button").dataset.code,ttl="اسم و فامیل";try{if(navigator.share){await navigator.share({title:ttl,text:"بیا اسم و فامیل بازی کنیم! کد اتاق: "+t.closest("button").dataset.code,url:u});return}}catch(e){if(e&&e.name==="AbortError")return}try{await navigator.clipboard.writeText(u);toastNf("لینک کپی شد")}catch(e){toastNf(u)}return}
+  if(id==="nfInvite"){const u=location.origin+location.pathname+"?game=nf&room="+t.closest("button").dataset.code,ttl="اسم و شهرت";try{if(navigator.share){await navigator.share({title:ttl,text:"بیا اسم و شهرت بازی کنیم! کد اتاق: "+t.closest("button").dataset.code,url:u});return}}catch(e){if(e&&e.name==="AbortError")return}try{await navigator.clipboard.writeText(u);toastNf("لینک کپی شد")}catch(e){toastNf(u)}return}
   if(id==="nfStart"){const mv=parseFloat(String($("#nfMin").value).replace(/[۰-۹]/g,d=>"۰۱۲۳۴۵۶۷۸۹".indexOf(d)).replace(/[٠-٩]/g,d=>"٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/٫/g,".").replace(",","."));const secs=Math.max(0,Math.min(1800,Math.round((isNaN(mv)?0:mv)*60)));store.set("arga_nf_secs",secs);const r=await call("/api/start",{...N.ses,secs});if(r.error)toastNf(msg(r.error));else refresh();return}
   if(id==="nfAgree"){await flush();const r=await call("/api/agree",N.ses);if(r.error)toastNf(msg(r.error));else refresh();return}
   if(id==="nfStop"){await flush();const r=await call("/api/stop",N.ses);if(r.error)toastNf(msg(r.error));else refresh();return}
