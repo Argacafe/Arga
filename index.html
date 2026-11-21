@@ -358,6 +358,16 @@ svg.hb path{fill:#e0245e;stroke:currentColor;animation:heartRW 2.8s ease-in-out 
 .nf input,.nf select{width:100%;font:inherit;font-size:16px;color:#1b2a4a;background:rgba(255,255,255,.7);border:0;border-bottom:2px solid #4a6a9a;border-radius:6px;padding:8px 10px}
 .nf-b{display:block;width:100%;margin-top:12px;padding:11px;border-radius:12px;border:2px solid #1b2a4a;background:transparent;color:#1b2a4a;font:700 15px inherit;font-family:inherit}
 .nf-b.pri{background:#1b2a4a;color:#fdfaf0}.nf-b:disabled{opacity:.35}.nf-b:active:not(:disabled){transform:scale(.98)}
+.nf.home{position:relative;min-height:100%;display:flex;flex-direction:column;background:#17240f url(images/nf-home.jpg) center top/cover no-repeat;color:#f6ecd0}
+.nf.home .nf-hd h2,.nf.home .nf-hd span{visibility:hidden}.nf.home .nf-hd button{color:#f6ecd0;text-shadow:0 1px 6px #000;background:none}
+.nf.home .nf-body{margin-top:auto;padding-top:46vh}
+.nf-ent{padding:30px 6px 10px;background:linear-gradient(transparent,rgba(10,18,8,.55) 38%)}
+.nf.home .nf-l{color:#f6ecd0;opacity:.85;text-shadow:0 1px 5px #000}
+.nf.home input{background:rgba(10,18,8,.28);border:0;border-bottom:1.5px solid rgba(240,214,140,.7);border-radius:8px;color:#fff8e0;padding:9px;backdrop-filter:blur(2px)}
+.nf.home input::placeholder{color:rgba(246,236,208,.5)}
+.nf.home .nf-b{background:rgba(10,18,8,.25);border:1.5px solid rgba(240,214,140,.75);color:#f6e3a8;text-shadow:0 1px 4px #000;backdrop-filter:blur(2px)}
+.nf.home .nf-b.pri{background:rgba(214,170,70,.32);color:#fff4cc}
+.nf.home .nf-or{color:#f6ecd0;text-shadow:0 1px 4px #000}
 .nf-or{text-align:center;margin:12px 0 0;opacity:.6;font-size:13px}
 .nf-code{text-align:center;margin-bottom:8px}.nf-code b{display:block;font-size:46px;letter-spacing:8px;line-height:1.3}.nf-code small{display:block;opacity:.65;font-size:12.5px}
 .nf-chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}.nf-chip{padding:4px 11px;border-radius:99px;background:rgba(27,42,74,.1);font-size:14px}.nf-chip.off{opacity:.4}
@@ -1259,11 +1269,12 @@ function leaveLocal(){stopAll();store.del(K);N.ses=null;N.s=null;N.view="";N.key
 /* ---------- entry ---------- */
 function entry(){
   stopAll();N.view="entry";
-  shell(`<div class="nf-paper"><label class="nf-l">${T("entryName")}</label><input id="nfName" maxlength="16" autocomplete="off" value="${eh(store.get(NAME_K)||"")}" placeholder="${T("entryPh")}">
+  shell(`<div class="nf-ent"><label class="nf-l">${T("entryName")}</label><input id="nfName" maxlength="16" autocomplete="off" value="${eh(store.get(NAME_K)||"")}" placeholder="${T("entryPh")}">
    <button class="nf-b pri" id="nfCreate">${T("create")}</button>
    <div class="nf-or">${T("or")}</div>
    <label class="nf-l">${T("codeLabel")}</label><input id="nfCode" inputmode="numeric" maxlength="4" autocomplete="off" dir="ltr" placeholder="۱۲۳۴" style="text-align:center;letter-spacing:6px">
    <button class="nf-b" id="nfJoin">${T("join")}</button></div>`);
+  const nf=$("#card .nf");if(nf)nf.classList.add("home");
 }
 async function enter(kind){
   if(N.busy)return;
