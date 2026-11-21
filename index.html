@@ -1228,6 +1228,8 @@ if(dict())applyLangTree(document.body);
 const API=(SITE.nfApi||"").replace(/\/+$/,"");
 if(!API||SITE.nf===0)return;
 const K="arga_nf",NAME_K="arga_nf_name",CATS=["اسم","فامیل","میوه","رنگ","شهر","کشور","ماشین","حیوان","شغل","اشیا"];
+const DEF={"title": "اسم و شهرت", "entryName": "اسم تو", "entryPh": "مثلاً سارا", "create": "ساخت اتاق جدید", "or": "یا", "codeLabel": "کد اتاق", "join": "ورود به اتاق", "codeBad": "کد اتاق چهار رقم است.", "tellCode": "این کد را به بقیه بگو", "invite": "🔗 لینک دعوت دوستان", "inviteMsg": "بیا اسم و شهرت بازی کنیم! کد اتاق: {c}", "scores": "امتیاز تا اینجا", "minutes": "مدت هر دور (دقیقه)", "start": "شروع دور {n}", "endGame": "پایان بازی", "waitStart": "منتظر شروع دور {n} توسط اتاق‌دار…", "closeRoom": "بستن اتاق", "leaveRoom": "خروج از اتاق", "letterHd": "حرف {l}", "stop": "تمام!", "agree": "🤝 چیزی پیدا نکردیم، توافق برای پایان دور", "agreed": "✓ موافقم (برای پس‌گرفتن بزن)", "agreeCount": "{d} از {n} نفر موافق پایان دور هستند. وقتی همه موافق باشند دور تمام می‌شود.", "someoneStop": "{name} تمام زد!", "someone": "یک نفر", "roundRes": "نتیجه‌ی دور {n}", "vetoHint": "برای باطل کردن یک جواب، روی آن بزن.", "next": "دور بعد", "waitHost": "منتظر اتاق‌دار…", "resultHd": "نتیجه", "endHd": "پایان بازی", "exit": "خروج", "closed": "اتاق بسته شده است.", "why_empty": "خالی", "why_letter": "حرف اشتباه", "why_short": "کوتاه", "why_veto": "رد شد", "e_net": "اتصال برقرار نشد.", "e_room": "اتاقی با این کد پیدا نشد.", "e_taken": "این اسم در اتاق هست. اسم دیگری بنویس.", "e_full": "اتاق پر است.", "e_started": "بازی شروع شده و دیگر نمی‌شود وارد شد.", "e_name": "اسمت را بنویس.", "e_incomplete": "همه‌ی خانه‌ها را پر کن.", "e_busy": "سرور شلوغ است. دوباره امتحان کن.", "e_host": "فقط اتاق‌دار می‌تواند.", "e_state": "الان نمی‌شود.", "e_other": "مشکلی پیش آمد."};
+const T=(k,v)=>{let t=(SITE.nft&&typeof SITE.nft[k]==="string"&&SITE.nft[k].trim())||DEF[k]||"";if(v)for(const x in v)t=t.split("{"+x+"}").join(v[x]);return t};
 const fa=n=>String(n).replace(/\d/g,d=>"۰۱۲۳۴۵۶۷۸۹"[d]);
 const norm=s=>String(s||"").replace(/[ً-ٰٟ‌‍‏‎\s]/g,"").replace(/[آأإ]/g,"ا").replace(/ي/g,"ی").replace(/ك/g,"ک").replace(/ة/g,"ه");
 const store={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}},del(k){try{localStorage.removeItem(k)}catch(e){}}};
@@ -1241,14 +1243,13 @@ async function call(path,body){
     const j=await r.json().catch(()=>({error:"bad"}));if(!r.ok&&!j.error)j.error="http";return j;
   }catch(e){return{error:"net"}}finally{clearTimeout(t)}
 }
-const ERR={net:"اتصال برقرار نشد.",room:"اتاقی با این کد پیدا نشد.",taken:"این اسم در اتاق هست. اسم دیگری بنویس.",full:"اتاق پر است.",started:"بازی شروع شده و دیگر نمی‌شود وارد شد.",name:"اسمت را بنویس.",incomplete:"همه‌ی خانه‌ها را پر کن.",busy:"سرور شلوغ است. دوباره امتحان کن.",host:"فقط اتاق‌دار می‌تواند.",state:"الان نمی‌شود."};
-const msg=e=>ERR[e]||"مشکلی پیش آمد.";
+const msg=e=>DEF["e_"+e]?T("e_"+e):T("e_other");
 const toastNf=t=>{const b=ROOT()&&ROOT().querySelector(".nf-msg");if(b){b.textContent=t;b.classList.add("on");clearTimeout(N.mt);N.mt=setTimeout(()=>b.classList.remove("on"),3500)}};
 
 function shell(inner,title){
   const card=$("#card");
   const was=$("#modal").classList.contains("show");
-  card.innerHTML=`<div class="nf" dir="rtl"><div class="nf-hd"><button data-close aria-label="بستن" style="font-size:22px">✕</button><h2>${title||"اسم و شهرت"}</h2><span style="width:22px"></span></div><div class="nf-msg"></div><div class="nf-body">${inner}</div></div>`;
+  card.innerHTML=`<div class="nf" dir="rtl"><div class="nf-hd"><button data-close aria-label="بستن" style="font-size:22px">✕</button><h2>${title||T("title")}</h2><span style="width:22px"></span></div><div class="nf-msg"></div><div class="nf-body">${inner}</div></div>`;
   $("#modal").classList.add("nfx");
   if(!was)openModal();
 }
@@ -1258,11 +1259,11 @@ function leaveLocal(){stopAll();store.del(K);N.ses=null;N.s=null;N.view="";N.key
 /* ---------- entry ---------- */
 function entry(){
   stopAll();N.view="entry";
-  shell(`<div class="nf-paper"><label class="nf-l">اسم تو</label><input id="nfName" maxlength="16" autocomplete="off" value="${eh(store.get(NAME_K)||"")}" placeholder="مثلاً سارا">
-   <button class="nf-b pri" id="nfCreate">ساخت اتاق جدید</button>
-   <div class="nf-or">یا</div>
-   <label class="nf-l">کد اتاق</label><input id="nfCode" inputmode="numeric" maxlength="4" autocomplete="off" dir="ltr" placeholder="۱۲۳۴" style="text-align:center;letter-spacing:6px">
-   <button class="nf-b" id="nfJoin">ورود به اتاق</button></div>`);
+  shell(`<div class="nf-paper"><label class="nf-l">${T("entryName")}</label><input id="nfName" maxlength="16" autocomplete="off" value="${eh(store.get(NAME_K)||"")}" placeholder="${T("entryPh")}">
+   <button class="nf-b pri" id="nfCreate">${T("create")}</button>
+   <div class="nf-or">${T("or")}</div>
+   <label class="nf-l">${T("codeLabel")}</label><input id="nfCode" inputmode="numeric" maxlength="4" autocomplete="off" dir="ltr" placeholder="۱۲۳۴" style="text-align:center;letter-spacing:6px">
+   <button class="nf-b" id="nfJoin">${T("join")}</button></div>`);
 }
 async function enter(kind){
   if(N.busy)return;
@@ -1274,7 +1275,7 @@ async function enter(kind){
     if(kind==="create")r=await call("/api/create",{name});
     else{
       const code=($("#nfCode").value||"").replace(/[۰-۹]/g,d=>"۰۱۲۳۴۵۶۷۸۹".indexOf(d)).replace(/\D/g,"");
-      if(code.length!==4){toastNf("کد اتاق چهار رقم است.");return}
+      if(code.length!==4){toastNf(T("codeBad"));return}
       r=await call("/api/join",{code,name,again:1});
     }
   }finally{N.busy=0}
@@ -1293,7 +1294,7 @@ async function refresh(){
   if(!N.ses)return;
   const s=await call("/api/state?code="+N.ses.code+"&pid="+N.ses.pid);
   if(!alive()){stopAll();return}
-  if(s.error==="room"||s.error==="player"){leaveLocal();entry();toastNf("اتاق بسته شده است.");return}
+  if(s.error==="room"||s.error==="player"){leaveLocal();entry();toastNf(T("closed"));return}
   if(s.error){if(++N.err>3)toastNf(msg(s.error));return}
   N.err=0;N.s=s;N.off=s.now-Date.now();draw(s);
 }
@@ -1332,13 +1333,13 @@ function scoreTable(s,withRound){
 }
 function drawLobby(s){
   const next=s.rnd+1;
-  shell(`<div class="nf-paper"><div class="nf-code"><small>کد اتاق</small><b dir="ltr">${fa(s.code)}</b><small>این کد را به بقیه بگو</small></div>
-    <div class="nf-chips">${playersChips(s)}</div><button class="nf-b" id="nfInvite" data-code="${eh(s.code)}">🔗 لینک دعوت دوستان</button>
-    ${s.rnd?`<div class="nf-sub">امتیاز تا اینجا</div>${scoreTable(s,false)}`:""}
-    ${s.host?`<div class="nf-sub">مدت هر دور (دقیقه)</div><input id="nfMin" type="text" inputmode="decimal" dir="ltr" placeholder="مثلاً ۲" value="${fa(Math.round(((+store.get("arga_nf_secs")>=0&&store.get("arga_nf_secs")!==null?+store.get("arga_nf_secs"):120)/60)*100)/100)}"><div class="nf-hint">عدد دقیقه را بنویس. ۰ یعنی بدون زمان و دور با «تمام» یا توافق تمام می‌شود.</div>
-      <button class="nf-b pri" id="nfStart">شروع دور ${fa(next)}</button>${s.rnd?`<button class="nf-b" id="nfEnd">پایان بازی</button>`:""}`
-      :`<div class="nf-wait">منتظر شروع دور ${fa(next)} توسط اتاق‌دار…</div>`}
-    <button class="nf-link" id="nfLeave">${s.host?"بستن اتاق":"خروج از اتاق"}</button></div>`);
+  shell(`<div class="nf-paper"><div class="nf-code"><small>${T("codeLabel")}</small><b dir="ltr">${fa(s.code)}</b><small>${T("tellCode")}</small></div>
+    <div class="nf-chips">${playersChips(s)}</div><button class="nf-b" id="nfInvite" data-code="${eh(s.code)}">${T("invite")}</button>
+    ${s.rnd?`<div class="nf-sub">${T("scores")}</div>${scoreTable(s,false)}`:""}
+    ${s.host?`<div class="nf-sub">${T("minutes")}</div><input id="nfMin" type="text" inputmode="decimal" dir="ltr" placeholder="مثلاً ۲" value="${fa(Math.round(((+store.get("arga_nf_secs")>=0&&store.get("arga_nf_secs")!==null?+store.get("arga_nf_secs"):120)/60)*100)/100)}"><div class="nf-hint">عدد دقیقه را بنویس. ۰ یعنی بدون زمان و دور با «تمام» یا توافق تمام می‌شود.</div>
+      <button class="nf-b pri" id="nfStart">${T("start",{n:fa(next)})}</button>${s.rnd?`<button class="nf-b" id="nfEnd">${T("endGame")}</button>`:""}`
+      :`<div class="nf-wait">${T("waitStart",{n:fa(next)})}</div>`}
+    <button class="nf-link" id="nfLeave">${s.host?T("closeRoom"):T("leaveRoom")}</button></div>`);
 }
 const ovLetter=(l,cnt)=>`<div class="np-ov"><div class="np-red"><span class="np-lt">${eh(l)}</span></div>${cnt?`<div class="np-cn" id="npCnt"></div>`:""}</div>`;
 function livePaper(){return paperHtml([{name:"شما",pts:null,cells:CATS.map((_,i)=>({t:N.mine[i]||""}))}],ovLetter(N.s&&N.s.letter,1))}
@@ -1346,16 +1347,16 @@ function drawPlay(s){
   shell(`<div class="nf-paper">
     <div class="nf-top"><div class="nf-info"><div id="nfClock" class="nf-clock"></div><div id="nfBar" class="nf-bar"></div></div></div>
     <div id="nfLive">${livePaper()}</div><div class="nf-sheet">${CATS.map((c,i)=>`<label class="nf-line"><span>${c}</span><input data-i="${i}" maxlength="40" autocomplete="off" autocorrect="off" spellcheck="false" value="${eh(N.mine[i]||"")}" placeholder="${eh(s.letter)}…"></label>`).join("")}</div>
-    <button class="nf-b pri" id="nfStop" disabled>تمام!</button><button class="nf-b" id="nfAgree">🤝 چیزی پیدا نکردیم، توافق برای پایان دور</button><div class="nf-hint" id="nfAgreeN"></div></div>`,"حرف "+s.letter);
+    <button class="nf-b pri" id="nfStop" disabled>${T("stop")}</button><button class="nf-b" id="nfAgree">${T("agree")}</button><div class="nf-hint" id="nfAgreeN"></div></div>`,T("letterHd",{l:s.letter}));
   checkFilled();
 }
 function statusBar(s){
   const b=$("#nfBar");if(!b)return;
   const n=s.players.length,d=(s.done||[]).length;
-  if(s.st==="ending"){const who=s.players.find(p=>p.pid===s.stopBy);b.textContent=(who?who.name:"یک نفر")+" تمام زد!"}
+  if(s.st==="ending"){const who=s.players.find(p=>p.pid===s.stopBy);b.textContent=T("someoneStop",{name:who?who.name:T("someone")})}
   else b.textContent="";
   {const c=$("#npCnt");if(c)c.innerHTML=`<b>${fa(d)}</b><i>از</i><b>${fa(n)}</b><span>${Array.from({length:n},(_,k)=>`<u class="${k<d?"on":""}"></u>`).join("")}</span>`}
-  {const ag=s.agree||[],me=ag.includes(s.you),bt=$("#nfAgree"),hn=$("#nfAgreeN");if(bt){bt.textContent=me?"✓ موافقم (برای پس‌گرفتن بزن)":"🤝 چیزی پیدا نکردیم، توافق برای پایان دور";bt.style.display=s.st==="ending"?"none":"";bt.classList.toggle("pri",me)}if(hn)hn.textContent=ag.length?fa(ag.length)+" از "+fa(n)+" نفر موافق پایان دور هستند. وقتی همه موافق باشند دور تمام می‌شود.":""}
+  {const ag=s.agree||[],me=ag.includes(s.you),bt=$("#nfAgree"),hn=$("#nfAgreeN");if(bt){bt.textContent=me?T("agreed"):T("agree");bt.style.display=s.st==="ending"?"none":"";bt.classList.toggle("pri",me)}if(hn)hn.textContent=ag.length?T("agreeCount",{d:fa(ag.length),n:fa(n)}):""}
   clock();
 }
 function clock(){
@@ -1380,16 +1381,16 @@ function checkFilled(){
 function flush(){clearTimeout(N.save);return N.ses?call("/api/save",{code:N.ses.code,pid:N.ses.pid,answers:N.mine}):0}
 function drawReview(s){
   const rows=CATS.map((c,ci)=>`<div class="nf-cat"><h3>${c}</h3>${s.players.map(p=>{
-    const x=s.cells[p.pid][ci],cls=x.ok?(x.pts===10?"g":"a"):"z",why=x.why==="empty"?"خالی":x.why==="letter"?"حرف اشتباه":x.why==="short"?"کوتاه":x.why==="veto"?"رد شد":"";
+    const x=s.cells[p.pid][ci],cls=x.ok?(x.pts===10?"g":"a"):"z",why=x.why?T("why_"+x.why):"";
     return `<div class="nf-ans ${cls}${s.host&&x.t?" tap":""}" ${s.host&&x.t&&x.why!=="letter"&&x.why!=="short"?`data-v="${p.pid}:${ci}"`:""}><span>${eh(p.name)}</span><b>${x.t?eh(x.t):"—"}</b><i>${x.ok?fa(x.pts):why||"۰"}</i></div>`}).join("")}</div>`).join("");
   const prow=s.players.map(p=>({name:p.name,pts:s.totals[p.pid]||0,cells:s.cells[p.pid].map(x=>({t:x.t,c:x.ok?(x.pts===10?"g":"a"):"z"}))}));
-  shell(`<div class="nf-paper"><div class="nf-sub">نتیجه‌ی دور ${fa(s.rnd)}</div>${paperHtml(prow,ovLetter(s.letter,0))}${scoreTable(s,true)}
-    ${s.host?`<div class="nf-hint">برای باطل کردن یک جواب، روی آن بزن.</div>`:""}${rows}
-    ${s.host?`<button class="nf-b pri" id="nfNext">دور بعد</button><button class="nf-b" id="nfEnd">پایان بازی</button>`:`<div class="nf-wait">منتظر اتاق‌دار…</div>`}</div>`,"نتیجه");
+  shell(`<div class="nf-paper"><div class="nf-sub">${T("roundRes",{n:fa(s.rnd)})}</div>${paperHtml(prow,ovLetter(s.letter,0))}${scoreTable(s,true)}
+    ${s.host?`<div class="nf-hint">${T("vetoHint")}</div>`:""}${rows}
+    ${s.host?`<button class="nf-b pri" id="nfNext">${T("next")}</button><button class="nf-b" id="nfEnd">${T("endGame")}</button>`:`<div class="nf-wait">${T("waitHost")}</div>`}</div>`,T("resultHd"));
 }
 function drawDone(s){
   const r=rank(s,false),top=r[0],tie=r.filter(p=>p.tot===top.tot).map(p=>eh(p.name)).join(" و ");
-  shell(`<div class="nf-paper"><div class="nf-win">🏆<br>${tie}</div>${scoreTable(s,false)}<button class="nf-b pri" id="nfLeave">خروج</button></div>`,"پایان بازی");
+  shell(`<div class="nf-paper"><div class="nf-win">🏆<br>${tie}</div>${scoreTable(s,false)}<button class="nf-b pri" id="nfLeave">${T("exit")}</button></div>`,T("endHd"));
 }
 
 /* ---------- events ---------- */
@@ -1404,7 +1405,7 @@ $("#card").addEventListener("click",async e=>{
   if(id==="nfCreate")return enter("create");
   if(id==="nfJoin")return enter("join");
   if(id==="nfLeave"){if(N.ses)await call("/api/leave",{code:N.ses.code,pid:N.ses.pid});leaveLocal();entry();return}
-  if(id==="nfInvite"){const u=location.origin+location.pathname+"?game=nf&room="+t.closest("button").dataset.code,ttl="اسم و شهرت";try{if(navigator.share){await navigator.share({title:ttl,text:"بیا اسم و شهرت بازی کنیم! کد اتاق: "+t.closest("button").dataset.code,url:u});return}}catch(e){if(e&&e.name==="AbortError")return}try{await navigator.clipboard.writeText(u);toastNf("لینک کپی شد")}catch(e){toastNf(u)}return}
+  if(id==="nfInvite"){const u=location.origin+location.pathname+"?game=nf&room="+t.closest("button").dataset.code,ttl=T("title");try{if(navigator.share){await navigator.share({title:ttl,text:T("inviteMsg",{c:t.closest("button").dataset.code}),url:u});return}}catch(e){if(e&&e.name==="AbortError")return}try{await navigator.clipboard.writeText(u);toastNf("لینک کپی شد")}catch(e){toastNf(u)}return}
   if(id==="nfStart"){const mv=parseFloat(String($("#nfMin").value).replace(/[۰-۹]/g,d=>"۰۱۲۳۴۵۶۷۸۹".indexOf(d)).replace(/[٠-٩]/g,d=>"٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/٫/g,".").replace(",","."));const secs=Math.max(0,Math.min(1800,Math.round((isNaN(mv)?0:mv)*60)));store.set("arga_nf_secs",secs);const r=await call("/api/start",{...N.ses,secs});if(r.error)toastNf(msg(r.error));else refresh();return}
   if(id==="nfAgree"){await flush();const r=await call("/api/agree",N.ses);if(r.error)toastNf(msg(r.error));else refresh();return}
   if(id==="nfStop"){await flush();const r=await call("/api/stop",N.ses);if(r.error)toastNf(msg(r.error));else refresh();return}
