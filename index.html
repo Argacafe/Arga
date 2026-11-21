@@ -1314,6 +1314,9 @@ function draw(s){
 const rank=(s,withRound)=>s.players.map(p=>({...p,tot:p.score+(withRound&&s.totals?s.totals[p.pid]||0:0),rd:s.totals?s.totals[p.pid]||0:0})).sort((a,b)=>b.tot-a.tot);
 
 const PE=[880,805,717,648,580,512,441,357,280,209,145,70];
+function fitS(c,wpx){if(c.c==="pt"||!c.t)return"";const w=wpx/896*100-1.1,L=[...String(c.t)].length||1,f1=w/(0.52*L);
+  if(f1>=2.2)return` style="font-size:${Math.min(3,f1).toFixed(2)}cqw;white-space:nowrap"`;
+  const f2=Math.max(1.3,Math.min(2.3,2*w/(0.52*L)));return` style="font-size:${f2.toFixed(2)}cqw;overflow-wrap:anywhere;line-height:1.02"`}
 function paperHtml(rows,ov,full){
   const P=v=>(v/896*100).toFixed(3)+"%",Q=v=>(v/(full?1200:780)*100).toFixed(3)+"%",RH=46.4,T0=150;
   let h="";
@@ -1321,7 +1324,7 @@ function paperHtml(rows,ov,full){
     const top=T0+ri*RH;
     h+=`<i class="np-n" style="top:${Q(top)};height:${Q(RH)};left:${P(880)};width:${P(16)}">${fa(ri+1)}</i>`;
     r.cells.concat([{t:r.pts==null?"":fa(r.pts),c:"pt"}]).forEach((c,ci)=>{
-      h+=`<b class="np-c ${c.c||""}"${c.v?` data-v="${c.v}"`:""} style="top:${Q(top)};height:${Q(RH)};left:${P(PE[ci+1])};width:${P(PE[ci]-PE[ci+1])}"><s>${eh(c.t||"")}</s></b>`;
+      h+=`<b class="np-c ${c.c||""}"${c.v?` data-v="${c.v}"`:""} style="top:${Q(top)};height:${Q(RH)};left:${P(PE[ci+1])};width:${P(PE[ci]-PE[ci+1])}"><s${fitS(c,PE[ci]-PE[ci+1])}>${eh(c.t||"")}</s></b>`;
     });
   });
   return `<div class="np-w${full?" full":""}"><div class="np-s">${h}${ov||""}</div></div><div class="np-lg">${rows.map((r,i)=>`<span>${fa(i+1)}. ${eh(r.name)}</span>`).join("")}</div>`;
