@@ -407,6 +407,8 @@ svg.hb path{fill:#e0245e;stroke:currentColor;animation:heartRW 2.8s ease-in-out 
 .nf-win{text-align:center;font:800 26px/1.5 inherit;font-family:inherit;margin-bottom:8px}
 #pick button+button{margin-top:2px}
 </style>
+<script>try{if(/[?&]play=nf\b/.test(location.search))document.documentElement.classList.add("gonly")}catch(e){}</script>
+<style>html.gonly,html.gonly body{background:#14110d}html.gonly body>*:not(#modal){display:none!important}</style>
 </head>
 <body>
 
@@ -1458,7 +1460,7 @@ $("#card").addEventListener("click",async e=>{
 
 /* ---------- public ---------- */
 window.openNameFamily=()=>{if(N.ses){start()}else entry()};
-{const q=new URLSearchParams(location.search);if(q.get("game")==="nf")setTimeout(()=>{window.openNameFamily();const r=(q.get("room")||"").replace(/\D/g,"").slice(0,4);const c=$("#nfCode");if(r&&c)c.value=r},700)}
+{const q=new URLSearchParams(location.search);if(document.documentElement.classList.contains("gonly")){document.addEventListener("click",e=>{if(e.target.closest("[data-close]")){e.stopImmediatePropagation();e.preventDefault();location.replace(location.pathname)}},true);setTimeout(()=>{window.openNameFamily();const r=(q.get("room")||"").replace(/\D/g,"").slice(0,4);const c=$("#nfCode");if(r&&c)c.value=r},300)}else if(q.get("game")==="nf")setTimeout(()=>{window.openNameFamily();const r=(q.get("room")||"").replace(/\D/g,"").slice(0,4);const c=$("#nfCode");if(r&&c)c.value=r},700)}
 window.hasNameFamily=true;
 })();
 </script>
