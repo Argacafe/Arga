@@ -1228,7 +1228,7 @@ if(dict())applyLangTree(document.body);
 const API=(SITE.nfApi||"").replace(/\/+$/,"");
 if(!API||SITE.nf===0)return;
 const K="arga_nf",NAME_K="arga_nf_name",CATS=["اسم","فامیل","میوه","رنگ","شهر","کشور","ماشین","حیوان","شغل","اشیا"];
-const DEF={"title": "اسم و شهرت", "entryName": "اسم تو", "entryPh": "مثلاً سارا", "create": "ساخت اتاق جدید", "or": "یا", "codeLabel": "کد اتاق", "join": "ورود به اتاق", "codeBad": "کد اتاق چهار رقم است.", "tellCode": "این کد را به بقیه بگو", "invite": "🔗 لینک دعوت دوستان", "inviteMsg": "بیا اسم و شهرت بازی کنیم! کد اتاق: {c}", "scores": "امتیاز تا اینجا", "minutes": "مدت هر دور (دقیقه)", "start": "شروع دور {n}", "endGame": "پایان بازی", "waitStart": "منتظر شروع دور {n} توسط اتاق‌دار…", "closeRoom": "بستن اتاق", "leaveRoom": "خروج از اتاق", "letterHd": "حرف {l}", "stop": "تمام!", "agree": "🤝 چیزی پیدا نکردیم، توافق برای پایان دور", "agreed": "✓ موافقم (برای پس‌گرفتن بزن)", "agreeCount": "{d} از {n} نفر موافق پایان دور هستند. وقتی همه موافق باشند دور تمام می‌شود.", "someoneStop": "{name} تمام زد!", "someone": "یک نفر", "roundRes": "نتیجه‌ی دور {n}", "vetoHint": "برای باطل کردن یک جواب، روی آن بزن.", "next": "دور بعد", "waitHost": "منتظر اتاق‌دار…", "resultHd": "نتیجه", "endHd": "پایان بازی", "exit": "خروج", "closed": "اتاق بسته شده است.", "why_empty": "خالی", "why_letter": "حرف اشتباه", "why_short": "کوتاه", "why_veto": "رد شد", "e_net": "اتصال برقرار نشد.", "e_room": "اتاقی با این کد پیدا نشد.", "e_taken": "این اسم در اتاق هست. اسم دیگری بنویس.", "e_full": "اتاق پر است.", "e_started": "بازی شروع شده و دیگر نمی‌شود وارد شد.", "e_name": "اسمت را بنویس.", "e_incomplete": "همه‌ی خانه‌ها را پر کن.", "e_busy": "سرور شلوغ است. دوباره امتحان کن.", "e_host": "فقط اتاق‌دار می‌تواند.", "e_state": "الان نمی‌شود.", "e_other": "مشکلی پیش آمد."};
+const DEF={"title": "اسم و شهرت", "entryName": "اسم تو", "entryPh": "مثلاً سارا", "create": "ساخت اتاق جدید", "or": "یا", "codeLabel": "کد اتاق", "join": "ورود به اتاق", "codeBad": "کد اتاق چهار رقم است.", "tellCode": "این کد را به بقیه بگو", "invite": "🔗 لینک دعوت دوستان", "inviteMsg": "بیا اسم و شهرت بازی کنیم! کد اتاق: {c}", "scores": "امتیاز تا اینجا", "minutes": "مدت هر دور (دقیقه)", "start": "شروع دور {n}", "endGame": "پایان بازی", "waitStart": "منتظر شروع دور {n} توسط اتاق‌دار…", "closeRoom": "بستن اتاق", "leaveRoom": "خروج از اتاق", "letterHd": "حرف {l}", "stop": "تمام!", "agree": "🤝 چیزی پیدا نکردیم، توافق برای پایان دور", "agreed": "✓ موافقم (برای پس‌گرفتن بزن)", "agreeCount": "{d} از {n} نفر موافق پایان دور هستند. وقتی همه موافق باشند دور تمام می‌شود.", "someoneStop": "{name} تمام زد!", "someone": "یک نفر", "roundRes": "نتیجه‌ی دور {n}", "vetoHint": "برای باطل کردن یک جواب، روی آن بزن.", "next": "دور بعد", "waitHost": "منتظر اتاق‌دار…", "resultHd": "نتیجه", "endHd": "پایان بازی", "exit": "خروج", "closed": "اتاق بسته شده است.", "why_empty": "خالی", "why_letter": "حرف اشتباه", "why_short": "کوتاه", "why_veto": "رد شد", "e_net": "اتصال برقرار نشد.", "e_room": "اتاقی با این کد پیدا نشد.", "e_taken": "این اسم در اتاق هست. اسم دیگری بنویس.", "e_full": "اتاق پر است.", "e_started": "بازی شروع شده و دیگر نمی‌شود وارد شد.", "e_name": "اسمت را بنویس.", "e_incomplete": "همه‌ی خانه‌ها را پر کن.", "e_busy": "سرور شلوغ است. دوباره امتحان کن.", "e_host": "فقط اتاق‌دار می‌تواند.", "e_state": "الان نمی‌شود.", "e_other": "مشکلی پیش آمد.", "rounds": "تعداد دور (۰ = نامحدود)", "finalEnd": "پایان و نتیجه‌ی نهایی", "sndOn": "🔔 صدا و لرزش: روشن", "sndOff": "🔕 صدا و لرزش: خاموش"};
 const T=(k,v)=>{let t=(SITE.nft&&typeof SITE.nft[k]==="string"&&SITE.nft[k].trim())||DEF[k]||"";if(v)for(const x in v)t=t.split("{"+x+"}").join(v[x]);return t};
 const fa=n=>String(n).replace(/\d/g,d=>"۰۱۲۳۴۵۶۷۸۹"[d]);
 const norm=s=>String(s||"").replace(/[ً-ٰٟ‌‍‏‎\s]/g,"").replace(/[آأإ]/g,"ا").replace(/ي/g,"ی").replace(/ك/g,"ک").replace(/ة/g,"ه");
@@ -1290,13 +1290,19 @@ function start(){
   N.poll=setInterval(()=>{if(!alive()){stopAll();return}refresh()},1300);
   N.tick=setInterval(()=>{if(!alive()){stopAll();return}clock()},250);
 }
+const snd=()=>store.get("arga_nf_snd")!==0;
+let AC=null;
+function cue(k){if(!snd())return;try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();if(AC.state==="suspended")AC.resume();
+  const seq={go:[[660,.12],[880,.2]],stop:[[740,.1],[740,.1]],end:[[520,.14],[700,.14],[880,.22]]}[k]||[];let t=AC.currentTime+.02;
+  seq.forEach(([f,d])=>{const o=AC.createOscillator(),g=AC.createGain();o.type="sine";o.frequency.value=f;g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.18,t+.02);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(AC.destination);o.start(t);o.stop(t+d+.02);t+=d+.05});
+  if(navigator.vibrate)navigator.vibrate(k==="go"?[180]:k==="stop"?[80,60,80]:[120,60,200])}catch(e){}}
 async function refresh(){
   if(!N.ses)return;
   const s=await call("/api/state?code="+N.ses.code+"&pid="+N.ses.pid);
   if(!alive()){stopAll();return}
   if(s.error==="room"||s.error==="player"){leaveLocal();entry();toastNf(T("closed"));return}
   if(s.error){if(++N.err>3)toastNf(msg(s.error));return}
-  N.err=0;N.s=s;N.off=s.now-Date.now();draw(s);
+  N.err=0;N.s=s;N.off=s.now-Date.now();{const pv=N.raw;N.raw=s.st;if(pv&&pv!==s.st){if(s.st==="play")cue("go");else if(s.st==="ending")cue("stop");else if(s.st==="review")cue("end")}}draw(s);
 }
 const srv=()=>Date.now()+N.off;
 
@@ -1330,9 +1336,9 @@ function paperHtml(rows,ov,full){
   return `<div class="np-w${full?" full":""}"><div class="np-s">${h}${ov||""}</div></div><div class="np-lg">${rows.map((r,i)=>`<span>${fa(i+1)}. ${eh(r.name)}</span>`).join("")}</div>`;
 }
 function playersChips(s){return s.players.map(p=>`<span class="nf-chip${p.on?"":" off"}">${p.pid===s.hostPid?"👑 ":""}${eh(p.name)}</span>`).join("")}
-function scoreTable(s,withRound){
+function scoreTable(s,withRound,medals){
   const r=rank(s,withRound);
-  return `<div class="nf-tbl">${r.map((p,i)=>`<div class="nf-row${p.pid===s.you?" me":""}"><span>${fa(i+1)}</span><b>${eh(p.name)}</b>${withRound?`<em>+${fa(p.rd)}</em>`:""}<i>${fa(p.tot)}</i></div>`).join("")}</div>`;
+  return `<div class="nf-tbl">${r.map((p,i)=>`<div class="nf-row${p.pid===s.you?" me":""}"><span>${medals&&i<3?["🥇","🥈","🥉"][i]:fa(i+1)}</span><b>${eh(p.name)}</b>${withRound?`<em>+${fa(p.rd)}</em>`:""}<i>${fa(p.tot)}</i></div>`).join("")}</div>`;
 }
 function drawLobby(s){
   const next=s.rnd+1;
@@ -1340,8 +1346,9 @@ function drawLobby(s){
     <div class="nf-chips">${playersChips(s)}</div><button class="nf-b" id="nfInvite" data-code="${eh(s.code)}">${T("invite")}</button>
     ${s.rnd?`<div class="nf-sub">${T("scores")}</div>${scoreTable(s,false)}`:""}
     ${s.host?`<div class="nf-sub">${T("minutes")}</div><input id="nfMin" type="text" inputmode="decimal" dir="ltr" placeholder="مثلاً ۲" value="${fa(Math.round(((+store.get("arga_nf_secs")>=0&&store.get("arga_nf_secs")!==null?+store.get("arga_nf_secs"):120)/60)*100)/100)}"><div class="nf-hint">عدد دقیقه را بنویس. ۰ یعنی بدون زمان و دور با «تمام» یا توافق تمام می‌شود.</div>
-      <button class="nf-b pri" id="nfStart">${T("start",{n:fa(next)})}</button>${s.rnd?`<button class="nf-b" id="nfEnd">${T("endGame")}</button>`:""}`
+      <div class="nf-sub">${T("rounds")}</div><input id="nfRounds" type="text" inputmode="numeric" dir="ltr" value="${fa(+store.get("arga_nf_rounds")||0)}">${""}<button class="nf-b pri" id="nfStart">${T("start",{n:fa(next)})}</button>${s.rnd?`<button class="nf-b" id="nfEnd">${T("endGame")}</button>`:""}`
       :`<div class="nf-wait">${T("waitStart",{n:fa(next)})}</div>`}
+    <button class="nf-link" id="nfSnd">${snd()?T("sndOn"):T("sndOff")}</button>
     <button class="nf-link" id="nfLeave">${s.host?T("closeRoom"):T("leaveRoom")}</button></div>`);
 }
 const ovLetter=(l,cnt)=>`<div class="np-ov"><div class="np-red"><span class="np-lt">${eh(l)}</span></div>${cnt?`<div class="np-cn" id="npCnt"></div>`:""}</div>`;
@@ -1382,18 +1389,20 @@ function checkFilled(){
   document.querySelectorAll(".nf-line").forEach((l,i)=>{const n=norm(N.mine[i]);l.classList.toggle("bad",!!n&&n[0]!==L)});
 }
 function flush(){clearTimeout(N.save);return N.ses?call("/api/save",{code:N.ses.code,pid:N.ses.pid,answers:N.mine}):0}
+const cv=(s,pid)=>s.host||(s.players.length===2&&pid!==s.you);
 function drawReview(s){
+  const maxR=+store.get("arga_nf_rounds")||0,last=s.host&&maxR>0&&s.rnd>=maxR;
   const rows=CATS.map((c,ci)=>`<div class="nf-cat"><h3>${c}</h3>${s.players.map(p=>{
     const x=s.cells[p.pid][ci],cls=x.ok?(x.pts===10?"g":"a"):"z",why=x.why?T("why_"+x.why):"";
-    return `<div class="nf-ans ${cls}${s.host&&x.t?" tap":""}" ${s.host&&x.t&&x.why!=="letter"&&x.why!=="short"?`data-v="${p.pid}:${ci}"`:""}><span>${eh(p.name)}</span><b>${x.t?eh(x.t):"—"}</b><i>${x.ok?fa(x.pts):why||"۰"}</i></div>`}).join("")}</div>`).join("");
-  const prow=s.players.map(p=>({name:p.name,pts:s.totals[p.pid]||0,cells:s.cells[p.pid].map((x,ci)=>({t:x.t,c:x.ok?(x.pts===10?"g":"a"):"z",v:s.host&&x.t&&x.why!=="letter"&&x.why!=="short"?p.pid+":"+ci:""}))}));
+    return `<div class="nf-ans ${cls}${cv(s,p.pid)&&x.t?" tap":""}" ${cv(s,p.pid)&&x.t&&x.why!=="letter"&&x.why!=="short"?`data-v="${p.pid}:${ci}"`:""}><span>${eh(p.name)}</span><b>${x.t?eh(x.t):"—"}</b><i>${x.ok?fa(x.pts):why||"۰"}</i></div>`}).join("")}</div>`).join("");
+  const prow=s.players.map(p=>({name:p.name,pts:s.totals[p.pid]||0,cells:s.cells[p.pid].map((x,ci)=>({t:x.t,c:x.ok?(x.pts===10?"g":"a"):"z",v:cv(s,p.pid)&&x.t&&x.why!=="letter"&&x.why!=="short"?p.pid+":"+ci:""}))}));
   shell(`<div class="nf-paper"><div class="nf-sub">${T("roundRes",{n:fa(s.rnd)})}</div>${paperHtml(prow,ovLetter(s.letter,0),1)}${scoreTable(s,true)}
-    ${s.host?`<div class="nf-hint">${T("vetoHint")}</div>`:""}${rows}
-    ${s.host?`<button class="nf-b pri" id="nfNext">${T("next")}</button><button class="nf-b" id="nfEnd">${T("endGame")}</button>`:`<div class="nf-wait">${T("waitHost")}</div>`}</div>`,T("resultHd"));
+    ${s.host||s.players.length===2?`<div class="nf-hint">${T("vetoHint")}</div>`:""}${rows}
+    ${s.host?(last?`<button class="nf-b pri" id="nfEnd">${T("finalEnd")}</button>`:`<button class="nf-b pri" id="nfNext">${T("next")}</button><button class="nf-b" id="nfEnd">${T("endGame")}</button>`):`<div class="nf-wait">${T("waitHost")}</div>`}</div>`,T("resultHd"));
 }
 function drawDone(s){
   const r=rank(s,false),top=r[0],tie=r.filter(p=>p.tot===top.tot).map(p=>eh(p.name)).join(" و ");
-  shell(`<div class="nf-paper"><div class="nf-win">🏆<br>${tie}</div>${scoreTable(s,false)}<button class="nf-b pri" id="nfLeave">${T("exit")}</button></div>`,T("endHd"));
+  shell(`<div class="nf-paper"><div class="nf-win">🏆<br>${tie}</div>${scoreTable(s,false,true)}<button class="nf-b pri" id="nfLeave">${T("exit")}</button></div>`,T("endHd"));
 }
 
 /* ---------- events ---------- */
@@ -1409,7 +1418,8 @@ $("#card").addEventListener("click",async e=>{
   if(id==="nfJoin")return enter("join");
   if(id==="nfLeave"){if(N.ses)await call("/api/leave",{code:N.ses.code,pid:N.ses.pid});leaveLocal();entry();return}
   if(id==="nfInvite"){const u=location.origin+location.pathname+"?game=nf&room="+t.closest("button").dataset.code,ttl=T("title");try{if(navigator.share){await navigator.share({title:ttl,text:T("inviteMsg",{c:t.closest("button").dataset.code}),url:u});return}}catch(e){if(e&&e.name==="AbortError")return}try{await navigator.clipboard.writeText(u);toastNf("لینک کپی شد")}catch(e){toastNf(u)}return}
-  if(id==="nfStart"){const mv=parseFloat(String($("#nfMin").value).replace(/[۰-۹]/g,d=>"۰۱۲۳۴۵۶۷۸۹".indexOf(d)).replace(/[٠-٩]/g,d=>"٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/٫/g,".").replace(",","."));const secs=Math.max(0,Math.min(1800,Math.round((isNaN(mv)?0:mv)*60)));store.set("arga_nf_secs",secs);const r=await call("/api/start",{...N.ses,secs});if(r.error)toastNf(msg(r.error));else refresh();return}
+  if(id==="nfSnd"){store.set("arga_nf_snd",snd()?0:1);t.closest("button").textContent=snd()?T("sndOn"):T("sndOff");cue("go");return}
+  if(id==="nfStart"){const rv=parseInt(String($("#nfRounds").value).replace(/[۰-۹]/g,d=>"۰۱۲۳۴۵۶۷۸۹".indexOf(d)),10);store.set("arga_nf_rounds",isNaN(rv)||rv<0?0:Math.min(50,rv));const mv=parseFloat(String($("#nfMin").value).replace(/[۰-۹]/g,d=>"۰۱۲۳۴۵۶۷۸۹".indexOf(d)).replace(/[٠-٩]/g,d=>"٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/٫/g,".").replace(",","."));const secs=Math.max(0,Math.min(1800,Math.round((isNaN(mv)?0:mv)*60)));store.set("arga_nf_secs",secs);const r=await call("/api/start",{...N.ses,secs});if(r.error)toastNf(msg(r.error));else refresh();return}
   if(id==="nfAgree"){await flush();const r=await call("/api/agree",N.ses);if(r.error)toastNf(msg(r.error));else refresh();return}
   if(id==="nfStop"){await flush();const r=await call("/api/stop",N.ses);if(r.error)toastNf(msg(r.error));else refresh();return}
   if(id==="nfNext"){const r=await call("/api/next",N.ses);if(r.error)toastNf(msg(r.error));else refresh();return}
