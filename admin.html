@@ -249,7 +249,11 @@ html[dir=rtl] .hist .m{text-align:right}
       <div id="nfOpts" style="margin:0 0 12px"><div class="lbl">آدرس سرور بازی (Worker)</div><input id="nfApi" dir="ltr" placeholder="https://arga-game.xxx.workers.dev"><p class="mut" style="margin:4px 0 0;font-size:12px">تا این آدرس پر نشود، بازی در سایت نشان داده نمی‌شود.</p></div>
       <details class="trd" id="nfTxBox"><summary>متن‌های بازی اسم و شهرت</summary><p class="mut" style="margin:0 0 6px;font-size:12px">هر متنی را که بنویسی، جای متن پیش‌فرض در بازی می‌آید. خالی بگذاری، متن پیش‌فرض می‌ماند. عبارت‌های داخل آکولاد مثل {n} را نگه دار، چون بازی آن‌ها را با عدد یا اسم جایگزین می‌کند.</p><div id="nfTxList"></div><button type="button" class="btn sec sm" id="nfTxReset" style="margin:8px 0">بازگرداندن همه‌ی متن‌ها به پیش‌فرض</button></details>
       <label class="tg2"><span>بازی حدس نقاشی (چندنفره)</span><input type="checkbox" id="swDg"></label>
-      <div id="dgOpts" style="margin:0 0 12px"><div class="lbl">آدرس بازی حدس نقاشی</div><input id="dgUrl" dir="ltr" placeholder="https://neghashi.werya68.workers.dev"><p class="mut" style="margin:4px 0 0;font-size:12px">خالی بماند، آدرس پیش‌فرض بازی استفاده می‌شود. با خاموش کردن کلید، گزینه‌ی «حدس نقاشی» از منوی دکمه‌ی تاس برداشته می‌شود.</p></div>
+      <div id="dgOpts" style="margin:0 0 12px"><div class="lbl">آدرس بازی حدس نقاشی</div><input id="dgUrl" dir="ltr" placeholder="https://neghashi.werya68.workers.dev"><p class="mut" style="margin:4px 0 0;font-size:12px">خالی بماند، آدرس پیش‌فرض بازی استفاده می‌شود. با خاموش کردن کلید، گزینه‌ی «حدس نقاشی» از منوی دکمه‌ی تاس برداشته می‌شود.</p>
+        <div class="lbl" style="margin-top:12px">کلمات بازی <span id="dgWc" class="mut"></span></div>
+        <textarea id="dgWords" rows="8" style="width:100%;font-family:inherit;direction:rtl" placeholder="هر خط یک کلمه"></textarea>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px"><button type="button" class="btn" id="dgWLoad">بارگذاری</button><button type="button" class="btn" id="dgWSave">ذخیره کلمات</button><button type="button" class="btn" id="dgWReset">برگشت به پیش‌فرض</button></div>
+        <p class="mut" id="dgWMsg" style="margin:4px 0 0;font-size:12px">هر خط یک کلمه (۲ تا ۲۴ حرف، حداقل ۱۰ کلمه). ذخیره‌ی کلمات فوری روی بازی اعمال می‌شود و نیازی به دکمه‌ی ذخیره‌ی بالای صفحه نیست.</p></div>
       </details>
       <label class="tg2"><span>دکمه‌ی دست‌دادن (هایلایت «قاب شما»، بالای صفحه)</span><input type="checkbox" id="swHs"></label>
       <label class="tg2"><span>اسکرین سیور («Hold Me»)</span><input type="checkbox" id="swHint"></label>
@@ -861,6 +865,20 @@ $("#swNf").onchange=e=>{SITE.nf=e.target.checked?1:0;bar();renderInfo()};
 $("#nfApi").oninput=e=>{SITE.nfApi=e.target.value.trim().replace(/\/+$/,"");if(!SITE.nfApi)delete SITE.nfApi;bar()};
 $("#swDg").onchange=e=>{SITE.dg=e.target.checked?1:0;$("#dgOpts").style.display=SITE.dg?"":"none";bar()};
 $("#dgUrl").oninput=e=>{SITE.dgUrl=e.target.value.trim().replace(/\/+$/,"");if(!SITE.dgUrl)delete SITE.dgUrl;bar()};
+
+(function(){
+const base=()=>(SITE.dgUrl||"https://neghashi.werya68.workers.dev").replace(/\/+$/,"")+"/api/words";
+const msg=t=>{$("#dgWMsg").textContent=t};
+const cnt=()=>{const n=$("#dgWords").value.split("\n").filter(x=>x.trim()).length;$("#dgWc").textContent="("+n+")"};
+$("#dgWords").oninput=cnt;
+async function load(){msg("در حال بارگذاری…");try{const r=await fetch(base(),{cache:"no-store"});const j=await r.json();$("#dgWords").value=j.words.join("\n");cnt();msg(j.custom?"فهرست سفارشی شما بارگذاری شد.":"فهرست پیش‌فرض بازی بارگذاری شد؛ ویرایش و ذخیره کنید.")}catch(e){msg("اتصال به بازی ممکن نشد.")}}
+async function call(method,body){if(!TOKEN){msg("ابتدا وارد پنل ادمین شوید.");return null}
+try{const r=await fetch(base(),{method,headers:{authorization:"Bearer "+TOKEN,"content-type":"application/json"},body});const j=await r.json().catch(()=>({}));if(r.status===401){msg("اجازه‌ی ذخیره ندارید (توکن معتبر نیست).");return null}if(!r.ok){msg(j.error==="need at least 10 words"?"حداقل ۱۰ کلمه لازم است.":"خطا در ذخیره.");return null}return j}catch(e){msg("اتصال به بازی ممکن نشد.");return null}}
+$("#dgWLoad").onclick=load;
+$("#dgWSave").onclick=async()=>{const w=$("#dgWords").value.split("\n").map(x=>x.trim()).filter(Boolean);const j=await call("PUT",JSON.stringify({words:w}));if(j)msg("ذخیره شد: "+j.count+" کلمه.")};
+$("#dgWReset").onclick=async()=>{if(!confirm("به فهرست پیش‌فرض برگردد؟"))return;const j=await call("DELETE");if(j){msg("به فهرست پیش‌فرض برگشت.");load()}};
+$("#swDg").addEventListener("change",e=>{if(e.target.checked&&!$("#dgWords").value)load()});
+})();
 $("#swHs").onchange=e=>{SITE.hs=e.target.checked?1:0;bar()};
 $("#swHint").onchange=e=>{SITE.hint=e.target.checked?1:0;bar();renderInfo()};
 $("#hintSec").oninput=e=>{const v=Math.round(+enDigits(e.target.value));if(v>=5&&v<=600){SITE.hintSec=v;bar()}};
