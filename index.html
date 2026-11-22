@@ -1106,7 +1106,7 @@ $("#btnShare").onclick=async()=>{
   const DG_URL=(SITE.dgUrl||"https://neghashi.werya68.workers.dev").replace(/\/+$/,"");
   const openDrawGuess=()=>{if(document.getElementById("dgLayer"))return;
     const LY=document.createElement("div");LY.id="dgLayer";
-    const nm=L("حدس نقاشی","Draw & Guess"),cl=L("بستن","Close");LY.innerHTML='<div class="dg-bar"><span>🎨 '+nm+'</span><button type="button" class="dg-x" aria-label="'+cl+'">'+cl+'</button></div><div class="dg-c"><iframe class="dg-f" title="'+nm+'" allow="clipboard-write; fullscreen"></iframe><button type="button" class="dg-xc" aria-label="'+cl+'">✕</button></div>';
+    const nm="Draw & Guess",cl=L("بستن","Close");LY.innerHTML='<div class="dg-bar"><span>🎨 '+nm+'</span><button type="button" class="dg-x" aria-label="'+cl+'">'+cl+'</button></div><div class="dg-c"><iframe class="dg-f" title="'+nm+'" allow="clipboard-write; fullscreen"></iframe><button type="button" class="dg-xc" aria-label="'+cl+'">✕</button></div>';
     LY.classList.add("lg");LY.querySelector("iframe").src=DG_URL+"/?card=1";document.body.appendChild(LY);document.documentElement.style.overflow="hidden";
     const esc=e=>{if(e.key==="Escape")close()};
     const gm=e=>{const d=e.data;if(e.source===LY.querySelector("iframe").contentWindow&&d&&d.dg==="screen")LY.classList.toggle("lg",d.v==="login")};
@@ -1114,7 +1114,7 @@ $("#btnShare").onclick=async()=>{
     const close=()=>{LY.remove();document.documentElement.style.overflow="";document.removeEventListener("keydown",esc);window.removeEventListener("message",gm)};
     LY.querySelectorAll(".dg-x,.dg-xc").forEach(b=>b.onclick=close);LY.onclick=e=>{if(e.target===LY&&LY.classList.contains("lg"))close()};document.addEventListener("keydown",esc)};
   const wM=SITE.mir!==0,wS=SITE.sud!==0,wN=SITE.nf!==0&&!!SITE.nfApi,wD=SITE.dg!==0&&/^https:\/\//.test(DG_URL);if(!wM&&!wS&&!wN&&!wD)btn.style.display="none";
-  const OPT=[];if(wM)OPT.push(["m","🪞 Mirror"]);if(wS)OPT.push(["s","🔢 Sudoku"]);if(wN)OPT.push(["n","📝 اسم و شهرت"]);if(wD)OPT.push(["d",()=>L("🎨 حدس نقاشی","🎨 Draw & Guess")]);
+  const OPT=[];if(wM)OPT.push(["m","🪞 Mirror"]);if(wS)OPT.push(["s","🔢 Sudoku"]);if(wN)OPT.push(["n","📝 اسم و شهرت"]);if(wD)OPT.push(["d","🎨 Draw & Guess"]);
   const run=k=>k==="m"?mf():k==="s"?openSudoku():k==="d"?openDrawGuess():window.openNameFamily&&window.openNameFamily();
   btn.onclick=()=>{if(OPT.length===1){run(OPT[0][0]);return}if(document.getElementById("pick")){closeP();return}
     const r=btn.getBoundingClientRect(),p=document.createElement("div");p.id="pick";
