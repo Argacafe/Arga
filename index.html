@@ -1114,8 +1114,8 @@ $("#btnShare").onclick=async()=>{
     const close=()=>{LY.remove();document.documentElement.style.overflow="";document.removeEventListener("keydown",esc);window.removeEventListener("message",gm)};
     LY.querySelectorAll(".dg-x,.dg-xc").forEach(b=>b.onclick=close);LY.onclick=e=>{if(e.target===LY&&LY.classList.contains("lg"))close()};document.addEventListener("keydown",esc)};
   const wM=SITE.mir!==0,wS=SITE.sud!==0,wN=SITE.nf!==0&&!!SITE.nfApi,wD=SITE.dg!==0&&/^https:\/\//.test(DG_URL);if(!wM&&!wS&&!wN&&!wD)btn.style.display="none";
-  const OPT=[];if(wM)OPT.push(["m","🪞 Mirror"]);if(wS)OPT.push(["s","🔢 Sudoku"]);if(wN)OPT.push(["n","📝 اسم و شهرت"]);if(wD)OPT.push(["d","🎨 Draw & Guess"]);
-  const run=k=>k==="m"?mf():k==="s"?openSudoku():k==="d"?openDrawGuess():window.openNameFamily&&window.openNameFamily();
+  const OPT=[];if(wM)OPT.push(["m","🪞 Mirror"]);if(wS)OPT.push(["s","🔢 Sudoku"]);if(wN)OPT.push(["n","📝 اسم و شهرت"]);if(wD)OPT.push(["d","🎨 Draw & Guess"]);OPT.push(["l","🌙 Anyone There?"]);
+  const run=k=>k==="m"?mf():k==="s"?openSudoku():k==="d"?openDrawGuess():k==="l"?window.open("https://www.isanyonethere.life","_blank","noopener"):window.openNameFamily&&window.openNameFamily();
   btn.onclick=()=>{if(OPT.length===1){run(OPT[0][0]);return}if(document.getElementById("pick")){closeP();return}
     const r=btn.getBoundingClientRect(),p=document.createElement("div");p.id="pick";
     p.innerHTML=OPT.map(o=>'<button data-pk="'+o[0]+'">'+(typeof o[1]==="function"?o[1]():o[1])+'</button>').join("");
