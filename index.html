@@ -185,7 +185,7 @@ html[dir=ltr] .info>[data-close]{float:right!important}
 #dgLayer .dg-bar{flex:none;height:2.7rem;display:flex;align-items:center;justify-content:space-between;padding:0 12px;color:#f3e6c4;font-size:14px;font-weight:700;direction:rtl;border-bottom:1px solid rgba(243,230,196,.18)}
 #dgLayer .dg-x{background:none;border:1px solid rgba(243,230,196,.45);color:#f3e6c4;border-radius:8px;padding:2px 14px;font:inherit;font-weight:600;cursor:pointer}
 #dgLayer .dg-f{flex:1;min-height:0;width:100%;border:0;background:#0e0f0d}
-#dgLayer{position:fixed}#dgLayer.lg .dg-bar{position:absolute;top:env(safe-area-inset-top);left:0;right:0;z-index:2;height:auto;padding:8px 12px;border-bottom:0;background:none;pointer-events:none}#dgLayer.lg .dg-bar span{visibility:hidden}#dgLayer.lg .dg-x{pointer-events:auto;background:rgba(10,18,8,.5);backdrop-filter:blur(2px)}
+#dgLayer .dg-c{flex:1;min-height:0;display:flex}#dgLayer .dg-xc{display:none}#dgLayer.lg{background:rgba(0,0,0,.55);align-items:center;justify-content:center;padding:16px;animation:t-fade-in .22s ease both}#dgLayer.lg .dg-bar{display:none}#dgLayer.lg .dg-c{flex:none;position:relative;width:100%;max-width:420px;aspect-ratio:1008/1150;border-radius:14px;overflow:hidden;background:#0e0f0d;animation:t-pop-in .32s var(--t-ease) both}#dgLayer.lg .dg-xc{display:block;position:absolute;top:6px;right:10px;z-index:2;background:none;border:0;color:#f6ecd0;font-size:24px;line-height:1;padding:4px 6px;text-shadow:0 1px 6px #000;cursor:pointer}
 .ring{width:64px;height:64px;padding:2px;background:var(--ring)}
 .story.on .ring{background:var(--fg)}
 .ring div{border-width:3px}
@@ -1106,13 +1106,13 @@ $("#btnShare").onclick=async()=>{
   const DG_URL=(SITE.dgUrl||"https://neghashi.werya68.workers.dev").replace(/\/+$/,"");
   const openDrawGuess=()=>{if(document.getElementById("dgLayer"))return;
     const LY=document.createElement("div");LY.id="dgLayer";
-    const nm=L("حدس نقاشی","Draw & Guess"),cl=L("بستن","Close");LY.innerHTML='<div class="dg-bar"><span>🎨 '+nm+'</span><button type="button" class="dg-x" aria-label="'+cl+'">'+cl+'</button></div><iframe class="dg-f" title="'+nm+'" allow="clipboard-write; fullscreen"></iframe>';
-    LY.classList.add("lg");LY.querySelector("iframe").src=DG_URL+"/";document.body.appendChild(LY);document.documentElement.style.overflow="hidden";
+    const nm=L("حدس نقاشی","Draw & Guess"),cl=L("بستن","Close");LY.innerHTML='<div class="dg-bar"><span>🎨 '+nm+'</span><button type="button" class="dg-x" aria-label="'+cl+'">'+cl+'</button></div><div class="dg-c"><iframe class="dg-f" title="'+nm+'" allow="clipboard-write; fullscreen"></iframe><button type="button" class="dg-xc" aria-label="'+cl+'">✕</button></div>';
+    LY.classList.add("lg");LY.querySelector("iframe").src=DG_URL+"/?card=1";document.body.appendChild(LY);document.documentElement.style.overflow="hidden";
     const esc=e=>{if(e.key==="Escape")close()};
     const gm=e=>{const d=e.data;if(e.source===LY.querySelector("iframe").contentWindow&&d&&d.dg==="screen")LY.classList.toggle("lg",d.v==="login")};
     window.addEventListener("message",gm);
     const close=()=>{LY.remove();document.documentElement.style.overflow="";document.removeEventListener("keydown",esc);window.removeEventListener("message",gm)};
-    LY.querySelector(".dg-x").onclick=close;document.addEventListener("keydown",esc)};
+    LY.querySelectorAll(".dg-x,.dg-xc").forEach(b=>b.onclick=close);LY.onclick=e=>{if(e.target===LY&&LY.classList.contains("lg"))close()};document.addEventListener("keydown",esc)};
   const wM=SITE.mir!==0,wS=SITE.sud!==0,wN=SITE.nf!==0&&!!SITE.nfApi,wD=SITE.dg!==0&&/^https:\/\//.test(DG_URL);if(!wM&&!wS&&!wN&&!wD)btn.style.display="none";
   const OPT=[];if(wM)OPT.push(["m","🪞 Mirror"]);if(wS)OPT.push(["s","🔢 Sudoku"]);if(wN)OPT.push(["n","📝 اسم و شهرت"]);if(wD)OPT.push(["d",()=>L("🎨 حدس نقاشی","🎨 Draw & Guess")]);
   const run=k=>k==="m"?mf():k==="s"?openSudoku():k==="d"?openDrawGuess():window.openNameFamily&&window.openNameFamily();
