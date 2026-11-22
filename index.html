@@ -409,6 +409,29 @@ svg.hb path{fill:#e0245e;stroke:currentColor;animation:heartRW 2.8s ease-in-out 
 .np-lt{font-size:7.5cqw;font-weight:800;line-height:1;transform:rotate(4deg)}
 .np-cn{position:absolute;right:19cqw;top:1.6cqw;display:flex;align-items:center;gap:1.2cqw;transform:rotate(-3deg);white-space:nowrap}.np-cn b{font-size:5.5cqw;font-weight:800;line-height:1}.np-cn i{font-style:normal;font-size:2.8cqw}.np-cn span{display:flex;gap:.7cqw;margin-inline-start:.8cqw}.np-cn u{width:1.9cqw;height:1.9cqw;border:.45cqw solid #d62828;border-radius:50%;opacity:.5}.np-cn u.on{background:#d62828;opacity:1}
 .np-lg{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:12.5px;opacity:.8;margin-bottom:6px}
+
+/* play screen: the whole screen is the paper, answers are typed straight into the columns */
+.nf.play{padding:0;min-height:100%;display:flex;justify-content:center;background:#2a2620}
+.nf.play .nf-hd{position:absolute;top:0;left:0;margin:0;z-index:6;width:auto}.nf.play .nf-hd h2,.nf.play .nf-hd span{display:none}
+.nf.play .nf-hd button{width:32px;height:32px;margin:5px;border:0;border-radius:50%;background:rgba(243,239,227,.85);color:#1b2a4a;font-size:16px!important;line-height:1;box-shadow:0 1px 4px rgba(0,0,0,.25)}
+.nf.play .nf-msg{position:absolute;top:44px;inset-inline:12px;z-index:7}
+.nf.play .nf-body{width:100%;max-width:600px;display:flex}
+.pp{position:relative;flex:1;min-width:0;container-type:inline-size;display:flex;flex-direction:column;background:#f3efe3;overflow:hidden}
+.pp-top{flex:none;aspect-ratio:896/654;background:url(images/paper-orig.jpg) top/100% auto no-repeat}
+.pp-ext{flex:1;background:url(images/paper-strip.jpg) top/100% auto repeat-y}
+.nf.play .pc{position:absolute;display:block;margin:0;padding:0;border:0;min-height:0;gap:0;background:rgba(255,236,140,.2);border-radius:.6cqw}
+.nf.play .pc input{display:block;width:100%;height:100%;margin:0;padding:0 .3cqw;border:0;border-radius:.6cqw;background:transparent;box-shadow:none;outline:0;text-align:center;color:#1b2a4a;font-family:inherit;font-size:3cqw;line-height:1;text-overflow:clip}
+.nf.play .pc input::placeholder{color:transparent}
+.nf.play .pc.bad input{color:#c0392b}
+.nf.play .pc.ed{z-index:5;left:5cqw!important;width:90cqw!important;top:calc(var(--t) + .3cqw)!important;height:8.4cqw!important;background:#fffdf0;box-shadow:0 .8cqw 3cqw rgba(0,0,0,.35),0 0 0 .5cqw #1b2a4a;border-radius:1.2cqw}
+.nf.play .pc.ed input{font-size:5.4cqw!important;padding:0 2cqw}
+.nf.play .pc.ed input::placeholder{color:rgba(27,42,74,.4)}
+.nf.play .pc-l{display:none}.nf.play .pc.ed .pc-l{display:block;position:absolute;right:2.4cqw;top:50%;transform:translateY(-50%);font-size:3.6cqw;font-weight:700;color:rgba(27,42,74,.5);pointer-events:none}.nf.play .pc.ed input{padding:0 16cqw 0 2cqw!important}
+.pp-dock{position:absolute;left:0;right:0;bottom:0;z-index:3;padding:9cqw 3.5cqw 2.5cqw;background:linear-gradient(rgba(243,239,227,0),rgba(243,239,227,.94) 42%)}
+.pp-st{display:flex;align-items:baseline;gap:3cqw;justify-content:center;min-height:6cqw}
+.nf.play .nf-clock{font-size:6cqw}.nf.play .nf-bar{font-size:3.2cqw;min-height:0}
+.pp-bt{display:flex;gap:2.5cqw}.pp-bt .nf-b{margin:0;flex:1}
+.nf.play .nf-hint{margin:1.5cqw 0 0;text-align:center}
 .nf-win{text-align:center;font:800 26px/1.5 inherit;font-family:inherit;margin-bottom:8px}
 #pick button+button{margin-top:2px}
 </style>
@@ -1398,11 +1421,16 @@ function drawLobby(s){
 }
 const ovLetter=(l,cnt)=>`<div class="np-ov"><div class="np-red"><span class="np-lt">${eh(l)}</span></div>${cnt?`<div class="np-cn" id="npCnt"></div>`:""}</div>`;
 function livePaper(){return paperHtml([{name:T("you"),pts:null,cells:CATS.map((_,i)=>({t:N.mine[i]||""}))}],ovLetter(N.s&&N.s.letter,1))}
+const cq=v=>(v/896*100).toFixed(3)+"cqw";
+function fitIn(inp){const i=+inp.dataset.i,w=(PE[i]-PE[i+1])/896*100-1.2,L=[...inp.value].length||1;inp.style.fontSize=Math.max(1.5,Math.min(3.2,w/(0.55*L))).toFixed(2)+"cqw"}
 function drawPlay(s){
-  shell(`<div class="nf-paper">
-    <div class="nf-top"><div class="nf-info"><div id="nfClock" class="nf-clock"></div><div id="nfBar" class="nf-bar"></div></div></div>
-    <div id="nfLive">${livePaper()}</div><div class="nf-sheet">${CATS.map((c,i)=>`<label class="nf-line"><span>${c}</span><input data-i="${i}" maxlength="40" autocomplete="off" autocorrect="off" spellcheck="false" value="${eh(N.mine[i]||"")}" placeholder="${eh(s.letter)}…"></label>`).join("")}</div>
-    <button class="nf-b pri" id="nfStop" disabled>${T("stop")}</button><button class="nf-b" id="nfAgree">${T("agree")}</button><div class="nf-hint" id="nfAgreeN"></div></div>`,T("letterHd",{l:s.letter}));
+  const T0=146,H=43;
+  const cells=CATS.map((c,i)=>`<label class="nf-line pc" style="left:${cq(PE[i+1])};width:${cq(PE[i]-PE[i+1])};top:${cq(T0)};height:${cq(H)};--t:${cq(T0)}"><input data-i="${i}" maxlength="40" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="${i<CATS.length-1?"next":"done"}" aria-label="${c}" value="${eh(N.mine[i]||"")}" placeholder="${c} (${eh(s.letter)})…"><b class="pc-l">${c}</b></label>`).join("");
+  shell(`<div class="pp"><div class="pp-top"></div><div class="pp-ext"></div>${cells}${ovLetter(s.letter,1)}
+    <div class="pp-dock"><div class="pp-st"><span id="nfClock" class="nf-clock"></span><span id="nfBar" class="nf-bar"></span></div>
+      <div class="pp-bt"><button class="nf-b pri" id="nfStop" disabled>${T("stop")}</button><button class="nf-b" id="nfAgree">${T("agree")}</button></div><div class="nf-hint" id="nfAgreeN"></div></div></div>`,T("letterHd",{l:s.letter}));
+  const nf=$("#card .nf");if(nf)nf.classList.add("play");
+  document.querySelectorAll(".pc input").forEach(fitIn);
   checkFilled();
 }
 function statusBar(s){
@@ -1452,9 +1480,16 @@ function drawDone(s){
 
 /* ---------- events ---------- */
 $("#card").addEventListener("click",e=>{const w=e.target.closest&&e.target.closest(".np-w");if(w&&!e.target.closest("[data-v]")){w.classList.toggle("zoom");w.scrollLeft=w.scrollWidth}});
+$("#card").addEventListener("focusin",e=>{const c=e.target.closest&&e.target.closest(".pc");if(c)c.classList.add("ed")});
+$("#card").addEventListener("focusout",e=>{const c=e.target.closest&&e.target.closest(".pc");if(c)c.classList.remove("ed")});
+$("#card").addEventListener("keydown",e=>{
+  if(e.key!=="Enter")return;const i=e.target.closest&&e.target.closest(".pc input");if(!i)return;
+  e.preventDefault();const all=[...document.querySelectorAll(".pc input")],nx=all[all.indexOf(i)+1];
+  if(nx)nx.focus();else i.blur();
+});
 $("#card").addEventListener("input",e=>{
   const i=e.target.closest&&e.target.closest(".nf-line input");if(!i)return;
-  N.mine[+i.dataset.i]=i.value;{const lv=$("#nfLive");if(lv)lv.innerHTML=livePaper()}checkFilled();clearTimeout(N.save);N.save=setTimeout(flush,350);
+  N.mine[+i.dataset.i]=i.value;fitIn(i);checkFilled();clearTimeout(N.save);N.save=setTimeout(flush,350);
 });
 $("#card").addEventListener("click",async e=>{
   const t=e.target;if(!t.closest(".nf"))return;
