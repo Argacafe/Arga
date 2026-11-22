@@ -248,6 +248,8 @@ html[dir=rtl] .hist .m{text-align:right}
       <label class="tg2"><span>بازی اسم و شهرت (چندنفره)</span><input type="checkbox" id="swNf"></label>
       <div id="nfOpts" style="margin:0 0 12px"><div class="lbl">آدرس سرور بازی (Worker)</div><input id="nfApi" dir="ltr" placeholder="https://arga-game.xxx.workers.dev"><p class="mut" style="margin:4px 0 0;font-size:12px">تا این آدرس پر نشود، بازی در سایت نشان داده نمی‌شود.</p></div>
       <details class="trd" id="nfTxBox"><summary>متن‌های بازی اسم و شهرت</summary><p class="mut" style="margin:0 0 6px;font-size:12px">هر متنی را که بنویسی، جای متن پیش‌فرض در بازی می‌آید. خالی بگذاری، متن پیش‌فرض می‌ماند. عبارت‌های داخل آکولاد مثل {n} را نگه دار، چون بازی آن‌ها را با عدد یا اسم جایگزین می‌کند.</p><div id="nfTxList"></div><button type="button" class="btn sec sm" id="nfTxReset" style="margin:8px 0">بازگرداندن همه‌ی متن‌ها به پیش‌فرض</button></details>
+      <label class="tg2"><span>بازی حدس نقاشی (چندنفره)</span><input type="checkbox" id="swDg"></label>
+      <div id="dgOpts" style="margin:0 0 12px"><div class="lbl">آدرس بازی حدس نقاشی</div><input id="dgUrl" dir="ltr" placeholder="https://neghashi.werya68.workers.dev"><p class="mut" style="margin:4px 0 0;font-size:12px">خالی بماند، آدرس پیش‌فرض بازی استفاده می‌شود. با خاموش کردن کلید، گزینه‌ی «حدس نقاشی» از منوی دکمه‌ی تاس برداشته می‌شود.</p></div>
       </details>
       <label class="tg2"><span>دکمه‌ی دست‌دادن (هایلایت «قاب شما»، بالای صفحه)</span><input type="checkbox" id="swHs"></label>
       <label class="tg2"><span>اسکرین سیور («Hold Me»)</span><input type="checkbox" id="swHint"></label>
@@ -480,7 +482,7 @@ document.addEventListener("input",e=>{const k=e.target.dataset&&e.target.dataset
 document.addEventListener("click",async e=>{if(e.target.id!=="nfTxReset")return;if(!(await ask("همه‌ی متن‌های بازی به حالت پیش‌فرض برگردد؟")))return;delete SITE.nft;renderNfTx();bar()});
 function renderInfo(){renderTxt();renderNfTx();
   document.querySelectorAll("[data-i]").forEach(el=>{el.value=INFO[el.dataset.i]||""});
-  $("#swFoot").checked=SITE.foot!==0;$("#swEn").checked=SITE.en!==0;$("#swFx").checked=SITE.fx===1;$("#swLock").checked=SITE.lock!==0;$("#swMir").checked=SITE.mir!==0;$("#swSud").checked=SITE.sud!==0;$("#swHs").checked=SITE.hs!==0;$("#swNf").checked=SITE.nf!==0;$("#nfOpts").style.display=SITE.nf!==0?"":"none";$("#nfApi").value=SITE.nfApi||"";$("#swHint").checked=SITE.hint!==0;$("#hintOpts").style.display=SITE.hint!==0?"flex":"none";$("#hintSec").value=SITE.hintSec||25;document.querySelectorAll("#icPick [data-ic]").forEach(b=>{const on=(+b.dataset.ic)===(SITE.ic===1?1:0);b.style.outline=on?"2px solid var(--acc)":"none";b.style.outlineOffset="1px"});
+  $("#swFoot").checked=SITE.foot!==0;$("#swEn").checked=SITE.en!==0;$("#swFx").checked=SITE.fx===1;$("#swLock").checked=SITE.lock!==0;$("#swMir").checked=SITE.mir!==0;$("#swSud").checked=SITE.sud!==0;$("#swHs").checked=SITE.hs!==0;$("#swNf").checked=SITE.nf!==0;$("#nfOpts").style.display=SITE.nf!==0?"":"none";$("#nfApi").value=SITE.nfApi||"";$("#swDg").checked=SITE.dg!==0;$("#dgOpts").style.display=SITE.dg!==0?"":"none";$("#dgUrl").value=SITE.dgUrl||"";$("#swHint").checked=SITE.hint!==0;$("#hintOpts").style.display=SITE.hint!==0?"flex":"none";$("#hintSec").value=SITE.hintSec||25;document.querySelectorAll("#icPick [data-ic]").forEach(b=>{const on=(+b.dataset.ic)===(SITE.ic===1?1:0);b.style.outline=on?"2px solid var(--acc)":"none";b.style.outlineOffset="1px"});
   $("#lockOpts").style.display=SITE.lock!==0?"flex":"none";
   $("#lockPrev").style.display=SITE.lockImg?"":"none";if(SITE.lockImg)$("#lockPrev").src=src_(SITE.lockImg);
   $("#lockEmoji").value=SITE.lockEmoji||"";$("#lockEmoji").style.display=SITE.lockImg?"none":"";$("#lockDel").style.display=SITE.lockImg?"":"none";$("#swKu").checked=SITE.ku!==0;document.body.classList.toggle("noEn",SITE.en===0);document.body.classList.toggle("noKu",SITE.ku===0);$("#swEgg").checked=SITE.egg!==0;
@@ -857,6 +859,8 @@ $("#swMir").onchange=e=>{SITE.mir=e.target.checked?1:0;bar()};
 $("#swSud").onchange=e=>{SITE.sud=e.target.checked?1:0;bar()};
 $("#swNf").onchange=e=>{SITE.nf=e.target.checked?1:0;bar();renderInfo()};
 $("#nfApi").oninput=e=>{SITE.nfApi=e.target.value.trim().replace(/\/+$/,"");if(!SITE.nfApi)delete SITE.nfApi;bar()};
+$("#swDg").onchange=e=>{SITE.dg=e.target.checked?1:0;$("#dgOpts").style.display=SITE.dg?"":"none";bar()};
+$("#dgUrl").oninput=e=>{SITE.dgUrl=e.target.value.trim().replace(/\/+$/,"");if(!SITE.dgUrl)delete SITE.dgUrl;bar()};
 $("#swHs").onchange=e=>{SITE.hs=e.target.checked?1:0;bar()};
 $("#swHint").onchange=e=>{SITE.hint=e.target.checked?1:0;bar();renderInfo()};
 $("#hintSec").oninput=e=>{const v=Math.round(+enDigits(e.target.value));if(v>=5&&v<=600){SITE.hintSec=v;bar()}};
@@ -899,6 +903,7 @@ function validate(){
   if(changed("phone")&&INFO.phone&&INFO.phone.replace(/\D/g,"").length<5)return"شماره تلفن کوتاه است.";
   if(changed("hl")&&INFO.hl&&!/^https:\/\/(www\.)?instagram\.com\//i.test(INFO.hl))return"لینک هایلایت باید با https://www.instagram.com/ شروع شود.";
   if(SITE.nfApi&&!/^https:\/\/[^\s]+$/i.test(SITE.nfApi))return"آدرس سرور بازی باید با https:// شروع شود.";
+  if(SITE.dgUrl&&!/^https:\/\/[^\s]+$/i.test(SITE.dgUrl))return"آدرس بازی حدس نقاشی باید با https:// شروع شود.";
   if(changed("wa")&&INFO.wa&&INFO.wa.replace(/\D/g,"").length<5)return"شماره واتساپ کوتاه است.";
   if(changed("instagram")&&!/^[A-Za-z0-9._]+$/.test(INFO.instagram))return"آیدی اینستاگرام درست نیست.";
   for(const c of CATS){

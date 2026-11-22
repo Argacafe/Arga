@@ -181,6 +181,10 @@ html[dir=ltr] .hd [data-close]{margin-left:auto!important;margin-right:0!importa
 html[dir=ltr] .info>[data-close]{float:right!important}
 #btnShare{flex:none!important;width:42px;padding:8px 0!important;display:grid;place-items:center}
 #btnShare svg{width:21px;height:21px}
+#dgLayer{position:fixed;inset:0;z-index:100000;background:#0e0f0d;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top)}
+#dgLayer .dg-bar{flex:none;height:2.7rem;display:flex;align-items:center;justify-content:space-between;padding:0 12px;color:#f3e6c4;font-size:14px;font-weight:700;direction:rtl;border-bottom:1px solid rgba(243,230,196,.18)}
+#dgLayer .dg-x{background:none;border:1px solid rgba(243,230,196,.45);color:#f3e6c4;border-radius:8px;padding:2px 14px;font:inherit;font-weight:600;cursor:pointer}
+#dgLayer .dg-f{flex:1;min-height:0;width:100%;border:0;background:#0e0f0d}
 .ring{width:64px;height:64px;padding:2px;background:var(--ring)}
 .story.on .ring{background:var(--fg)}
 .ring div{border-width:3px}
@@ -1098,9 +1102,17 @@ $("#btnShare").onclick=async()=>{
   const closeP=()=>{const p=document.getElementById("pick");if(p)p.remove()};
   const MIR='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="9.3" rx="6.3" ry="7" fill="currentColor" fill-opacity=".1"/><path d="M8.9 7.4a3.7 3.7 0 0 1 2.3-2" stroke-width="1.6"/><path d="M12 16.3v4.4M9 21h6"/><path d="M20 3v3M18.5 4.5h3" stroke-width="1.4"/></svg>';
   if(SITE.ic===1)btn.innerHTML=MIR,btn.setAttribute("aria-label","Mirror");
-  const wM=SITE.mir!==0,wS=SITE.sud!==0,wN=SITE.nf!==0&&!!SITE.nfApi;if(!wM&&!wS&&!wN)btn.style.display="none";
-  const OPT=[];if(wM)OPT.push(["m","🪞 Mirror"]);if(wS)OPT.push(["s","🔢 Sudoku"]);if(wN)OPT.push(["n","📝 اسم و شهرت"]);
-  const run=k=>k==="m"?mf():k==="s"?openSudoku():window.openNameFamily&&window.openNameFamily();
+  const DG_URL=(SITE.dgUrl||"https://neghashi.werya68.workers.dev").replace(/\/+$/,"");
+  const openDrawGuess=()=>{if(document.getElementById("dgLayer"))return;
+    const L=document.createElement("div");L.id="dgLayer";
+    L.innerHTML='<div class="dg-bar"><span>🎨 حدس نقاشی</span><button type="button" class="dg-x" aria-label="بستن">بستن</button></div><iframe class="dg-f" title="حدس نقاشی" allow="clipboard-write; fullscreen"></iframe>';
+    L.querySelector("iframe").src=DG_URL+"/";document.body.appendChild(L);document.documentElement.style.overflow="hidden";
+    const esc=e=>{if(e.key==="Escape")close()};
+    const close=()=>{L.remove();document.documentElement.style.overflow="";document.removeEventListener("keydown",esc)};
+    L.querySelector(".dg-x").onclick=close;document.addEventListener("keydown",esc)};
+  const wM=SITE.mir!==0,wS=SITE.sud!==0,wN=SITE.nf!==0&&!!SITE.nfApi,wD=SITE.dg!==0&&/^https:\/\//.test(DG_URL);if(!wM&&!wS&&!wN&&!wD)btn.style.display="none";
+  const OPT=[];if(wM)OPT.push(["m","🪞 Mirror"]);if(wS)OPT.push(["s","🔢 Sudoku"]);if(wN)OPT.push(["n","📝 اسم و شهرت"]);if(wD)OPT.push(["d","🎨 حدس نقاشی"]);
+  const run=k=>k==="m"?mf():k==="s"?openSudoku():k==="d"?openDrawGuess():window.openNameFamily&&window.openNameFamily();
   btn.onclick=()=>{if(OPT.length===1){run(OPT[0][0]);return}if(document.getElementById("pick")){closeP();return}
     const r=btn.getBoundingClientRect(),p=document.createElement("div");p.id="pick";
     p.innerHTML=OPT.map(o=>'<button data-pk="'+o[0]+'">'+o[1]+'</button>').join("");
