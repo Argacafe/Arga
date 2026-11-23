@@ -409,8 +409,10 @@ dialog::backdrop{background:rgba(3,18,11,.55)}
     </div>
     <div class="card">
       <h2>دانلود سایت</h2>
-      <p class="mut" style="margin:0 0 10px;font-size:12px">یک فایل ZIP از کل سایت با آخرین تغییراتی که الان در پنل داری (حتی ذخیره‌نشده‌ها) دانلود می‌شود. برای آپلود روی هاست مستقل مثل arga.ir.</p>
-      <button type="button" class="btn" id="zipBtn">دانلود نسخه‌ی کامل سایت (ZIP)</button>
+      <div style="display:grid;gap:10px">
+        <button type="button" class="btn" id="zipBtn">دانلود نسخه‌ی کامل سایت (ZIP)</button>
+        <button type="button" class="btn" id="pdfBtn">منوی کاغذی برای چاپ (A4 / PDF)</button>
+      </div>
     </div>
     <div class="card" id="devCard">
       <details id="devBox">
@@ -1142,6 +1144,53 @@ $("#zipBtn").onclick=async()=>{
     toast("فایل ZIP دانلود شد.","ok");
   }catch(err){toast("دانلود انجام نشد: "+(err.message||"خطا"),"err")}
   finally{btn.disabled=false;btn.textContent=t0}
+};
+/* ---- منوی کاغذی A4 افقی برای چاپ یا ذخیره به‌صورت PDF (بدون اینترنت قابل استفاده) ---- */
+function printHtml(){
+  const B=new URL(".",location.href).href,ab=p=>/^(data:|https?:)/.test(p)?p:B+p;
+  const ac=/^#[0-9a-f]{3,8}$/i.test(SITE.accent||"")?SITE.accent:"#b87333";
+  const dsc=s=>String(s||"").trim().replace(/^[(（]\s*|\s*[)）]$/g,"");
+  const groups=CATS.map(c=>({c,items:c.items.filter(i=>!i.off)})).filter(x=>x.items.length);
+  const body=groups.map(({c,items})=>'<section class="grp"><h2><span class="em">'+esc(c.e||"")+'</span>'+esc(c.t||"")+'</h2>'+
+    items.map(i=>'<div class="it"><div class="nm"><b>'+esc(i.n)+'</b>'+(dsc(i.d)?'<small>'+esc(dsc(i.d))+'</small>':'')+'</div><i class="dots"></i><span class="pr">'+fa(i.p)+'</span></div>').join("")+'</section>').join("");
+  const ph=/^[\d۰-۹+\s-]{7,}$/.test(INFO.phone||"")?INFO.phone:"";
+  const foot=[INFO.address,INFO.hours,INFO.instagram?"اینستاگرام: "+INFO.instagram:"",ph].filter(Boolean).map(x=>'<span>'+esc(x)+'</span>').join('<em></em>');
+  const css='@font-face{font-family:V;src:url("'+B+'fonts/Vazirmatn-VF.woff2");font-weight:100 900}'+
+   ':root{--fs:13pt;--ac:'+ac+';--ink:#3b2a1d}'+
+   '@page{size:A4 landscape;margin:0}*{box-sizing:border-box;margin:0;padding:0}'+
+   'html,body{font-family:V,Tahoma,sans-serif;color:var(--ink);direction:rtl;-webkit-print-color-adjust:exact;print-color-adjust:exact}'+
+   '.page{position:relative;width:297mm;height:210mm;padding:12mm 15mm 9mm;display:flex;flex-direction:column;overflow:hidden;background:#fffbf3}'+
+   '.fr{position:absolute;inset:5.5mm;border:.7mm solid var(--ac);border-radius:3mm;pointer-events:none}.fr::after{content:"";position:absolute;inset:1.4mm;border:.25mm solid var(--ac);border-radius:1.8mm}'+
+   '.cn{position:absolute;width:3.4mm;height:3.4mm;background:var(--ac);transform:rotate(45deg)}.cn.a{top:3.8mm;right:3.8mm}.cn.b{top:3.8mm;left:3.8mm}.cn.c{bottom:3.8mm;right:3.8mm}.cn.d{bottom:3.8mm;left:3.8mm}'+
+   '.hd{display:flex;align-items:center;justify-content:center;gap:6mm;padding-bottom:3mm}.hd img{width:21mm;height:21mm;border-radius:50%;border:.6mm solid var(--ac);padding:.6mm;background:#fff}'+
+   '.hd h1{font-size:25pt;font-weight:800;line-height:1.25}.hd p{font-size:10.5pt;font-weight:500;opacity:.8;margin-top:.5mm}'+
+   '.dv{display:flex;align-items:center;gap:3mm;margin:0 0 3.5mm}.dv::before,.dv::after{content:"";flex:1;height:.3mm;background:var(--ac);opacity:.7}.dv i{width:2.4mm;height:2.4mm;background:var(--ac);transform:rotate(45deg)}'+
+   '.cols{flex:1;min-height:0;column-count:4;column-gap:9mm;column-rule:.25mm solid rgba(0,0,0,.14);column-fill:balance;overflow:hidden;font-size:var(--fs)}'+
+   '.grp{break-inside:avoid;margin-bottom:3.6mm}.grp h2{font-size:1.12em;font-weight:800;padding:.9mm 2.2mm;margin-bottom:1.2mm;border-radius:1.6mm;background:rgba(0,0,0,.055);border-right:1.4mm solid var(--ac);display:flex;gap:2mm;align-items:center}.grp h2 .em{font-size:1.05em}'+
+   '.it{display:flex;align-items:flex-end;gap:1.6mm;padding:.45mm 1mm;break-inside:avoid;line-height:1.5}.nm{display:flex;flex-direction:column;min-width:0}.nm b{font-weight:600}.nm small{font-size:.74em;opacity:.78;line-height:1.35}'+
+   '.dots{flex:1;min-width:3mm;border-bottom:.4mm dotted rgba(0,0,0,.4);margin-bottom:1.7mm}.pr{font-weight:800;color:var(--ac);filter:brightness(.85);min-width:7mm;text-align:left}'+
+   '.ft{margin-top:2.5mm;padding-top:2.2mm;border-top:.3mm solid var(--ac);display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:1mm 3.5mm;font-size:9.5pt}.ft em{width:1.8mm;height:1.8mm;background:var(--ac);transform:rotate(45deg);display:inline-block}.ft .nt{width:100%;text-align:center;font-size:8.5pt;opacity:.75;margin-top:.6mm}'+
+   '.tb{display:none}'+
+   '@media screen{html{background:#cfc8bb}body{padding:60px 10px 20px}.page{margin:0 auto;box-shadow:0 4px 24px rgba(0,0,0,.3);zoom:var(--z,1)}.tb{display:flex;gap:10px;align-items:center;position:fixed;top:0;inset-inline:0;z-index:9;padding:10px 14px;background:#2b2118;color:#fff;font-size:14px}.tb button{font:inherit;padding:7px 16px;border:0;border-radius:10px;background:#d99a56;color:#2b1c10;font-weight:700;cursor:pointer}}';
+  const js='(async()=>{const cols=document.querySelector(".cols"),root=document.documentElement;'+
+   'try{await Promise.all([document.fonts.load("400 12pt V"),document.fonts.load("600 12pt V"),document.fonts.load("800 12pt V")])}catch(e){}'+
+   'await Promise.all([].map.call(document.images,i=>i.complete?1:new Promise(r=>{i.onload=i.onerror=r})));'+
+   'const over=()=>cols.scrollWidth>cols.clientWidth+2||cols.scrollHeight>cols.clientHeight+2;'+
+   'let fs=14.5;for(;fs>7;fs-=.25){root.style.setProperty("--fs",fs+"pt");if(!over())break}'+
+   'root.style.setProperty("--z",Math.min(1,(innerWidth-20)/(297*3.7795)));'+
+   'document.getElementById("pb").onclick=()=>print();setTimeout(()=>print(),300)})();';
+  return '<!doctype html><html lang="fa" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>منوی کاغذی '+esc(INFO.name||"")+'</title><style>'+css+'</style></head><body>'+
+   '<div class="tb"><button id="pb" type="button">چاپ / ذخیره PDF</button><span>در پنجره‌ی چاپ، اندازه‌ی کاغذ A4 و حالت افقی (Landscape) را بگذار؛ برای ذخیره، مقصد را «Save as PDF» انتخاب کن.</span></div>'+
+   '<div class="page"><div class="fr"></div><i class="cn a"></i><i class="cn b"></i><i class="cn c"></i><i class="cn d"></i>'+
+   '<div class="hd"><img src="'+esc(ab(src_("images/logo-192.png")))+'" alt=""><div><h1>'+esc(INFO.name||"منو")+'</h1><p>منوی نوشیدنی‌ها و خوراکی‌ها</p></div></div><div class="dv"><i></i></div>'+
+   '<div class="cols">'+body+'</div><div class="ft">'+foot+'<div class="nt">قیمت‌ها به هزار تومان‌اند (۲۰۰ = ۲۰۰,۰۰۰ تومان)</div></div></div>'+
+   '<script>'+js+'<\/script></body></html>';
+}
+$("#pdfBtn").onclick=()=>{
+  if(!CATS.length){toast("منو هنوز بارگذاری نشده.","err");return}
+  const w=window.open("","_blank");
+  if(!w){toast("پنجره‌ی چاپ باز نشد. اجازه‌ی باز شدن پنجره (پاپ‌آپ) را بده و دوباره بزن.","err");return}
+  w.document.open();w.document.write(printHtml());w.document.close();
 };
 $("#save").onclick=async()=>{
   const bad=validate();if(bad){toast(bad,"err");render();return}
