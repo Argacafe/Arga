@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>چاپ منو</title>
+<style id="pgsize">@page{size:A4 landscape;margin:0}</style>
+<style>
+@font-face{font-family:V;src:url(fonts/Vazirmatn-VF.woff2) format("woff2");font-weight:100 900}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{font-family:V,Tahoma,sans-serif;direction:rtl;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.tb{display:none}
+.page{position:relative;width:var(--W);height:var(--H);display:grid;grid-template-rows:auto 1fr auto;overflow:hidden;break-after:avoid;page-break-after:avoid}
+.body{min-height:0;height:calc(100% - 2.5mm);overflow:hidden;font-size:var(--fs,12pt)}
+.it{display:flex;align-items:flex-end;gap:1.6mm;padding:var(--rp,.45mm) 0;break-inside:avoid;line-height:1.5}
+.nm{display:flex;flex-direction:column;min-width:0}
+.nm b{font-weight:600}
+.nm small{font-size:.74em;opacity:.78;line-height:1.35}
+.dots{flex:1;min-width:3mm;border-bottom:.4mm dotted currentColor;opacity:.4;margin-bottom:1.7mm}
+.pr{font-weight:800;min-width:7mm;text-align:left}
+h2{break-after:avoid;break-inside:avoid}
+.body>h2:first-child{margin-top:0!important}
+.fr,.cn,.dv{display:none}
+.fr{position:absolute;pointer-events:none}
+.cn{position:absolute;width:3.4mm;height:3.4mm;background:var(--ac);transform:rotate(45deg)}
+.cn.a{top:3.8mm;right:3.8mm}.cn.b{top:3.8mm;left:3.8mm}.cn.c{bottom:3.8mm;right:3.8mm}.cn.d{bottom:3.8mm;left:3.8mm}
+header img{object-fit:cover;flex:none}
+footer{line-height:1.6}
+
+/* 1) کلاسیک قاب‌دار — A4 افقی */
+.t-classic{background:#fffbf3;color:#3b2a1d;padding:12mm 15mm 7mm}
+.t-classic .fr{display:block;inset:5.5mm;border:.7mm solid var(--ac);border-radius:3mm}
+.t-classic .fr::after{content:"";position:absolute;inset:1.4mm;border:.25mm solid var(--ac);border-radius:1.8mm}
+.t-classic .cn{display:block}
+.t-classic .hrow{display:flex;align-items:center;justify-content:center;gap:6mm;padding-bottom:3mm}
+.t-classic img{width:23mm;height:23mm;border-radius:50%;border:.6mm solid var(--ac);padding:.6mm;background:#fff}
+.t-classic h1{font-size:34pt;font-weight:800;line-height:1.2}
+.t-classic .tt p{display:none}
+.t-classic .dv{display:flex;align-items:center;gap:3mm;margin:0 0 3.5mm}
+.t-classic .dv::before,.t-classic .dv::after{content:"";flex:1;height:.3mm;background:var(--ac);opacity:.7}
+.t-classic .dv i{width:2.4mm;height:2.4mm;background:var(--ac);transform:rotate(45deg)}
+.t-classic .body{columns:4;column-gap:9mm;column-rule:.25mm solid rgba(0,0,0,.14)}
+.t-classic h2{font-size:1.12em;font-weight:800;padding:.9mm 2.2mm;margin:2.5mm 0 1.2mm;border-radius:1.6mm;background:rgba(0,0,0,.055);border-right:1.4mm solid var(--ac)}
+.t-classic .pr{color:var(--ac);filter:brightness(.85)}
+.t-classic footer{text-align:center;font-size:7.5pt;opacity:.65;padding-top:1.5mm}
+
+/* 2) مینیمال سفید — A4 عمودی (کم‌جوهر) */
+.t-minimal{background:#fff;color:#222;padding:15mm 15mm 9mm}
+.t-minimal .hrow{display:flex;flex-direction:column;align-items:center;gap:2mm;text-align:center}
+.t-minimal img{width:20mm;height:20mm;border-radius:50%}
+.t-minimal h1{font-size:26pt;font-weight:300;line-height:1.3}
+.t-minimal .tt p{font-size:9pt;color:#777}
+.t-minimal .dv{display:block;height:.3mm;background:#222;margin:5mm 0 4mm}
+.t-minimal .body{columns:2;column-gap:14mm;column-rule:.2mm solid #ddd}
+.t-minimal h2{font-size:1em;font-weight:700;color:var(--ac);filter:brightness(.8);border-bottom:.3mm solid var(--ac);padding-bottom:.8mm;margin:4mm 0 1.2mm}
+.t-minimal .dots{border-bottom-style:solid;border-bottom-width:.2mm;opacity:.18}
+.t-minimal .pr{font-weight:600}
+.t-minimal footer{border-top:.2mm solid #ddd;margin-top:4mm;padding-top:3mm;text-align:center;font-size:8.5pt;color:#666}
+
+/* 3) تیره و طلایی — A4 عمودی */
+.t-dark{background:#1d1511;color:#f1e3cf;padding:14mm 15mm 10mm;--gold:#e3b25f}
+.t-dark .fr{display:block;inset:6mm;border:.4mm solid var(--gold)}
+.t-dark .fr::after{content:"";position:absolute;inset:1.3mm;border:.2mm solid rgba(227,178,95,.55)}
+.t-dark .hrow{display:flex;align-items:center;justify-content:center;gap:5mm}
+.t-dark img{width:22mm;height:22mm;border-radius:50%;border:.5mm solid var(--gold);background:#fff;padding:.5mm}
+.t-dark h1{font-size:32pt;font-weight:800;color:var(--gold);line-height:1.25}
+.t-dark .tt p{font-size:9pt;opacity:.75}
+.t-dark .dv{display:flex;align-items:center;gap:3mm;margin:3mm 0 4mm}
+.t-dark .dv::before,.t-dark .dv::after{content:"";flex:1;height:.3mm;background:var(--gold);opacity:.7}
+.t-dark .dv i{width:2.4mm;height:2.4mm;background:var(--gold);transform:rotate(45deg)}
+.t-dark .body{columns:2;column-gap:12mm}
+.t-dark h2{font-size:1.1em;font-weight:800;color:var(--gold);padding-bottom:1mm;margin:4mm 0 1.2mm;border-bottom:.3mm solid rgba(227,178,95,.6)}
+.t-dark .dots{opacity:.5}
+.t-dark .pr{color:var(--gold)}
+.t-dark footer{margin-top:3mm;text-align:center;font-size:8.5pt;color:#d9c7ac}
+
+/* 4) رنگی — هر دسته با رنگ خودش، A4 عمودی */
+.t-color{background:#fff;color:#2a2a2a;padding:0 0 8mm}
+.t-color header{background:linear-gradient(135deg,rgba(255,255,255,.15),rgba(0,0,0,.25)),var(--ac);color:#fff;padding:9mm 15mm 7mm}
+.t-color .hrow{display:flex;align-items:center;gap:6mm}
+.t-color img{width:20mm;height:20mm;border-radius:50%;border:.6mm solid #fff;background:#fff;padding:.5mm}
+.t-color h1{font-size:30pt;font-weight:800;line-height:1.25}
+.t-color .tt p{font-size:9pt;opacity:.92}
+.t-color .body{columns:2;column-gap:10mm;margin:5mm 15mm 0}
+.t-color h2{display:flex;gap:2mm;align-items:center;font-size:1.05em;font-weight:800;padding:.9mm 2.4mm;margin:3.5mm 0 1.2mm;border-radius:1.6mm;background:linear-gradient(90deg,var(--r0),var(--r1));border-inline-start:1.6mm solid var(--g0)}
+.t-color .pr{color:var(--g0);filter:brightness(.8)}
+.t-color footer{margin:3mm 15mm 0;text-align:center;font-size:8.5pt;color:#666;border-top:.2mm solid #ddd;padding-top:2.5mm}
+
+@media screen{
+  html{background:#cfc8bb}
+  .tb{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;position:sticky;top:0;z-index:9;padding:10px 12px;background:#2b2118;color:#fff;font-size:14px}
+  .tb button{font:inherit;padding:7px 14px;border:0;border-radius:10px;background:#4a3a2c;color:#fff;cursor:pointer}
+  .tb button.on{background:#d99a56;color:#2b1c10;font-weight:700}
+  .tb #pb{background:#2f9e5b;color:#fff;font-weight:700}
+  .tb label{display:flex;gap:6px;align-items:center}
+  .tb .hint{flex-basis:100%;font-size:12px;opacity:.75}
+  #chips{display:flex;gap:6px;flex-wrap:wrap}
+  #stage{padding:14px 0 26px}
+  .page{margin:0 auto;box-shadow:0 4px 24px rgba(0,0,0,.3);zoom:var(--z,1)}
+  #msg{padding:40px 16px;text-align:center;color:#2b2118}
+}
+@media print{.tb,#msg{display:none!important}html,body{background:none}.page{margin:0;box-shadow:none}}
+</style>
+</head>
+<body>
+<div class="tb">
+  <b>چاپ منو</b>
+  <div id="chips"></div>
+  <label><input type="checkbox" id="ex"> افزودنی‌ها</label>
+  <label><input type="checkbox" id="ds"> توضیحات زیر آیتم‌ها</label>
+  <button id="pb" type="button">چاپ / ذخیره PDF</button>
+  <span class="hint">اندازه‌ی کاغذ A4 است و جهت (افقی یا عمودی) خودکار تنظیم می‌شود. برای ذخیره، مقصد را «Save as PDF» بگذار و Margins را None کن.</span>
+</div>
+<div id="msg">در حال بارگذاری منو...</div>
+<div id="stage"></div>
+<script>
+"use strict";
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fa=n=>String(n).replace(/\d/g,d=>"۰۱۲۳۴۵۶۷۸۹"[d]);
+const dsc=s=>String(s||"").trim().replace(/^[(（]\s*|\s*[)）]$/g,"");
+const rgba=(h,a)=>{h=/^#[0-9a-f]{6}$/i.test(h||"")?h.slice(1):"b87333";const n=parseInt(h,16);return "rgba("+(n>>16&255)+","+(n>>8&255)+","+(n&255)+","+a+")"};
+const TPL={
+  classic:{n:"کلاسیک قاب‌دار (افقی)",W:297,H:210,o:"landscape"},
+  minimal:{n:"مینیمال سفید (عمودی)",W:210,H:297,o:"portrait"},
+  dark:{n:"تیره و طلایی (عمودی)",W:210,H:297,o:"portrait"},
+  color:{n:"رنگی (عمودی)",W:210,H:297,o:"portrait"}
+};
+let CATS=[],INFO={},SITE={},cur="classic",extra=true,desc=true;
+try{const t=localStorage.getItem("arga_print_tpl");if(TPL[t])cur=t;extra=localStorage.getItem("arga_print_extra")!=="0";desc=localStorage.getItem("arga_print_desc")!=="0"}catch(e){}
+
+async function load(){
+  const t=await fetch("index.html",{cache:"no-store"}).then(r=>{if(!r.ok)throw 0;return r.text()});
+  const m=t.match(/const MENU=(\[[\s\S]*?\n\]);/),i=t.match(/const INFO=(\{.*\});/),s=t.match(/const SITE=(\{.*\});/);
+  if(!m||!i)throw 0;
+  CATS=new Function("return "+m[1])().map(c=>({id:c.id,t:c.t,e:c.e,g:c.g||["#b87333","#e0a766"],items:c.items.filter(a=>!(a[4]&&a[4].off)).map(a=>({n:a[0],p:a[1],d:a[2]||""}))}));
+  INFO=JSON.parse(i[1]);SITE=s?JSON.parse(s[1]):{};
+}
+function bodyHtml(t){
+  return CATS.filter(c=>(extra||c.id!=="extra")&&c.items.length).map(c=>{
+    const st=t==="color"?' style="--g0:'+esc(c.g[0])+';--r0:'+rgba(c.g[0],.13)+';--r1:'+rgba(c.g[1],.13)+'"':"";
+    return '<h2'+st+'>'+(t==="color"?'<span>'+esc(c.e)+'</span>':'')+esc(c.t)+'</h2>'+
+      c.items.map(i=>'<div class="it"'+st+'><div class="nm"><b>'+esc(i.n)+'</b>'+(desc&&dsc(i.d)?'<small>'+esc(dsc(i.d))+'</small>':'')+'</div><i class="dots"></i><span class="pr">'+fa(i.p)+'</span></div>').join("");
+  }).join("");
+}
+function pageHtml(t){
+  const T=TPL[t],ac=/^#[0-9a-f]{3,8}$/i.test(SITE.accent||"")?SITE.accent:"#b87333";
+  const full=(INFO.name||"").trim(),nm=full.replace(/^\s*کافه\s*/,"").replace(/^\s*خونه\s*/,"").trim()||full||"منو";
+  const ph=/^[+\d۰-۹][\d۰-۹\s-]{8,}$/.test((INFO.phone||"").trim())?INFO.phone.trim():"";
+  const parts=["قیمت‌ها به هزار تومان"];
+  if(t!=="classic"){if(INFO.hours)parts.push(INFO.hours);if(INFO.address)parts.push(INFO.address);if(INFO.instagram)parts.push("اینستاگرام: @"+INFO.instagram);if(ph)parts.push(ph)}
+  return '<div class="page t-'+t+'" style="--W:'+T.W+'mm;--H:'+T.H+'mm;--ac:'+ac+'">'+
+    '<div class="fr"></div><i class="cn a"></i><i class="cn b"></i><i class="cn c"></i><i class="cn d"></i>'+
+    '<header><div class="hrow"><img src="images/logo-192.png" alt=""><div class="tt"><h1>'+esc(nm)+'</h1>'+(full&&full!==nm?'<p>'+esc(full)+'</p>':'')+'</div></div><div class="dv"><i></i></div></header>'+
+    '<div class="body">'+bodyHtml(t)+'</div>'+
+    '<footer>'+parts.map(esc).join(" &nbsp;•&nbsp; ")+'</footer></div>';
+}
+const over=b=>{const r=b.getBoundingClientRect();return [].some.call(b.children,e=>{const q=e.getBoundingClientRect();return q.left<r.left-1||q.right>r.right+1||q.bottom>r.bottom+1||q.top<r.top-1})};
+function fit(page){
+  const b=page.querySelector(".body");let lo=6,hi=22;
+  page.style.setProperty("--rp",".3mm");
+  for(let k=0;k<12;k++){const mid=(lo+hi)/2;page.style.setProperty("--fs",mid+"pt");b.style.setProperty("--fs",mid+"pt");if(over(b))hi=mid;else lo=mid}
+  b.style.setProperty("--fs",lo+"pt");
+  let rp=.3;while(rp<6){page.style.setProperty("--rp",(rp+.15)+"mm");if(over(b)){page.style.setProperty("--rp",rp+"mm");break}rp+=.15}
+  return !over(b);
+}
+async function render(){
+  const T=TPL[cur];
+  $("#pgsize").textContent="@page{size:A4 "+T.o+";margin:0}";
+  document.documentElement.style.setProperty("--z",1);
+  $("#stage").innerHTML=pageHtml(cur);
+  try{await Promise.all([document.fonts.load("400 12pt V"),document.fonts.load("600 12pt V"),document.fonts.load("800 12pt V")])}catch(e){}
+  await Promise.all([].map.call(document.images,i=>i.complete?1:new Promise(r=>{i.onload=i.onerror=r})));
+  const ok=fit($(".page"));
+  document.documentElement.style.setProperty("--z",Math.min(1,(innerWidth-20)/(T.W*3.7795)));
+  $("#msg").style.display=ok?"none":"block";if(!ok)$("#msg").textContent="همه‌ی آیتم‌ها در یک صفحه جا نشد. افزودنی‌ها را خاموش کن یا قالب دیگری بزن.";
+  document.querySelectorAll("#chips button").forEach(b=>b.classList.toggle("on",b.dataset.t===cur));
+  document.body.dataset.ready="1";
+}
+function init(){
+  $("#chips").innerHTML=Object.keys(TPL).map(k=>'<button type="button" data-t="'+k+'">'+esc(TPL[k].n)+'</button>').join("");
+  $("#chips").onclick=e=>{const b=e.target.closest("button");if(!b)return;cur=b.dataset.t;try{localStorage.setItem("arga_print_tpl",cur)}catch(_){}render()};
+  $("#ex").checked=extra;
+  $("#ex").onchange=e=>{extra=e.target.checked;try{localStorage.setItem("arga_print_extra",extra?"1":"0")}catch(_){}render()};
+  $("#ds").checked=desc;
+  $("#ds").onchange=e=>{desc=e.target.checked;try{localStorage.setItem("arga_print_desc",desc?"1":"0")}catch(_){}render()};
+  $("#pb").onclick=()=>print();
+  addEventListener("resize",()=>{const T=TPL[cur];document.documentElement.style.setProperty("--z",Math.min(1,(innerWidth-20)/(T.W*3.7795)))});
+}
+init();
+load().then(()=>{$("#msg").style.display="none";return render()}).catch(()=>{$("#msg").textContent="منو بارگذاری نشد. این صفحه را از روی آدرس سایت باز کن (نه از فایل ذخیره‌شده) و اینترنت را بررسی کن."});
+</script>
+</body>
+</html>
