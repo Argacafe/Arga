@@ -26,7 +26,8 @@ h2{break-after:avoid;break-inside:avoid}
 .cn{position:absolute;width:3.4mm;height:3.4mm;background:var(--ac);transform:rotate(45deg)}
 .cn.a{top:3.8mm;right:3.8mm}.cn.b{top:3.8mm;left:3.8mm}.cn.c{bottom:3.8mm;right:3.8mm}.cn.d{bottom:3.8mm;left:3.8mm}
 header img{object-fit:cover;flex:none}
-footer{line-height:1.6}
+footer{display:flex;align-items:center;justify-content:center;gap:1.6mm;line-height:1.6}
+footer .ig{width:1.25em;height:1.25em;flex:none}
 
 /* 1) کلاسیک قاب‌دار — A4 افقی */
 .t-classic{background:#fffbf3;color:#3b2a1d;padding:12mm 15mm 7mm}
@@ -43,7 +44,7 @@ footer{line-height:1.6}
 .t-classic .body{columns:4;column-gap:9mm;column-rule:.25mm solid rgba(0,0,0,.14)}
 .t-classic h2{font-size:1.12em;font-weight:800;padding:.9mm 2.2mm;margin:2.5mm 0 1.2mm;border-radius:1.6mm;background:rgba(0,0,0,.055);border-right:1.4mm solid var(--ac)}
 .t-classic .pr{color:var(--ac);filter:brightness(.85)}
-.t-classic footer{text-align:center;font-size:7.5pt;opacity:.65;padding-top:1.5mm}
+.t-classic footer{font-size:9pt;opacity:.8;padding-top:1.5mm}
 
 /* 2) مینیمال سفید — A4 عمودی (کم‌جوهر) */
 .t-minimal{background:#fff;color:#222;padding:15mm 15mm 9mm}
@@ -147,14 +148,13 @@ function bodyHtml(t){
 function pageHtml(t){
   const T=TPL[t],ac=/^#[0-9a-f]{3,8}$/i.test(SITE.accent||"")?SITE.accent:"#b87333";
   const full=(INFO.name||"").trim(),nm=full.replace(/^\s*کافه\s*/,"").replace(/^\s*خونه\s*/,"").trim()||full||"منو";
-  const ph=/^[+\d۰-۹][\d۰-۹\s-]{8,}$/.test((INFO.phone||"").trim())?INFO.phone.trim():"";
-  const parts=["قیمت‌ها به هزار تومان"];
-  if(t!=="classic"){if(INFO.hours)parts.push(INFO.hours);if(INFO.address)parts.push(INFO.address);if(INFO.instagram)parts.push("اینستاگرام: @"+INFO.instagram);if(ph)parts.push(ph)}
+  const ig=String(INFO.instagram||"").trim().replace(/^@/,"");
+  const igSvg='<svg class="ig" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.3" cy="6.7" r=".9" fill="currentColor" stroke="none"/></svg>';
   return '<div class="page t-'+t+'" style="--W:'+T.W+'mm;--H:'+T.H+'mm;--ac:'+ac+'">'+
     '<div class="fr"></div><i class="cn a"></i><i class="cn b"></i><i class="cn c"></i><i class="cn d"></i>'+
     '<header><div class="hrow"><img src="images/logo-192.png" alt=""><div class="tt"><h1>'+esc(nm)+'</h1>'+(full&&full!==nm?'<p>'+esc(full)+'</p>':'')+'</div></div><div class="dv"><i></i></div></header>'+
     '<div class="body">'+bodyHtml(t)+'</div>'+
-    '<footer>'+parts.map(esc).join(" &nbsp;•&nbsp; ")+'</footer></div>';
+    '<footer>'+(ig?igSvg+'<span dir="ltr">@'+esc(ig)+'</span>':'')+'</footer></div>';
 }
 const over=b=>{const r=b.getBoundingClientRect();return [].some.call(b.children,e=>{const q=e.getBoundingClientRect();return q.left<r.left-1||q.right>r.right+1||q.bottom>r.bottom+1||q.top<r.top-1})};
 function fit(page){
