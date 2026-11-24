@@ -1209,6 +1209,7 @@ function printHtml(withExtra){
 try{$("#pdfExtra").checked=localStorage.getItem("arga_print_extra")!=="0"}catch(e){$("#pdfExtra").checked=true}
 $("#pdfExtra").onchange=e=>{try{localStorage.setItem("arga_print_extra",e.target.checked?"1":"0")}catch(_){}};
 $("#pdfBtn").onclick=()=>{
+    window.open("print.html","_blank");return;
   if(!CATS.length){toast("منو هنوز بارگذاری نشده.","err");return}
   const w=window.open("","_blank");
   if(!w){toast("پنجره‌ی چاپ باز نشد. اجازه‌ی باز شدن پنجره (پاپ‌آپ) را بده و دوباره بزن.","err");return}
