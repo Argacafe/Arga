@@ -31,7 +31,6 @@ header img{object-fit:cover;flex:none}
 footer{display:flex;align-items:center;justify-content:center;gap:1.6mm;line-height:1.6}
 footer .ig{width:1.25em;height:1.25em;flex:none}
 .igw{display:flex;gap:1.6mm;align-items:center}
-.adr{line-height:1.5}
 
 /* 1) کلاسیک قاب‌دار — A4 افقی */
 .t-classic{background:#fffbf3;color:#3b2a1d;padding:12mm 15mm 7mm}
@@ -129,7 +128,7 @@ footer .ig{width:1.25em;height:1.25em;flex:none}
 .t-chalk h2 span{margin-inline-end:1.5mm}
 .t-chalk .dots{border-bottom-style:dotted;opacity:.45}
 .t-chalk .pr{color:#f7b6c8;font-weight:700}
-.t-chalk footer{margin-top:3mm;gap:5mm;font-size:9pt;color:#e7e2d4}
+.t-chalk footer{margin-top:3mm;font-size:9pt;color:#e7e2d4}
 
 /* 7) روزنامه — A4 عمودی */
 .t-news{background:#f4efe4;color:#141414;padding:11mm 13mm 9mm}
@@ -141,7 +140,7 @@ footer .ig{width:1.25em;height:1.25em;flex:none}
 .t-news h2{font-size:1.15em;font-weight:900;line-height:1.3;margin:3mm 0 1.2mm;padding-bottom:.8mm;border-bottom:.6mm solid #141414}
 .t-news .dots{opacity:.35}
 .t-news .pr{font-weight:900}
-.t-news footer{border-top:1.4mm double #141414;margin-top:3mm;padding-top:2mm;font-size:8.5pt;justify-content:space-between}
+.t-news footer{border-top:1.4mm double #141414;margin-top:3mm;padding-top:2mm;font-size:8.5pt}
 
 /* 8) گلیم کوردی — A4 افقی */
 .t-kilim{background:#fbf2e1;color:#2b1d16;padding:17mm 20mm 13mm;--k1:#9b2c2c;--k2:#1f3a5f;--k3:#d4a017}
@@ -159,7 +158,7 @@ footer .ig{width:1.25em;height:1.25em;flex:none}
 .t-kilim h2::before,.t-kilim h2::after{content:"";width:2mm;height:2mm;background:var(--k1);transform:rotate(45deg);flex:none}
 .t-kilim h2::after{background:var(--k3)}
 .t-kilim .pr{color:var(--k1)}
-.t-kilim footer{margin-top:2mm;gap:5mm;font-size:9pt;color:var(--k2)}
+.t-kilim footer{margin-top:2mm;font-size:9pt;color:var(--k2)}
 
 /* 9) کاغذ کرافت و لکه قهوه — A4 عمودی */
 .t-kraft{background:repeating-linear-gradient(83deg,rgba(255,255,255,.035) 0 .5mm,transparent .5mm 1.7mm),repeating-linear-gradient(-12deg,rgba(0,0,0,.03) 0 .4mm,transparent .4mm 2.3mm),#c9a679;color:#2a1b10;padding:15mm 16mm 11mm}
@@ -176,7 +175,7 @@ footer .ig{width:1.25em;height:1.25em;flex:none}
 .t-kraft h2{display:inline-block;width:100%;font-size:1.08em;font-weight:900;color:#fbf3e6;background:#3a2516;padding:.8mm 2.6mm;margin:3.5mm 0 1.2mm;border-radius:.6mm}
 .t-kraft .dots{opacity:.5}
 .t-kraft .pr{font-weight:900}
-.t-kraft footer{margin-top:3mm;gap:5mm;font-size:9pt}
+.t-kraft footer{margin-top:3mm;font-size:9pt}
 
 @media screen{
   html{background:#cfc8bb}
@@ -241,7 +240,6 @@ function bodyHtml(t){
   }).join("");
 }
 const NOTE={receipt:"ممنون که اومدی، باز هم بیا"};
-const ADR=["receipt","chalk","news","kilim","kraft"];
 function pageHtml(t){
   const T=TPL[t],ac=/^#[0-9a-f]{3,8}$/i.test(SITE.accent||"")?SITE.accent:"#b87333";
   const full=(INFO.name||"").trim(),nm=full.replace(/^\s*کافه\s*/,"").replace(/^\s*خونه\s*/,"").trim()||full||"منو";
@@ -251,7 +249,7 @@ function pageHtml(t){
     '<div class="fr"></div><i class="cn a"></i><i class="cn b"></i><i class="cn c"></i><i class="cn d"></i><i class="x1"></i><i class="x2"></i>'+
     '<header><div class="hrow"><img src="images/logo-192.png" alt=""><div class="tt"><h1>'+esc(nm)+'</h1>'+(full&&full!==nm?'<p>'+esc(full)+'</p>':'')+'</div></div><div class="dv"><i></i></div></header>'+
     '<div class="body">'+bodyHtml(t)+'</div>'+
-    '<footer>'+(NOTE[t]?'<span class="note">'+esc(NOTE[t])+'</span>':'')+(t==="receipt"?'<i class="bar"></i>':'')+(ADR.includes(t)&&String(INFO.address||"").trim()?'<span class="adr">'+esc(String(INFO.address).trim())+'</span>':'')+(ig?'<span class="igw">'+igSvg+'<span dir="ltr">@'+esc(ig)+'</span></span>':'')+'</footer></div>';
+    '<footer>'+(NOTE[t]?'<span class="note">'+esc(NOTE[t])+'</span>':'')+(t==="receipt"?'<i class="bar"></i>':'')+(ig?'<span class="igw">'+igSvg+'<span dir="ltr">@'+esc(ig)+'</span></span>':'')+'</footer></div>';
 }
 const over=b=>{const r=b.getBoundingClientRect();return [].some.call(b.children,e=>{const q=e.getBoundingClientRect();return q.left<r.left-1||q.right>r.right+1||q.bottom>r.bottom+1||q.top<r.top-1})};
 function fit(page){
