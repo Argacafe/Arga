@@ -8,6 +8,7 @@
 <style id="pgsize">@page{size:A4 landscape;margin:0}</style>
 <style>
 @font-face{font-family:V;src:url(fonts/Vazirmatn-VF.woff2) format("woff2");font-weight:100 900}
+@font-face{font-family:G;src:url(fonts/Gandom.woff2) format("woff2")}
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{font-family:V,Tahoma,sans-serif;direction:rtl;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 .tb{display:none}
@@ -20,7 +21,8 @@ html,body{font-family:V,Tahoma,sans-serif;direction:rtl;-webkit-print-color-adju
 .dots{flex:1;min-width:3mm;border-bottom:.4mm dotted currentColor;opacity:.4;margin-bottom:1.7mm}
 .pr{font-weight:800;min-width:7mm;text-align:left}
 h2{break-after:avoid;break-inside:avoid}
-.body>h2:first-child{margin-top:0!important}
+.hd{break-inside:avoid;page-break-inside:avoid}
+.body>.hd:first-child h2{margin-top:0!important}
 .fr,.cn,.dv{display:none}
 .fr{position:absolute;pointer-events:none}
 .cn{position:absolute;width:3.4mm;height:3.4mm;background:var(--ac);transform:rotate(45deg)}
@@ -28,6 +30,7 @@ h2{break-after:avoid;break-inside:avoid}
 header img{object-fit:cover;flex:none}
 footer{display:flex;align-items:center;justify-content:center;gap:1.6mm;line-height:1.6}
 footer .ig{width:1.25em;height:1.25em;flex:none}
+.igw{display:flex;gap:1.6mm;align-items:center}
 
 /* 1) کلاسیک قاب‌دار — A4 افقی */
 .t-classic{background:#fffbf3;color:#3b2a1d;padding:12mm 15mm 7mm}
@@ -88,6 +91,101 @@ footer .ig{width:1.25em;height:1.25em;flex:none}
 .t-color .pr{color:var(--g0);filter:brightness(.8)}
 .t-color footer{margin:3mm 15mm 0;text-align:center;font-size:8.5pt;color:#666;border-top:.2mm solid #ddd;padding-top:2.5mm}
 
+/* 5) فیش صندوق — A4 عمودی */
+.mast,.x1,.x2,.bar,.note,.stamp{display:none}
+.t-receipt{background:#e6e1d6;color:#1e1e1e;padding:17mm 24mm 14mm}
+.t-receipt .fr{display:block;inset:9mm 15mm;background:#fffdf7;box-shadow:0 .6mm 2mm rgba(0,0,0,.18)}
+.t-receipt .fr::before,.t-receipt .fr::after{content:"";position:absolute;left:0;right:0;height:3mm;background:linear-gradient(135deg,#e6e1d6 50%,transparent 50%) 0 0/4mm 3mm repeat-x,linear-gradient(225deg,#e6e1d6 50%,transparent 50%) 0 0/4mm 3mm repeat-x}
+.t-receipt .fr::before{top:0}
+.t-receipt .fr::after{bottom:0;transform:scaleY(-1)}
+.t-receipt header,.t-receipt .body,.t-receipt footer{position:relative}
+.t-receipt .hrow{display:flex;flex-direction:column;align-items:center;gap:1.5mm;text-align:center}
+.t-receipt img{width:17mm;height:17mm;border-radius:50%;filter:grayscale(1) contrast(1.1)}
+.t-receipt h1{font-size:24pt;font-weight:900;letter-spacing:.5mm;line-height:1.2}
+.t-receipt .tt p{font-size:9pt;opacity:.7}
+.t-receipt .mast{display:block;text-align:center;font-size:8.5pt;opacity:.75;margin-top:1.5mm}
+.t-receipt .dv{display:block;border-top:.45mm dashed #1e1e1e;margin:3.5mm 0 3mm}
+.t-receipt .body{columns:3;column-gap:7mm;column-rule:.3mm dashed rgba(0,0,0,.35)}
+.t-receipt h2{text-align:center;font-size:.95em;font-weight:800;letter-spacing:.3mm;padding:.6mm 0;margin:3.5mm 0 1.2mm;border-top:.3mm dashed #1e1e1e;border-bottom:.3mm dashed #1e1e1e}
+.t-receipt h2::before{content:"* "}.t-receipt h2::after{content:" *"}
+.t-receipt .dots{border-bottom-style:dashed;opacity:.45}
+.t-receipt .pr{font-weight:800}
+.t-receipt footer{flex-direction:column;gap:1.2mm;border-top:.45mm dashed #1e1e1e;margin-top:3mm;padding-top:2.5mm;font-size:8.5pt}
+.t-receipt .note{display:block;font-weight:700;font-size:10pt}
+.t-receipt .bar{display:block;width:58mm;height:9mm;background:repeating-linear-gradient(90deg,#1e1e1e 0 .35mm,transparent .35mm .7mm,#1e1e1e .7mm 1.5mm,transparent 1.5mm 1.9mm,#1e1e1e 1.9mm 2.15mm,transparent 2.15mm 2.9mm)}
+
+
+/* 6) تخته‌سیاه گچی — A4 عمودی */
+.t-chalk{background:radial-gradient(ellipse at 30% 20%,rgba(255,255,255,.07),transparent 55%),radial-gradient(ellipse at 75% 85%,rgba(255,255,255,.05),transparent 50%),#24302a;color:#f2efe6;padding:17mm 18mm 13mm}
+.t-chalk .fr{display:block;inset:0;border:7mm solid #7a4e2d;box-shadow:inset 0 0 0 .6mm #5a3519,inset 0 0 6mm rgba(0,0,0,.55)}
+.t-chalk .fr::after{content:"";position:absolute;inset:-7mm;border:.4mm solid #4a2b14}
+.t-chalk .hrow{display:flex;align-items:center;justify-content:center;gap:5mm}
+.t-chalk img{width:21mm;height:21mm;border-radius:50%;border:.5mm dashed #f2efe6;padding:.8mm;background:#fff}
+.t-chalk h1{font-family:G,V,sans-serif;font-size:38pt;font-weight:400;color:#fff;line-height:1.25;text-shadow:0 0 .5mm rgba(255,255,255,.6)}
+.t-chalk .tt p{font-size:9.5pt;opacity:.75}
+.t-chalk .dv{display:block;height:2.5mm;margin:2mm 10mm 4mm;background:radial-gradient(circle at 50% 50%,rgba(242,239,230,.85) .35mm,transparent .45mm) 0 50%/3mm 2.5mm repeat-x}
+.t-chalk .body{columns:3;column-gap:7mm}
+.t-chalk h2{font-family:G,V,sans-serif;font-weight:400;font-size:1.3em;color:#f6dc86;margin:3.5mm 0 1mm;text-decoration:underline wavy rgba(246,220,134,.7);text-decoration-thickness:.25mm;text-underline-offset:1.6mm}
+.t-chalk h2 span{margin-inline-end:1.5mm}
+.t-chalk .dots{border-bottom-style:dotted;opacity:.45}
+.t-chalk .pr{color:#f7b6c8;font-weight:700}
+.t-chalk footer{margin-top:3mm;font-size:9pt;color:#e7e2d4}
+
+/* 7) روزنامه — A4 عمودی */
+.t-news{background:#f4efe4;color:#141414;padding:11mm 13mm 9mm}
+.t-news .mast{display:flex;justify-content:space-between;font-size:8pt;font-weight:600;border-bottom:.3mm solid #141414;padding-bottom:1.2mm;margin-bottom:2.5mm}
+.t-news .hrow{display:flex;align-items:center;justify-content:center;gap:5mm;border-bottom:1.4mm double #141414;padding-bottom:2.5mm}
+.t-news img{width:16mm;height:16mm;border-radius:50%;filter:grayscale(1) contrast(1.15)}
+.t-news h1{font-size:44pt;font-weight:900;line-height:1.1;letter-spacing:-.3mm}
+.t-news h1::before{content:"روزنامه‌ی ";font-weight:300;font-size:.55em}
+.t-news .tt p{display:none}
+.t-news .dv{display:block;text-align:center;font-size:9pt;font-weight:700;padding:1.2mm 0;border-bottom:.3mm solid #141414;margin-bottom:3.5mm}
+.t-news .dv::after{content:"خبر داغ امروز: قهوه هنوز گرم است ☕"}
+.t-news .dv i{display:none}
+.t-news .body{columns:3;column-gap:6mm;column-rule:.25mm solid #141414}
+.t-news h2{font-size:1.15em;font-weight:900;line-height:1.3;margin:3mm 0 1.2mm;padding-bottom:.8mm;border-bottom:.6mm solid #141414}
+.t-news .dots{opacity:.35}
+.t-news .pr{font-weight:900}
+.t-news footer{border-top:1.4mm double #141414;margin-top:3mm;padding-top:2mm;font-size:8.5pt;justify-content:space-between}
+.t-news .note{display:block}
+
+/* 8) گلیم کوردی — A4 افقی */
+.t-kilim{background:#fbf2e1;color:#2b1d16;padding:17mm 20mm 13mm;--k1:#9b2c2c;--k2:#1f3a5f;--k3:#d4a017}
+.t-kilim .fr{display:block;inset:5mm;background:linear-gradient(135deg,var(--k1) 25%,transparent 25%) -3mm 0/6mm 6mm,linear-gradient(225deg,var(--k1) 25%,transparent 25%) -3mm 0/6mm 6mm,linear-gradient(315deg,var(--k1) 25%,transparent 25%) 0 0/6mm 6mm,linear-gradient(45deg,var(--k1) 25%,transparent 25%) 0 0/6mm 6mm,var(--k3)}
+.t-kilim .fr::after{content:"";position:absolute;inset:6mm;background:#fbf2e1;border:.8mm solid var(--k2);box-shadow:inset 0 0 0 1.2mm #fbf2e1,inset 0 0 0 1.6mm var(--k1)}
+.t-kilim header,.t-kilim .body,.t-kilim footer{position:relative}
+.t-kilim .hrow{display:flex;align-items:center;justify-content:center;gap:6mm}
+.t-kilim img{width:21mm;height:21mm;border-radius:50%;border:.7mm solid var(--k1);padding:.6mm;background:#fff}
+.t-kilim h1{font-size:34pt;font-weight:900;color:var(--k1);line-height:1.2}
+.t-kilim .tt p{font-size:9pt;color:var(--k2)}
+.t-kilim .dv{display:block;height:3.2mm;margin:2.5mm 0 3.5mm;background:linear-gradient(135deg,var(--k2) 25%,transparent 25%) -1.6mm 0/3.2mm 3.2mm,linear-gradient(225deg,var(--k2) 25%,transparent 25%) -1.6mm 0/3.2mm 3.2mm,linear-gradient(315deg,var(--k2) 25%,transparent 25%) 0 0/3.2mm 3.2mm,linear-gradient(45deg,var(--k2) 25%,transparent 25%) 0 0/3.2mm 3.2mm}
+.t-kilim .dv i{display:none}
+.t-kilim .body{columns:4;column-gap:8mm}
+.t-kilim h2{display:flex;align-items:center;gap:1.6mm;font-size:1.08em;font-weight:900;color:var(--k2);margin:2.6mm 0 1.1mm;padding-bottom:.8mm;border-bottom:.5mm solid var(--k3)}
+.t-kilim h2::before,.t-kilim h2::after{content:"";width:2mm;height:2mm;background:var(--k1);transform:rotate(45deg);flex:none}
+.t-kilim h2::after{background:var(--k3)}
+.t-kilim .pr{color:var(--k1)}
+.t-kilim footer{margin-top:2mm;font-size:9pt;color:var(--k2)}
+
+/* 9) کاغذ کرافت و لکه قهوه — A4 عمودی */
+.t-kraft{background:repeating-linear-gradient(83deg,rgba(255,255,255,.035) 0 .5mm,transparent .5mm 1.7mm),repeating-linear-gradient(-12deg,rgba(0,0,0,.03) 0 .4mm,transparent .4mm 2.3mm),#c9a679;color:#2a1b10;padding:15mm 16mm 11mm}
+.t-kraft .x1,.t-kraft .x2{display:block;position:absolute;border-radius:50%;pointer-events:none}
+.t-kraft .x1{width:52mm;height:52mm;top:-14mm;left:-12mm;background:radial-gradient(circle,transparent 60%,rgba(92,52,22,.28) 62%,rgba(92,52,22,.12) 66%,transparent 70%)}
+.t-kraft .x2{width:34mm;height:34mm;bottom:9mm;right:-8mm;background:radial-gradient(circle,rgba(92,52,22,.08) 52%,rgba(92,52,22,.26) 58%,transparent 64%)}
+.t-kraft .stamp{display:block;position:absolute;top:13mm;left:16mm;transform:rotate(-14deg);border:.7mm solid rgba(160,32,32,.8);color:rgba(160,32,32,.85);border-radius:1.5mm;padding:.6mm 3mm;font-weight:900;font-size:12pt;letter-spacing:.4mm}
+.t-kraft .stamp::before{content:"";position:absolute;inset:.6mm;border:.25mm solid rgba(160,32,32,.6);border-radius:1mm}
+.t-kraft .hrow{display:flex;align-items:center;justify-content:center;gap:5mm}
+.t-kraft img{width:22mm;height:22mm;border-radius:50%;border:.5mm solid #2a1b10;padding:.6mm;background:#fff}
+.t-kraft h1{font-size:34pt;font-weight:900;line-height:1.2}
+.t-kraft .tt p{font-size:9pt;opacity:.75}
+.t-kraft .dv{display:block;height:.6mm;margin:3mm 0 4mm;background:repeating-linear-gradient(90deg,#2a1b10 0 3mm,transparent 3mm 4.5mm)}
+.t-kraft .dv i{display:none}
+.t-kraft .body{columns:3;column-gap:7mm;column-rule:.3mm dashed rgba(42,27,16,.4)}
+.t-kraft h2{display:inline-block;width:100%;font-size:1.08em;font-weight:900;color:#fbf3e6;background:#3a2516;padding:.8mm 2.6mm;margin:3.5mm 0 1.2mm;border-radius:.6mm}
+.t-kraft .dots{opacity:.5}
+.t-kraft .pr{font-weight:900}
+.t-kraft footer{margin-top:3mm;font-size:9pt}
+
 @media screen{
   html{background:#cfc8bb}
   .tb{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;position:sticky;top:0;z-index:9;padding:10px 12px;background:#2b2118;color:#fff;font-size:14px}
@@ -126,7 +224,12 @@ const TPL={
   classic:{n:"کلاسیک قاب‌دار (افقی)",W:297,H:210,o:"landscape"},
   minimal:{n:"مینیمال سفید (عمودی)",W:210,H:297,o:"portrait"},
   dark:{n:"تیره و طلایی (عمودی)",W:210,H:297,o:"portrait"},
-  color:{n:"رنگی (عمودی)",W:210,H:297,o:"portrait"}
+  color:{n:"رنگی (عمودی)",W:210,H:297,o:"portrait"},
+  receipt:{n:"فیش صندوق (عمودی)",W:210,H:297,o:"portrait"},
+  chalk:{n:"تخته‌سیاه گچی (عمودی)",W:210,H:297,o:"portrait"},
+  news:{n:"روزنامه (عمودی)",W:210,H:297,o:"portrait"},
+  kilim:{n:"گلیم کوردی (افقی)",W:297,H:210,o:"landscape"},
+  kraft:{n:"کرافت و لکه قهوه (عمودی)",W:210,H:297,o:"portrait"}
 };
 let CATS=[],INFO={},SITE={},cur="classic",extra=true,desc=true;
 try{const t=localStorage.getItem("arga_print_tpl");if(TPL[t])cur=t;extra=localStorage.getItem("arga_print_extra")!=="0";desc=localStorage.getItem("arga_print_desc")!=="0"}catch(e){}
@@ -141,9 +244,16 @@ async function load(){
 function bodyHtml(t){
   return CATS.filter(c=>(extra||c.id!=="extra")&&c.items.length).map(c=>{
     const st=t==="color"?' style="--g0:'+esc(c.g[0])+';--r0:'+rgba(c.g[0],.13)+';--r1:'+rgba(c.g[1],.13)+'"':"";
-    return '<h2'+st+'>'+(t==="color"?'<span>'+esc(c.e)+'</span>':'')+esc(c.t)+'</h2>'+
-      c.items.map(i=>'<div class="it"'+st+'><div class="nm"><b>'+esc(i.n)+'</b>'+(desc&&dsc(i.d)?'<small>'+esc(dsc(i.d))+'</small>':'')+'</div><i class="dots"></i><span class="pr">'+fa(i.p)+'</span></div>').join("");
+    const row=i=>'<div class="it"'+st+'><div class="nm"><b>'+esc(i.n)+'</b>'+(desc&&dsc(i.d)?'<small>'+esc(dsc(i.d))+'</small>':'')+'</div><i class="dots"></i><span class="pr">'+fa(i.p)+'</span></div>';
+    return '<div class="hd"><h2'+st+'>'+(t==="color"||t==="chalk"?'<span>'+esc(c.e)+'</span>':'')+esc(c.t)+'</h2>'+row(c.items[0])+'</div>'+c.items.slice(1).map(row).join("");
   }).join("");
+}
+const NOTE={receipt:"ممنون که اومدی، باز هم بیا",news:"همه‌ی حقوق قهوه محفوظ است"};
+const today=()=>{try{return new Date().toLocaleDateString("fa-IR",{year:"numeric",month:"long",day:"numeric"})}catch(e){return ""}};
+function mast(t){
+  if(t==="receipt")return '<div class="mast">'+esc("فیش سفارش • شماره "+fa(String(new Date().getDate()*37+101))+" • "+today())+'</div>';
+  if(t==="news")return '<div class="mast"><span>'+esc(today())+'</span><span>'+esc(INFO.hours||"")+'</span><span>قیمت: یک لبخند</span></div>';
+  return "";
 }
 function pageHtml(t){
   const T=TPL[t],ac=/^#[0-9a-f]{3,8}$/i.test(SITE.accent||"")?SITE.accent:"#b87333";
@@ -151,10 +261,10 @@ function pageHtml(t){
   const ig=String(INFO.instagram||"").trim().replace(/^@/,"");
   const igSvg='<svg class="ig" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.3" cy="6.7" r=".9" fill="currentColor" stroke="none"/></svg>';
   return '<div class="page t-'+t+'" style="--W:'+T.W+'mm;--H:'+T.H+'mm;--ac:'+ac+'">'+
-    '<div class="fr"></div><i class="cn a"></i><i class="cn b"></i><i class="cn c"></i><i class="cn d"></i>'+
-    '<header><div class="hrow"><img src="images/logo-192.png" alt=""><div class="tt"><h1>'+esc(nm)+'</h1>'+(full&&full!==nm?'<p>'+esc(full)+'</p>':'')+'</div></div><div class="dv"><i></i></div></header>'+
+    '<div class="fr"></div><i class="cn a"></i><i class="cn b"></i><i class="cn c"></i><i class="cn d"></i><i class="x1"></i><i class="x2"></i><span class="stamp">تازه‌دم</span>'+
+    '<header>'+mast(t)+'<div class="hrow"><img src="images/logo-192.png" alt=""><div class="tt"><h1>'+esc(nm)+'</h1>'+(full&&full!==nm?'<p>'+esc(full)+'</p>':'')+'</div></div><div class="dv"><i></i></div></header>'+
     '<div class="body">'+bodyHtml(t)+'</div>'+
-    '<footer>'+(ig?igSvg+'<span dir="ltr">@'+esc(ig)+'</span>':'')+'</footer></div>';
+    '<footer>'+(NOTE[t]?'<span class="note">'+esc(NOTE[t])+'</span>':'')+(t==="receipt"?'<i class="bar"></i>':'')+(ig?'<span class="igw">'+igSvg+'<span dir="ltr">@'+esc(ig)+'</span></span>':'')+'</footer></div>';
 }
 const over=b=>{const r=b.getBoundingClientRect();return [].some.call(b.children,e=>{const q=e.getBoundingClientRect();return q.left<r.left-1||q.right>r.right+1||q.bottom>r.bottom+1||q.top<r.top-1})};
 function fit(page){
@@ -170,7 +280,7 @@ async function render(){
   $("#pgsize").textContent="@page{size:A4 "+T.o+";margin:0}";
   document.documentElement.style.setProperty("--z",1);
   $("#stage").innerHTML=pageHtml(cur);
-  try{await Promise.all([document.fonts.load("400 12pt V"),document.fonts.load("600 12pt V"),document.fonts.load("800 12pt V")])}catch(e){}
+  try{await Promise.all([document.fonts.load("400 12pt V"),document.fonts.load("600 12pt V"),document.fonts.load("800 12pt V"),document.fonts.load("400 12pt G")])}catch(e){}
   await Promise.all([].map.call(document.images,i=>i.complete?1:new Promise(r=>{i.onload=i.onerror=r})));
   const ok=fit($(".page"));
   document.documentElement.style.setProperty("--z",Math.min(1,(innerWidth-20)/(T.W*3.7795)));
