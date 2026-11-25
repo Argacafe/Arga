@@ -1083,7 +1083,7 @@ $("#card").addEventListener("click",e=>{
   const a=t.closest("[data-sa]");if(!a)return;
   if(a.dataset.sa==="erase")sdSet(0);
   else if(a.dataset.sa==="new"){sdNew(SD.lv);openSudoku()}
-  else if(a.dataset.sa==="hint")sdMsg("Are you fucking serious 😐")
+  else if(a.dataset.sa==="hint")sdMsg(pick(["This game is not for you. Go play Ludo.","If you need a hint, maybe Sudoku isn’t your thing.","Seriously? You can’t solve this?","Even the dice in Ludo have more logic.","Stop suffering. Go play something easier.","Who told you that you could play Sudoku?","Your brain called. It wants a break.","Just close the game. You’re embarrassing yourself."]))
   else if(a.dataset.sa==="save"){sdSave();sdMsg("Saved ✓")}
   else if(a.dataset.sa==="delsave"){sdDelSave();sdMsg("Save deleted")}
 });
