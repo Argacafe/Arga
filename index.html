@@ -50,6 +50,10 @@ svg.i{width:26px;height:26px;stroke:currentColor;fill:none;stroke-width:1.8;stro
 .stats b{display:block;font-size:17px}.stats span{font-size:12.5px;color:var(--mut)}
 .bio{padding:0 16px 10px;font-size:14px;line-height:1.9}
 .bio h1{font-size:15px;margin:0}.bio .cat{color:var(--fg);font-size:15px;font-weight:800}
+.glrow{padding:0 16px 12px}
+.glrow button{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;background:var(--chip);color:var(--fg);border:1px solid var(--line);border-radius:10px;padding:9px 8px;font-size:13.5px;font-weight:700}
+.glrow button svg{width:17px;height:17px;flex:none}
+.glrow button.on{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
 .actions{display:flex;gap:8px;padding:6px 16px 14px}
 .actions a,.actions button{flex:1;text-align:center;background:var(--chip);border-radius:9px;padding:8px;font-size:13.5px;font-weight:600;text-decoration:none;color:inherit}
 .actions .pri{background:#b87333;color:#fff}
@@ -468,6 +472,7 @@ svg.hb path{fill:#e0245e;stroke:currentColor;animation:heartRW 2.8s ease-in-out 
     <button id="btnRes">رزرو</button>
     <button id="btnShare" aria-label="تاس"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.8" y="3.8" width="16.4" height="16.4" rx="4.2" fill="currentColor" fill-opacity=".1"/><g fill="currentColor" stroke="none"><circle cx="8.6" cy="8.6" r="1.35"/><circle cx="15.4" cy="8.6" r="1.35"/><circle cx="12" cy="12" r="1.35"/><circle cx="8.6" cy="15.4" r="1.35"/><circle cx="15.4" cy="15.4" r="1.35"/></g></svg></button>
   </section>
+  <div class="glrow"><button id="btnGoogle" type="button"></button></div>
 
   <div class="stories" id="stories"></div>
 
@@ -631,7 +636,10 @@ const fa=n=>LANG==="en"?String(n):String(n).replace(/\d/g,d=>"۰۱۲۳۴۵۶۷۸
 const price=p=>fa(LANG==="en"&&SITE.fx===1?Math.round(p*1.3):p)+(LANG==="en"?",000 Toman":LANG==="ku"?",۰۰۰ تمەن":",۰۰۰ تومان");
 const nm=i=>LANG==="en"&&i.en?i.en:LANG==="ku"&&i.ku?i.ku:i.n;
 const ds=i=>LANG==="en"&&i.en?(i.ed||i.d):LANG==="ku"&&i.ku?(i.kd||i.d):i.d;
-const priceH=i=>(i.old?`<s class="old">${price(i.old)}</s> `:"")+price(i.p);
+let DISC=false;try{DISC=localStorage.getItem("arga_gl")==="1"}catch(e){}
+const DPCT=2;
+const priceD=p=>fa(Math.round((LANG==="en"&&SITE.fx===1?p*1.3:p)*(100-DPCT)*10).toLocaleString("en"))+(LANG==="en"?" Toman":LANG==="ku"?" تمەن":" تومان");
+const priceH=i=>DISC&&!i.off&&typeof i.p==="number"?`<s class="old">${price(i.p)}</s> ${priceD(i.p)}`:(i.old?`<s class="old">${price(i.old)}</s> `:"")+price(i.p);
 const badge=i=>(i.off?`<span class="ofl">${tr("ناموجود")}</span>`:"")+(i.tag?`<span class="tg">${eh(i.tag)}</span>`:"");
 let cat="all",view="grid",onlyFav=false,query="";
 let favs=new Set();
@@ -1527,6 +1535,47 @@ const show=()=>{if(SITE.hint===0)return;const b=document.getElementById("btnShar
 const arm=()=>{clearTimeout(T);if(!shown)T=setTimeout(show,IDLE)};
 const act=()=>{hide();arm()};
 ["pointerdown","touchstart","keydown","scroll","wheel"].forEach(e=>addEventListener(e,act,{passive:true,capture:true}));arm()})();
+</script>
+<script>
+(function(){
+  var CFG={apiKey:"AIzaSyB_5KbCWfAyHeT-MPXQsjuTPgUBf-bMAuI",authDomain:"arga-cafe.firebaseapp.com",projectId:"arga-cafe",storageBucket:"arga-cafe.firebasestorage.app",messagingSenderId:"156854287334",appId:"1:156854287334:web:b36f64f83474f723b57427"};
+  var V="10.14.1",BASE="https://www.gstatic.com/firebasejs/"+V+"/";
+  var btn=document.getElementById("btnGoogle"),A=null,user=null;
+  var G='<svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.9 6.1C12.4 13.6 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.6 5.9c4.5-4.1 7-10.2 7-17.6z"/><path fill="#FBBC05" d="M10.5 28.7a14.5 14.5 0 0 1 0-9.4l-7.9-6.1a24 24 0 0 0 0 21.6l7.9-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.6-5.9c-2.1 1.4-4.9 2.3-8.3 2.3-6.3 0-11.6-4.1-13.5-9.8l-7.9 6.1C6.5 42.6 14.6 48 24 48z"/></svg>';
+  function paint(){
+    if(!btn)return;
+    btn.className=DISC?"on":"";
+    btn.innerHTML=DISC
+      ? G+'<span>'+L("خروج از حساب · تخفیف ۲٪ فعال","Sign out · 2% discount on","چوونەدەرەوە · داشکاندنی ٢٪ چالاکە")+'</span>'
+      : G+'<span>'+L("ورود با گوگل و ۲٪ تخفیف","Sign in with Google for 2% off","چوونەژوورەوە بە گووگڵ و ٢٪ داشکاندن")+'</span>';
+  }
+  function setDisc(on){
+    try{on?localStorage.setItem("arga_gl","1"):localStorage.removeItem("arga_gl")}catch(e){}
+    if(on!==DISC){DISC=on;render()}
+    paint();
+  }
+  var _render=render;
+  render=function(){_render.apply(this,arguments);paint()};
+  paint();
+  var inApp=/Instagram|FBAN|FBAV|FB_IAB|Line\//i.test(navigator.userAgent);
+  var ready=Promise.all([import(BASE+"firebase-app.js"),import(BASE+"firebase-auth.js")]).then(function(m){
+    var app=m[0].initializeApp(CFG);A=m[1];A.auth=A.getAuth(app);
+    A.onAuthStateChanged(A.auth,function(u){user=u;setDisc(!!u)});
+  }).catch(function(){A=null});
+  btn&&btn.addEventListener("click",function(){
+    if(DISC&&A){A.signOut(A.auth).catch(function(){});return}
+    if(inApp){toast(L("برای ورود، سایت را در مرورگر (کروم یا سافاری) باز کنید","Open this page in your browser to sign in","بۆ چوونەژوورەوە، پەڕەکە لە وێبگەڕ بکەرەوە"));return}
+    ready.then(function(){
+      if(!A){toast(L("اتصال برقرار نشد، دوباره تلاش کنید","Could not connect, try again","پەیوەندی نەکرا، دووبارە هەوڵبدەرەوە"));return}
+      var p=new A.GoogleAuthProvider();
+      A.signInWithPopup(A.auth,p).catch(function(e){
+        var c=e&&e.code;
+        if(c==="auth/popup-blocked"||c==="auth/operation-not-supported-in-this-environment"){A.signInWithRedirect(A.auth,p).catch(function(){})}
+        else if(c!=="auth/popup-closed-by-user"&&c!=="auth/cancelled-popup-request"){toast(L("ورود انجام نشد","Sign-in failed","چوونەژوورەوە سەرکەوتوو نەبوو"))}
+      });
+    });
+  });
+})();
 </script>
 </body>
 </html>
