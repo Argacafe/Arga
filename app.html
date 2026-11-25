@@ -8,7 +8,7 @@
 <link rel="icon" href="images/favicon.png">
 <style>
 @font-face{font-family:V;src:url(fonts/Vazirmatn-VF.woff2) format("woff2");font-weight:100 900;font-display:swap}
-:root{--ac:#b87333;--ink:#1e1a17;--mut:#8a8079;--r:22px;--y0:0px;
+:root{--ac:#b87333;--ink:#1e1a17;--mut:#8a8079;--r:22px;--y0:0px;--gy:0px;
 --folds:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='700' height='900'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.004 .011' numOctaves='3' seed='7' stitchTiles='stitch' result='t'/%3E%3CfeDiffuseLighting in='t' lighting-color='%23ffffff' surfaceScale='7'%3E%3CfeDistantLight azimuth='235' elevation='72'/%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E")}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html{scroll-behavior:smooth;background:#f6f4f1}
@@ -17,7 +17,6 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;background:var(--folds
 button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 .wrap{position:relative;max-width:560px;margin:0 auto;padding:0 18px}
 .wrap.pre{transform:translateY(var(--y0))}
-#wr{position:absolute;z-index:3;top:0;left:0;right:0;height:62vh;opacity:0;pointer-events:none;background:repeating-conic-gradient(from 70deg at 50% 0,rgba(90,80,70,.13) 0 2.2deg,rgba(255,255,255,.7) 2.2deg 5.5deg);-webkit-mask-image:linear-gradient(#000 25%,transparent);mask-image:linear-gradient(#000 25%,transparent)}
 .top{display:flex;align-items:center;justify-content:space-between;padding:calc(14px + env(safe-area-inset-top)) 0 6px}
 .ib{width:44px;height:44px;border-radius:50%;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.08);display:grid;place-items:center}
 .ib svg{width:22px;height:22px}
@@ -45,7 +44,7 @@ h2{font-size:20px;font-weight:800;margin:24px 0 12px;scroll-margin-top:70px}
 .tg{position:absolute;top:18px;inset-inline-end:18px;background:var(--ac);color:#fff;font-size:11px;padding:2px 9px;border-radius:99px}
 .fav{position:absolute;top:18px;inset-inline-start:18px;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.9);display:grid;place-items:center}
 .fav svg{width:18px;height:18px;fill:none;stroke:#444;stroke-width:2}.fav.on svg{fill:#e0457b;stroke:#e0457b}
-.sheet{position:fixed;inset:0;z-index:30;display:none;background:rgba(0,0,0,.45);align-items:flex-end;justify-content:center}.sheet.on{display:flex}
+.sheet{position:fixed;inset:0;z-index:50;display:none;background:rgba(0,0,0,.45);align-items:flex-end;justify-content:center}.sheet.on{display:flex}
 .sh{width:100%;max-width:560px;background:#fff;border-radius:28px 28px 0 0;padding:16px 20px calc(24px + env(safe-area-inset-bottom))}
 .sh .ph{aspect-ratio:1.4;font-size:90px;margin-bottom:14px}
 .sh h3{font-size:22px}.sh p{color:var(--mut);margin:6px 0 12px;line-height:1.9}
@@ -53,30 +52,37 @@ h2{font-size:20px;font-weight:800;margin:24px 0 12px;scroll-margin-top:70px}
 .foot{text-align:center;margin:30px 0 10px;color:var(--mut)}
 .foot a{display:inline-flex;gap:6px;align-items:center;color:inherit;text-decoration:none;direction:ltr}.foot svg{width:18px;height:18px}
 #msg{padding:60px 20px;text-align:center;color:var(--mut)}
-#paw{position:fixed;z-index:40;left:50%;top:0;width:150px;height:513px;transform:translateX(-50%) translateY(-120vh);transform-origin:50% 0;pointer-events:none;filter:drop-shadow(0 16px 12px rgba(70,45,20,.28))}
-#toes{transition:transform .45s;transform-box:fill-box;transform-origin:50% 0}
-.claw{transform:scale(0);transform-box:fill-box;transform-origin:50% 0;transition:transform .35s}
-#paw.grab #toes{transform:translateY(-6px) scaleY(.92)}
-#paw.grab .claw{transform:scale(1)}
-@media (prefers-reduced-motion:reduce){#paw,#wr{display:none}}
+/* چروک‌های پارچه دور مشت پنجه */
+#pl{position:fixed;z-index:20;left:0;right:0;top:0;height:62vh;opacity:0;pointer-events:none;-webkit-mask-image:radial-gradient(ellipse 80vw 56vh at 50% var(--gy),#000 22%,transparent 100%);mask-image:radial-gradient(ellipse 80vw 56vh at 50% var(--gy),#000 22%,transparent 100%)}
+#gs{position:absolute;left:50%;top:var(--gy);width:240px;height:240px;margin:-120px 0 0 -120px;background:radial-gradient(circle,rgba(110,95,105,.22),transparent 68%)}
+#pls{position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible;transform:scale(.2);transform-origin:50% var(--gy)}
+/* پنجه‌ی نرم صورتی */
+#paw{position:fixed;z-index:40;left:50%;top:0;transform:translateX(-50%) translateY(-120vh);transform-origin:50% 0;pointer-events:none;filter:drop-shadow(0 8px 7px rgba(90,55,70,.3))}
+#paw .tt{transition:transform .3s;transform-box:fill-box;transform-origin:50% 50%}
+#paw.grab .tl{transform:translate(5px,-9px) scale(.93)}
+#paw.grab .tc{transform:translate(0,-13px) scale(.93)}
+#paw.grab .tr{transform:translate(-5px,-9px) scale(.93)}
+@media (prefers-reduced-motion:reduce){#paw,#pl{display:none}}
 </style>
 </head>
 <body>
-<svg id="paw" viewBox="0 -400 240 820" aria-hidden="true">
+<div id="pl" aria-hidden="true"><i id="gs"></i><svg id="pls"></svg></div>
+<svg id="paw" viewBox="0 -240 100 500" aria-hidden="true">
 <defs>
-<linearGradient id="arm" x1="0" x2="1"><stop offset="0" stop-color="#d98e45"/><stop offset=".5" stop-color="#f6d4a2"/><stop offset="1" stop-color="#d98e45"/></linearGradient>
-<radialGradient id="fur" cx=".5" cy=".35" r=".85"><stop offset="0" stop-color="#fbe2b8"/><stop offset="1" stop-color="#e29a50"/></radialGradient>
-<radialGradient id="pad" cx=".4" cy=".3" r=".9"><stop offset="0" stop-color="#fbc3cd"/><stop offset="1" stop-color="#e88aa0"/></radialGradient>
+<linearGradient id="pa" x1="0" x2="1"><stop offset="0" stop-color="#ffd3d9"/><stop offset=".45" stop-color="#f8b3bf"/><stop offset="1" stop-color="#e68c9f"/></linearGradient>
+<radialGradient id="pb" cx=".38" cy=".3" r=".85"><stop offset="0" stop-color="#ffdfe3"/><stop offset=".55" stop-color="#f8b4c0"/><stop offset="1" stop-color="#e48a9d"/></radialGradient>
+<filter id="bl" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.6"/></filter>
 </defs>
-<path d="M52 -400 L188 -400 L178 236 Q120 266 62 236 Z" fill="url(#arm)"/>
-<g stroke="#b86a2a" stroke-width="7" fill="none" opacity=".3" stroke-linecap="round"><path d="M58 -220 q62 14 124 0"/><path d="M58 -130 q62 14 124 0"/><path d="M58 -40 q62 14 124 0"/><path d="M60 50 q60 14 120 0"/><path d="M62 140 q58 14 116 0"/></g>
-<g id="fur"></g>
-<ellipse cx="120" cy="304" rx="84" ry="72" fill="url(#fur)"/>
-<g id="toes"></g>
-<path d="M84 318C84 296 104 290 120 292C136 290 156 296 156 318C156 340 142 344 134 336C128 330 112 330 106 336C98 344 84 340 84 318Z" fill="url(#pad)"/>
+<rect x="27" y="-240" width="46" height="400" rx="23" fill="url(#pa)"/>
+<ellipse cx="50" cy="188" rx="30" ry="32" fill="url(#pb)"/>
+<ellipse class="tt tl" cx="31" cy="224" rx="13" ry="16" fill="url(#pb)" stroke="rgba(214,120,140,.45)" stroke-width="1"/>
+<ellipse class="tt tr" cx="69" cy="224" rx="13" ry="16" fill="url(#pb)" stroke="rgba(214,120,140,.45)" stroke-width="1"/>
+<ellipse class="tt tc" cx="50" cy="234" rx="14" ry="17" fill="url(#pb)" stroke="rgba(214,120,140,.45)" stroke-width="1"/>
+<path d="M40 216q-2 9 0 17M60 216q2 9 0 17" stroke="rgba(206,110,132,.45)" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+<ellipse cx="38" cy="-40" rx="4.5" ry="170" fill="#fff" opacity=".42" filter="url(#bl)"/>
+<ellipse cx="40" cy="176" rx="12" ry="9" fill="#fff" opacity=".42" filter="url(#bl)"/>
 </svg>
 <div class="wrap pre" id="app">
-<i id="wr"></i>
 <div class="top"><button class="ib" id="bs" type="button" aria-label="جستجو"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></button><div class="loc"><small>منوی دیجیتال</small><b id="nm"></b></div><img class="av" src="images/logo-192.png" alt=""></div>
 <div class="sb" id="sb"><input id="qi" placeholder="جستجوی آیتم..."></div>
 <h1>منوی کافه <small id="cn"></small></h1>
@@ -157,51 +163,53 @@ addEventListener("scroll",()=>{
   document.querySelectorAll("#chips .chip[data-s]").forEach(b=>b.classList.toggle("on",+b.dataset.s===on));
 },{passive:true});
 
-/* پنجه‌ی گربه: پوست و پنجه‌ها با موی ریز ساخته می‌شوند */
-function buildPaw(){
-  const r=(a,b)=>a+Math.random()*(b-a);let f="";
-  for(let y=-390;y<232;y+=6){[0,1].forEach(s=>{const x=s?188-(y+400)*10/636:52+(y+400)*10/636,d=s?1:-1;f+='<path d="M'+x.toFixed(1)+' '+y+' l'+(d*r(6,13)).toFixed(1)+' '+r(-1,5).toFixed(1)+'" stroke="'+(Math.random()<.5?"#f7d9ae":"#cf8a43")+'" stroke-width="'+r(1,2).toFixed(1)+'" stroke-linecap="round" opacity=".75" fill="none"/>'})}
-  for(let a=0;a<360;a+=8){const q=a*Math.PI/180;if(Math.sin(q)>.3)continue;const x=120+Math.cos(q)*84,y=304+Math.sin(q)*72,l=r(5,10);f+='<path d="M'+x.toFixed(1)+' '+y.toFixed(1)+' l'+(Math.cos(q)*l).toFixed(1)+' '+(Math.sin(q)*l).toFixed(1)+'" stroke="#e8b273" stroke-width="1.5" stroke-linecap="round" opacity=".8" fill="none"/>'}
-  $("#fur").innerHTML=f;
-  let t="";
-  [[48,352,-18],[94,382,-6],[146,382,6],[192,352,18]].forEach((o,k)=>{
-    const cx=o[0],cy=o[1];let h="";
-    for(let a=0;a<360;a+=14){const q=a*Math.PI/180,x=cx+Math.cos(q)*27,y=cy+Math.sin(q)*32,l=r(5,9);h+='<path d="M'+x.toFixed(1)+' '+y.toFixed(1)+' l'+(Math.cos(q)*l).toFixed(1)+' '+(Math.sin(q)*l).toFixed(1)+'" stroke="'+(k%2?"#f7d9ae":"#d9954f")+'" stroke-width="1.6" stroke-linecap="round" opacity=".8" fill="none"/>'}
-    t+='<g transform="rotate('+o[2]+' '+cx+' '+cy+')"><ellipse cx="'+cx+'" cy="'+cy+'" rx="27" ry="32" fill="url(#fur)"/>'+h+'<ellipse cx="'+cx+'" cy="'+(cy+10)+'" rx="13" ry="10" fill="url(#pad)"/><path class="claw" d="M'+(cx-3)+' '+(cy+30)+' q5 14 -1 25 q-7 -9 -4 -25z" fill="#fff8ec" stroke="#d6bf9d" stroke-width=".8"/></g>';
-  });
-  $("#toes").innerHTML=t;
+/* چروک‌های ریز پارچه: خط تیره‌ی نازک + خط روشن کنارش، شعاعی از مشت پنجه */
+function pleats(w,oy){
+  const ox=w/2,N=38,R=Math.random;let s="";
+  for(let k=0;k<N;k++){
+    const a=(8+(k+R()*.7)/N*164)*Math.PI/180,dx=Math.cos(a),dy=Math.sin(a);
+    const r0=10+R()*16,L=(.35+R()*.65)*Math.min(w*.62,420)*(1+.5*Math.abs(dx));
+    const x1=ox+dx*r0,y1=oy+dy*r0,x2=ox+dx*(r0+L),y2=oy+dy*(r0+L)*.9,b=(R()-.5)*34;
+    const d="M"+x1.toFixed(1)+" "+y1.toFixed(1)+" Q"+((x1+x2)/2-dy*b).toFixed(1)+" "+((y1+y2)/2+dx*b).toFixed(1)+" "+x2.toFixed(1)+" "+y2.toFixed(1);
+    const sw=(.9+R()*1.7).toFixed(1);
+    s+='<path d="'+d+'" stroke="rgba(88,84,94,'+(.16+R()*.2).toFixed(2)+')" stroke-width="'+sw+'" fill="none" stroke-linecap="round" vector-effect="non-scaling-stroke"/><path d="'+d+'" transform="translate(1.8 1.2)" stroke="rgba(255,255,255,.9)" stroke-width="'+(sw*.9).toFixed(1)+'" fill="none" stroke-linecap="round" vector-effect="non-scaling-stroke"/>';
+  }
+  return s;
 }
 
-/* انیمیشن روی خود سایت: پنجه می‌آید، چپ و راست می‌رود، پارچه‌ی سایت را می‌گیرد و بالا می‌کشد */
+/* روی خود سایت: سایت پایین‌تر می‌نشیند، پنجه از بالا می‌آید، چپ و راست می‌رود، مشت می‌شود، پارچه چروک می‌شود و سایت را بالا می‌کشد */
 function intro(){
-  const app=$("#app"),paw=$("#paw"),wr=$("#wr");
-  if(matchMedia("(prefers-reduced-motion:reduce)").matches||/noanim/.test(location.search)){app.classList.remove("pre");paw.remove();wr.remove();return}
-  buildPaw();
-  const Y0=Math.round(innerHeight*.36),up=-(Y0+560);
-  document.documentElement.style.setProperty("--y0",Y0+"px");
-  paw.style.top=(Y0-500)+"px";
+  const app=$("#app"),paw=$("#paw"),pl=$("#pl"),pls=$("#pls");
+  if(matchMedia("(prefers-reduced-motion:reduce)").matches||/noanim/.test(location.search)){app.classList.remove("pre");paw.remove();pl.remove();return}
+  const Y0=Math.round(Math.min(150,Math.max(96,innerHeight*.14))),gy=Y0-18;
+  const W=70,S=W/100,H=Math.round(500*S),tb=Math.round((251+240)*S);
+  const root=document.documentElement.style;root.setProperty("--y0",Y0+"px");root.setProperty("--gy",gy+"px");
+  paw.style.width=W+"px";paw.style.height=H+"px";paw.style.top=(gy-tb)+"px";
+  pls.innerHTML=pleats(innerWidth,gy);
   const P=(x,y,r)=>"translateX(-50%) translate("+x+"px,"+y+"px) rotate("+r+"deg)";
-  const anims=[];let stop=false;
+  const up=-(gy+H+40),anims=[];let stop=false;
   const A=(el,k,o)=>{const a=el.animate(k,Object.assign({fill:"forwards",easing:"ease-in-out"},o));anims.push(a);return a.finished.catch(()=>{})};
   const wait=ms=>new Promise(r=>setTimeout(r,ms));
-  const end=()=>{if(stop)return;stop=true;anims.forEach(a=>{try{a.cancel()}catch(e){}});app.classList.remove("pre");paw.remove();wr.remove()};
+  const end=()=>{if(stop)return;stop=true;anims.forEach(a=>{try{a.cancel()}catch(e){}});app.classList.remove("pre");paw.remove();pl.remove()};
   ["wheel","touchmove","keydown"].forEach(ev=>addEventListener(ev,end,{once:true,passive:true}));
+  const E="ease-in-out";
   (async()=>{
-    await A(paw,[{transform:P(0,up,0)},{transform:P(0,0,0)}],{duration:900,easing:"cubic-bezier(.2,.8,.2,1)"});
+    await A(paw,[{transform:P(0,up,0)},{transform:P(0,0,0)}],{duration:800,easing:"cubic-bezier(.2,.8,.2,1)"});
     if(stop)return;
-    await A(paw,[{transform:P(0,0,0)},{transform:P(0,8,-10)},{transform:P(0,-4,9)},{transform:P(0,10,-9)},{transform:P(0,-4,10)},{transform:P(0,6,-6)},{transform:P(0,0,0)}],{duration:4600});
+    await A(paw,[{transform:P(0,0,0),easing:E},{transform:P(0,0,-15),easing:E},{transform:P(0,0,16),easing:E},{transform:P(0,0,-11),easing:E},{transform:P(0,0,9),easing:E},{transform:P(0,0,0)}],{duration:3600,easing:"linear"});
     if(stop)return;
     paw.classList.add("grab");
-    A(app,[{clipPath:"polygon(0 0,100% 0,100% 100%,0 100%)"},{clipPath:"polygon(14% 0,86% 0,100% 100%,0 100%)"}],{duration:450});
-    await A(wr,[{opacity:0},{opacity:1}],{duration:450});
+    A(pl,[{opacity:0},{opacity:.55}],{duration:350});
+    A(pls,[{transform:"scale(.2)"},{transform:"scale(.55)"}],{duration:350,easing:"ease-out"});
+    await wait(380);
     if(stop)return;
-    const E="cubic-bezier(.45,0,.2,1)";
-    A(wr,[{opacity:1},{opacity:0}],{duration:1400,delay:200});
-    A(paw,[{transform:P(0,0,0)},{transform:P(0,-Y0,0)}],{duration:1300,easing:E});
-    A(app,[{transform:"translateY("+Y0+"px)",clipPath:"polygon(14% 0,86% 0,100% 100%,0 100%)"},{transform:"translateY(0px)",clipPath:"polygon(0 0,100% 0,100% 100%,0 100%)"}],{duration:1300,easing:E});
-    await wait(1300);
+    A(paw,[{transform:P(0,0,0)},{transform:P(0,up,0)}],{duration:480,easing:"cubic-bezier(.5,0,.9,.4)"});
+    A(pl,[{opacity:.55},{opacity:1}],{duration:480});
+    await A(pls,[{transform:"scale(.55)"},{transform:"scale(1.05)"}],{duration:520,easing:"ease-out"});
     if(stop)return;
-    await A(paw,[{transform:P(0,-Y0,0)},{transform:P(0,up,0)}],{duration:500,easing:"ease-in"});
+    A(pl,[{opacity:1},{opacity:0}],{duration:1000,delay:150});
+    A(pls,[{transform:"scale(1.05)"},{transform:"scale(1.25)"}],{duration:1100,easing:"ease-out"});
+    await A(app,[{transform:"translateY("+Y0+"px)"},{transform:"translateY(0px)"}],{duration:1000,easing:"cubic-bezier(.3,0,.2,1)"});
     end();
   })();
 }
