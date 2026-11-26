@@ -633,7 +633,7 @@ const nm=i=>LANG==="en"&&i.en?i.en:LANG==="ku"&&i.ku?i.ku:i.n;
 const ds=i=>LANG==="en"&&i.en?(i.ed||i.d):LANG==="ku"&&i.ku?(i.kd||i.d):i.d;
 let DISC=false;try{DISC=localStorage.getItem("arga_gl")==="1"}catch(e){}
 const DPCT=2;
-const priceD=p=>fa(Math.round((LANG==="en"&&SITE.fx===1?p*1.3:p)*(100-DPCT)*10).toLocaleString("en"))+(LANG==="en"?" Toman":LANG==="ku"?" تمەن":" تومان");
+const priceD=p=>{const full=Math.round((LANG==="en"&&SITE.fx===1?p*1.3:p)*1000);let v=Math.round(full*(100-DPCT)/100/500)*500;if(v>=full)v=full-500;return fa(v.toLocaleString("en"))+(LANG==="en"?" Toman":LANG==="ku"?" تمەن":" تومان")};
 const priceH=i=>DISC&&!i.off&&typeof i.p==="number"?`<s class="old">${price(i.p)}</s> ${priceD(i.p)}`:(i.old?`<s class="old">${price(i.old)}</s> `:"")+price(i.p);
 const badge=i=>(i.off?`<span class="ofl">${tr("ناموجود")}</span>`:"")+(i.tag?`<span class="tg">${eh(i.tag)}</span>`:"");
 let cat="all",view="grid",onlyFav=false,query="";
@@ -721,7 +721,7 @@ function openInfo(){
    ${COUNTER?`<div class="row">👁 <div>بازدید: <b id="visitNum">${VISITS===null?"…":VISITS===false?"—":fa(VISITS.toLocaleString("en"))}</b></div></div>`:""}
    ${INSTALLED?"":`<div class="row">📲 <div><button id="btnInstall" style="font:inherit;font-weight:700;text-decoration:underline">نصب اپلیکیشن روی گوشی</button></div></div>`}
    <div class="row">📸 <div><a href="${eh(igUrl())}" target="_blank" rel="noopener" style="color:inherit" dir="ltr">@${eh(INFO.instagram)}</a></div></div>
-   <div class="row">🔐 <div><button id="btnGoogle" type="button" style="font:inherit;font-weight:700;text-decoration:underline"></button></div></div></div>`;
+   <div class="row">🔐 <div><button id="btnGoogle" type="button" style="font:inherit;font-weight:700;display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:10px;padding:7px 12px;background:var(--chip)"></button></div></div></div>`;
   openModal();
 }
 function setLang(l){
@@ -1536,10 +1536,19 @@ const act=()=>{hide();arm()};
 (function(){
   var CFG={apiKey:"AIzaSyB_5KbCWfAyHeT-MPXQsjuTPgUBf-bMAuI",authDomain:"arga-cafe.firebaseapp.com",projectId:"arga-cafe",storageBucket:"arga-cafe.firebasestorage.app",messagingSenderId:"156854287334",appId:"1:156854287334:web:b36f64f83474f723b57427"};
   var BASE="https://www.gstatic.com/firebasejs/10.14.1/";
-  var FA=null,AU=null,loading=null;
+  var GCID="";
+  var FA=null,AU=null,loading=null,gisOK=false;
+  function loadGIS(){
+    if(!GCID||document.getElementById("gisjs"))return;
+    var sc=document.createElement("script");sc.id="gisjs";sc.src="https://accounts.google.com/gsi/client";sc.async=true;
+    sc.onload=function(){gisOK=true};sc.onerror=function(){var x=document.getElementById("gisjs");if(x)x.remove()};
+    document.head.appendChild(sc);
+  }
+  loadGIS();
   function paint(){
     var b=document.getElementById("btnGoogle");if(!b)return;
-    b.textContent=DISC?L("خروج از حساب","Sign out","چوونەدەرەوە"):L("ورود با گوگل","Sign in with Google","چوونەژوورەوە بە گووگڵ");
+    b.innerHTML='<svg viewBox="0 0 48 48" width="18" height="18" style="flex:none"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.9 6.1C12.4 13.6 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.6 5.9c4.5-4.1 7-10.2 7-17.6z"/><path fill="#FBBC05" d="M10.5 28.7a14.5 14.5 0 0 1 0-9.4l-7.9-6.1a24 24 0 0 0 0 21.6l7.9-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.6-5.9c-2.1 1.4-4.9 2.3-8.3 2.3-6.3 0-11.6-4.1-13.5-9.8l-7.9 6.1C6.5 42.6 14.6 48 24 48z"/></svg><span></span>';
+    b.lastChild.textContent=DISC?L("خروج از حساب","Sign out","چوونەدەرەوە"):L("ورود با گوگل","Sign in with Google","چوونەژوورەوە بە گووگڵ");
   }
   function setDisc(on){
     try{on?localStorage.setItem("arga_gl","1"):localStorage.removeItem("arga_gl")}catch(e){}
@@ -1562,15 +1571,28 @@ const act=()=>{hide();arm()};
   document.addEventListener("click",function(e){
     var b=e.target.closest&&e.target.closest("#btnGoogle");if(!b)return;
     if(inApp&&!DISC){toast(L("برای ورود، سایت را در مرورگر (کروم یا سافاری) باز کنید","Open this page in your browser to sign in","بۆ چوونەژوورەوە، پەڕەکە لە وێبگەڕ بکەرەوە"));return}
+    var fail=function(){toast(L("اتصال برقرار نشد، دوباره تلاش کنید","Could not connect, try again","پەیوەندی نەکرا، دووبارە هەوڵبدەرەوە"))};
+    if(DISC){load().then(function(){FA.signOut(AU).catch(function(){})},fail);return}
+    if(GCID){
+      if(!FA||!(window.google&&google.accounts&&google.accounts.oauth2)){loadGIS();load().catch(function(){});fail();return}
+      google.accounts.oauth2.initTokenClient({
+        client_id:GCID,scope:"openid email profile",
+        callback:function(r){
+          if(!r||!r.access_token){toast(L("ورود انجام نشد","Sign-in failed","چوونەژوورەوە سەرکەوتوو نەبوو"));return}
+          FA.signInWithCredential(AU,FA.GoogleAuthProvider.credential(null,r.access_token)).catch(function(er){toast(L("ورود انجام نشد","Sign-in failed","چوونەژوورەوە سەرکەوتوو نەبوو")+" ("+((er&&er.code)||"?")+")")});
+        },
+        error_callback:function(){}
+      }).requestAccessToken({prompt:"select_account"});
+      return;
+    }
     load().then(function(){
-      if(DISC){FA.signOut(AU).catch(function(){});return}
       var p=new FA.GoogleAuthProvider();
       FA.signInWithPopup(AU,p).catch(function(er){
         var c=er&&er.code;
         if(c==="auth/popup-blocked"||c==="auth/operation-not-supported-in-this-environment"){FA.signInWithRedirect(AU,p).catch(function(){})}
         else if(c!=="auth/popup-closed-by-user"&&c!=="auth/cancelled-popup-request"){toast(L("ورود انجام نشد","Sign-in failed","چوونەژوورەوە سەرکەوتوو نەبوو")+" ("+(c||"?")+")")}
       });
-    },function(){toast(L("اتصال برقرار نشد، دوباره تلاش کنید","Could not connect, try again","پەیوەندی نەکرا، دووبارە هەوڵبدەرەوە"))});
+    },fail);
   });
 })();
 </script>
