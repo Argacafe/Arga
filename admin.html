@@ -367,8 +367,28 @@ dialog::backdrop{background:rgba(3,18,11,.55)}
     </div>
     <div class="card">
       <h2>قالب جدید (میز)</h2>
+      <style>
+        #tbPv{position:relative;width:240px;height:444px;margin:0 auto 8px;border-radius:12px;overflow:hidden;background:#1a120c;touch-action:pan-y;direction:ltr}
+        #tbPv .bgi{position:absolute;max-width:none;pointer-events:none}
+        #tbPv .fb{position:absolute;left:0;right:0;font-size:10px;color:#fff;text-align:center;background:#0008;pointer-events:none}
+        #tbPv .pp{position:absolute;border-radius:50%;background:#fffaf0;border:2px solid #fffaf0;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 4px #0008;pointer-events:none;font-size:12px}
+        #tbPv .pl2{position:absolute;height:9px;border-radius:5px;background:#140c06c8;pointer-events:none}
+        #tbPv .ln{position:absolute;left:0;right:0;border-top:1px dashed #ffe08a;pointer-events:none}
+        #tbPv .pz{position:absolute;border:2px dashed #ff4d4d;background:#ff4d4d33;touch-action:none;cursor:move;box-sizing:border-box}
+        #tbPv .pz .px{position:absolute;top:-1px;left:-1px;width:22px;height:22px;line-height:20px;text-align:center;background:#ff4d4d;color:#fff;font-style:normal;font-size:12px;cursor:pointer}
+        #tbPv .pz .ph{position:absolute;right:-2px;bottom:-2px;width:22px;height:22px;background:#ff4d4d;cursor:nwse-resize;touch-action:none}
+      </style>
+      <div id="tbPv"><img class="bgi" id="tbPvBg" alt=""><div class="fb" style="top:0;height:34px;line-height:34px" id="tbPvTop">استوری‌ها</div><div class="fb" style="bottom:0;height:18px;line-height:18px">جمع سفارش</div></div>
+      <p class="mut" id="tbCap" style="margin:0 0 8px;text-align:center;font-size:12px"></p>
+      <div class="lbl">جاهای ممنوعه روی میز (قرمز)</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin:0 0 6px">
+        <button type="button" class="btn sec sm" id="tbZAdd">افزودن ناحیه</button>
+        <button type="button" class="btn sec sm" id="tbZNone">حذف همه</button>
+        <button type="button" class="btn sec sm" id="tbZDef">برگشت به پیش‌فرض</button>
+      </div>
+      <p class="mut" style="margin:0 0 12px;font-size:12px">ناحیه‌های قرمز را با انگشت جابه‌جا کن و با مربع پایین‌شان بزرگ و کوچک کن. آیتم‌ها روی این ناحیه‌ها نمی‌افتند، مثلاً روی گوشی یا گلدان. پیش‌فرض، جای گوشی در عکس پیش‌فرض است.</p>
       <div class="lbl">اندازه‌ی آیتم‌ها <span id="tbSzV" class="mut"></span></div>
-      <input type="range" id="tbSz" min="60" max="160" step="5" style="width:100%;margin:2px 0 12px">
+      <input type="range" id="tbSz" min="60" max="170" step="5" style="width:100%;margin:2px 0 12px">
       <div class="lbl">شروع سطح میز از بالای عکس <span id="tbTopV" class="mut"></span></div>
       <input type="range" id="tbTop" min="20" max="80" step="1" style="width:100%;margin:2px 0 4px">
       <p class="mut" style="margin:0 0 12px;font-size:12px">آیتم‌ها فقط از این خط به پایین روی میز می‌نشینند. با عکس پس‌زمینه‌ی خودت این را روی سطح میز تنظیم کن.</p>
@@ -553,7 +573,7 @@ function serStory(){
   const k=n=>/^[A-Za-z_]\w*$/.test(n)?n:q(n);
   return "const STORY={\n"+Object.keys(all).map(n=>" "+k(n)+":{img:"+q(all[n].img)+(all[n].cut?",cut:1":"")+"}").join(",\n")+"\n};";
 }
-const serSite=()=>{const o=Object.assign({},SITE);if(!o.txt||!Object.keys(o.txt).length)delete o.txt;if(!o.nft||!Object.keys(o.nft).length)delete o.nft;if(o.tb){const t=o.tb;if(t.sz===100||!t.sz)delete t.sz;if(t.top===50||t.top==null)delete t.top;if(t.lb!==0)delete t.lb;if(!t.bg)delete t.bg;if(!Object.keys(t).length)delete o.tb}return "const SITE="+JSON.stringify(o)+";"};
+const serSite=()=>{const o=Object.assign({},SITE);if(!o.txt||!Object.keys(o.txt).length)delete o.txt;if(!o.nft||!Object.keys(o.nft).length)delete o.nft;if(o.tb){const t=o.tb;if(t.sz===100||!t.sz)delete t.sz;if(t.top===50||t.top==null)delete t.top;if(t.lb!==0)delete t.lb;if(!t.bg)delete t.bg;if(!Array.isArray(t.zones))delete t.zones;if(!Object.keys(t).length)delete o.tb}return "const SITE="+JSON.stringify(o)+";"};
 const serGal=()=>"const GALLERY="+JSON.stringify(GALLERY)+";";
 const serInfo=()=>{const o=Object.assign({},INFO);if(!o.wa)delete o.wa;if(!o.hl)delete o.hl;return "const INFO="+JSON.stringify(o)+";"};
 const state=()=>serMenu()+serLocal()+serGal()+serInfo()+serStory()+serSite()+Object.keys(PENDING).join()+LOGOVER;
@@ -1066,19 +1086,90 @@ $("#swKu").onchange=e=>{SITE.ku=e.target.checked?1:0;bar();renderInfo();render()
 $("#swFoot").onchange=e=>{SITE.foot=e.target.checked?1:0;bar()};
 $("#swEgg").onchange=e=>{SITE.egg=e.target.checked?1:0;bar()};
 function tbS(){if(!SITE.tb)SITE.tb={};return SITE.tb}
+var DEFZ=[[.592,.663,1,.864]];
+function zonesOf(t){return t&&t.zones!=null?t.zones:(t&&t.bg?[]:DEFZ)}
+function tbCalc(o){
+  var W=o.W,H=o.H,IW=o.IW,IH=o.IH,sc=Math.max(W/IW,H/IH),ox=(W-IW*sc)/2,oy=H-IH*sc;
+  var zf=Math.min(1.6,Math.max(.6,(+o.sz||100)/100)),lbh=o.nolb?8:26;
+  var x0=Math.max(8,ox+10),x1=Math.min(W-8,ox+IW*sc-10);
+  var y0=Math.max(o.top,oy+Math.min(80,Math.max(20,o.tf))/100*IH*sc),y1=H-o.bar-4;
+  var zs=(o.zones||[]).map(function(z){return {x0:ox+z[0]*IW*sc-8,y0:oy+z[1]*IH*sc-8,x1:ox+z[2]*IW*sc+8,y1:oy+z[3]*IH*sc+8}});
+  function build(d){
+    var cw=d*1.12,ch=d+lbh,cols=Math.max(1,Math.floor((x1-x0)/cw)),rows=Math.max(1,Math.floor((y1-y0)/ch));
+    var gx=x0+((x1-x0)-cols*cw)/2,gy=y0+Math.max(0,((y1-y0)-rows*ch)/2),out=[],r,c;
+    for(r=0;r<rows;r++)for(c=0;c<cols;c++){
+      var cx=gx+(c+.5)*cw+((r*7+c*13)%5-2)*1.5,cy=gy+r*ch+d/2+((r*11+c*5)%5-2)*1.5;
+      if(zs.some(function(p){return cx+d/2>p.x0&&cx-d/2<p.x1&&cy+d/2+(o.nolb?0:24)>p.y0&&cy-d/2<p.y1}))continue;
+      out.push({x:cx,y:cy});
+    }
+    var mx=(x0+x1)/2,my=(y0+y1)/2;
+    out.sort(function(a,b){return Math.hypot(a.x-mx,(a.y-my)*1.3)-Math.hypot(b.x-mx,(b.y-my)*1.3)});
+    return out;
+  }
+  var mind=Math.max(22,Math.round(W*.1)),d=Math.round(Math.min(170*zf,Math.max(mind,IW*sc*0.15*zf))),out=build(d);
+  while(out.length<5&&d>mind){d=Math.max(mind,Math.round(d*.94));out=build(d)}
+  return {d:d,slots:out,sc:sc,ox:ox,oy:oy};
+}
+
+const TBIM={w:912,h:1169};
+const TBPW=240,TBPH=444;
+let TBZN=-1;
+function tbCfg(){const t=SITE.tb||{};return {W:TBPW,H:TBPH,IW:t.bg?TBIM.w:912,IH:t.bg?TBIM.h:1169,top:Math.round(154*TBPW/390),bar:Math.round(50*TBPW/390),sz:t.sz,tf:t.top!=null?t.top:50,zones:zonesOf(t),nolb:t.lb===0}}
+function tbZoneMat(){const t=tbS();if(!Array.isArray(t.zones))t.zones=zonesOf(t).map(z=>z.slice());return t.zones}
+function buildZones(){
+  const box=$("#tbPv");box.querySelectorAll(".pz").forEach(e=>e.remove());
+  const zs=zonesOf(SITE.tb);TBZN=zs.length;
+  zs.forEach((z,i)=>{
+    const e=document.createElement("div");e.className="pz";e.dataset.i=i;e.innerHTML='<i class="px">✕</i><i class="ph"></i>';box.appendChild(e);
+    e.addEventListener("pointerdown",ev=>{
+      if(ev.target.classList.contains("px"))return;
+      ev.preventDefault();const zz=tbZoneMat(),k=+e.dataset.i,z0=zz[k].slice(),c=tbCalc(tbCfg()),mode=ev.target.classList.contains("ph")?"r":"m",sx=ev.clientX,sy=ev.clientY,fw=TBIMW()*c.sc,fh=TBIMH()*c.sc;
+      e.setPointerCapture(ev.pointerId);
+      const mv=m=>{const dx=(m.clientX-sx)/fw,dy=(m.clientY-sy)/fh,z=zz[k];
+        if(mode==="m"){const w=z0[2]-z0[0],h=z0[3]-z0[1];let x=Math.min(1-w,Math.max(0,z0[0]+dx)),y=Math.min(1-h,Math.max(0,z0[1]+dy));z[0]=x;z[1]=y;z[2]=x+w;z[3]=y+h}
+        else{z[2]=Math.min(1,Math.max(z0[0]+.04,z0[2]+dx));z[3]=Math.min(1,Math.max(z0[1]+.04,z0[3]+dy))}
+        for(let q=0;q<4;q++)z[q]=Math.round(z[q]*1000)/1000;
+        renderTbPv()};
+      const up=()=>{e.removeEventListener("pointermove",mv);e.removeEventListener("pointerup",up);e.removeEventListener("pointercancel",up);zz.forEach(z=>{for(let q=0;q<4;q++)z[q]=Math.round(z[q]*1000)/1000});bar()};
+      e.addEventListener("pointermove",mv);e.addEventListener("pointerup",up);e.addEventListener("pointercancel",up);
+    });
+    e.querySelector(".px").addEventListener("click",ev=>{ev.stopPropagation();const zz=tbZoneMat();zz.splice(+e.dataset.i,1);renderTb();bar()});
+  });
+}
+const TBIMW=()=>(SITE.tb&&SITE.tb.bg)?TBIM.w:912,TBIMH=()=>(SITE.tb&&SITE.tb.bg)?TBIM.h:1169;
+function renderTbPv(){
+  const box=$("#tbPv");if(!box)return;const t=SITE.tb||{},src=t.bg?src_(t.bg):"images/table-bg.webp",bgi=$("#tbPvBg");
+  if(bgi.dataset.s!==src){bgi.dataset.s=src;bgi.onload=()=>{if(t.bg===(SITE.tb||{}).bg){TBIM.w=bgi.naturalWidth||912;TBIM.h=bgi.naturalHeight||1169;renderTbPv()}};bgi.src=src}
+  const cfg=tbCfg(),c=tbCalc(cfg);
+  bgi.style.width=cfg.IW*c.sc+"px";bgi.style.height=cfg.IH*c.sc+"px";bgi.style.left=c.ox+"px";bgi.style.top=c.oy+"px";
+  box.querySelectorAll(".pp,.pl2,.ln").forEach(e=>e.remove());
+  const ln=document.createElement("div");ln.className="ln";ln.style.top=Math.max(cfg.top,c.oy+Math.min(80,Math.max(20,cfg.tf))/100*cfg.IH*c.sc)+"px";box.appendChild(ln);
+  c.slots.forEach(s=>{
+    const p=document.createElement("div");p.className="pp";p.style.cssText="width:"+c.d+"px;height:"+c.d+"px;left:"+(s.x-c.d/2)+"px;top:"+(s.y-c.d/2)+"px";p.textContent="☕";box.appendChild(p);
+    if(!cfg.nolb){const l=document.createElement("div");l.className="pl2";l.style.cssText="width:"+Math.round(c.d*.8)+"px;left:"+(s.x-c.d*.4)+"px;top:"+(s.y+c.d/2+3)+"px";box.appendChild(l)}
+  });
+  if(TBZN!==zonesOf(t).length||box.querySelectorAll(".pz").length!==zonesOf(t).length)buildZones();
+  zonesOf(t).forEach((z,i)=>{const e=box.querySelector('.pz[data-i="'+i+'"]');if(!e)return;
+    e.style.left=(c.ox+z[0]*cfg.IW*c.sc)+"px";e.style.top=(c.oy+z[1]*cfg.IH*c.sc)+"px";e.style.width=((z[2]-z[0])*cfg.IW*c.sc)+"px";e.style.height=((z[3]-z[1])*cfg.IH*c.sc)+"px";box.appendChild(e)});
+  $("#tbCap").textContent="ظرفیت میز: "+fa(c.slots.length)+" آیتم (حداقل ۵ آیتم همیشه جا دارد)";
+}
 function renderTb(){
   const t=SITE.tb||{},sz=t.sz||100,tp=t.top!=null?t.top:50;
   $("#tbSz").value=sz;$("#tbSzV").textContent="("+fa(sz)+"٪)";
   $("#tbTop").value=tp;$("#tbTopV").textContent="("+fa(tp)+"٪)";
   $("#tbLb").checked=t.lb!==0;
   $("#tbBgPrev").src=t.bg?src_(t.bg):"images/table-bg.webp";$("#tbBgDel").style.display=t.bg?"":"none";
+  renderTbPv();
 }
-$("#tbSz").oninput=e=>{tbS().sz=Math.min(160,Math.max(60,+e.target.value||100));renderTb();bar()};
+$("#tbSz").oninput=e=>{tbS().sz=Math.min(170,Math.max(60,+e.target.value||100));renderTb();bar()};
 $("#tbTop").oninput=e=>{tbS().top=Math.min(80,Math.max(20,+e.target.value||50));renderTb();bar()};
 $("#tbLb").onchange=e=>{tbS().lb=e.target.checked?1:0;bar()};
 $("#tbBgPick").onclick=()=>$("#tbBgFile").click();
 $("#tbBgFile").addEventListener("change",async e=>{const f=e.target.files[0];e.target.value="";if(!f)return;const d=await wideJpeg(f);if(!d)return;const p=newPath("table");PENDING[p]=d;tbS().bg=p;renderTb();bar()});
 $("#tbBgDel").onclick=()=>{tbS().bg="";renderTb();bar()};
+$("#tbZAdd").onclick=()=>{tbZoneMat().push([.35,.68,.62,.82]);renderTb();bar()};
+$("#tbZNone").onclick=()=>{tbS().zones=[];renderTb();bar()};
+$("#tbZDef").onclick=()=>{delete tbS().zones;renderTb();bar()};
 $("#tbReset").onclick=()=>{SITE.tb={};renderTb();bar()};
 $("#fontPick").addEventListener("click",e=>{const b=e.target.closest("[data-font]");if(b){SITE.font=+b.dataset.font;renderInfo()}});
 $("#accPick").addEventListener("click",e=>{const b=e.target.closest("[data-acc]");if(b){SITE.accent=b.dataset.acc;renderInfo()}});
