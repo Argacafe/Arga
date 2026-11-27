@@ -378,30 +378,31 @@ dialog::backdrop{background:rgba(3,18,11,.55)}
         #tbPv .pz .px{position:absolute;top:-1px;left:-1px;width:22px;height:22px;line-height:20px;text-align:center;background:#ff4d4d;color:#fff;font-style:normal;font-size:12px;cursor:pointer}
         #tbPv .pz .ph{position:absolute;right:-2px;bottom:-2px;width:22px;height:22px;background:#ff4d4d;cursor:nwse-resize;touch-action:none}
       </style>
-      <div id="tbPv"><img class="bgi" id="tbPvBg" alt=""><div class="fb" style="top:0;height:34px;line-height:34px" id="tbPvTop">استوری‌ها</div><div class="fb" style="bottom:0;height:18px;line-height:18px">جمع سفارش</div></div>
+      <div id="tbPv"><img class="bgi" id="tbPvBg" alt=""><div class="fb" style="top:0;height:34px;line-height:34px" id="tbPvTop">بالای صفحه: آیتم‌ها</div><div class="fb" style="bottom:0;height:18px;line-height:18px">پایین صفحه: جمع سفارش</div></div>
       <p class="mut" id="tbCap" style="margin:0 0 8px;text-align:center;font-size:12px"></p>
-      <div class="lbl">جاهای ممنوعه روی میز (قرمز)</div>
+      <div class="lbl">جاهایی که نباید چیزی روشون بیفته</div>
       <div style="display:flex;gap:6px;flex-wrap:wrap;margin:0 0 6px">
-        <button type="button" class="btn sec sm" id="tbZAdd">افزودن ناحیه</button>
-        <button type="button" class="btn sec sm" id="tbZNone">حذف همه</button>
-        <button type="button" class="btn sec sm" id="tbZDef">برگشت به پیش‌فرض</button>
+        <button type="button" class="btn sec sm" id="tbZAdd">ناحیه‌ی جدید</button>
+        <button type="button" class="btn sec sm" id="tbZNone">پاک کردن همه</button>
+        <button type="button" class="btn sec sm" id="tbZDef">برگردوندن به حالت اول</button>
       </div>
-      <p class="mut" style="margin:0 0 12px;font-size:12px">ناحیه‌های قرمز را با انگشت جابه‌جا کن و با مربع پایین‌شان بزرگ و کوچک کن. آیتم‌ها روی این ناحیه‌ها نمی‌افتند، مثلاً روی گوشی یا گلدان. پیش‌فرض، جای گوشی در عکس پیش‌فرض است.</p>
+      <p class="mut" style="margin:0 0 12px;font-size:12px">این مستطیل‌های قرمز جاهایی‌ان که آیتم‌ها نمی‌افتن روشون، مثلاً جای گوشی یا گلدون. با انگشتت هر کدوم رو بکش و جابه‌جاش کن، با مربع گوشه‌ی پایینش هم بزرگ و کوچیکش کن. اگه لازمش نداری، با ✕ پاکش کن. پیش‌فرض فقط جای گوشی توی عکس اصلی علامت خورده.</p>
       <div class="lbl">اندازه‌ی آیتم‌ها <span id="tbSzV" class="mut"></span></div>
-      <input type="range" id="tbSz" min="60" max="170" step="5" style="width:100%;margin:2px 0 12px">
-      <div class="lbl">شروع سطح میز از بالای عکس <span id="tbTopV" class="mut"></span></div>
+      <p class="mut" style="margin:0 0 4px;font-size:12px">هرچی بیشتر باشه آیتم‌ها درشت‌تر می‌شن، ولی جای کمتری روی میز می‌مونه. تغییرش رو همین بالا روی میز می‌بینی.</p>
+      <input type="range" id="tbSz" min="60" max="250" step="5" style="width:100%;margin:2px 0 12px">
+      <div class="lbl">میز از کجای عکس شروع بشه؟ <span id="tbTopV" class="mut"></span></div>
       <input type="range" id="tbTop" min="20" max="80" step="1" style="width:100%;margin:2px 0 4px">
-      <p class="mut" style="margin:0 0 12px;font-size:12px">آیتم‌ها فقط از این خط به پایین روی میز می‌نشینند. با عکس پس‌زمینه‌ی خودت این را روی سطح میز تنظیم کن.</p>
-      <label class="tg2"><span>نمایش اسم زیر آیتم‌ها</span><input type="checkbox" id="tbLb"></label>
+      <p class="mut" style="margin:0 0 12px;font-size:12px">آیتم‌ها فقط پایین‌تر از این خط زرد روی میز می‌افتن. اگه عکس خودت رو گذاشتی، خط رو بذار روی لبه‌ی بالای میز.</p>
+      <label class="tg2"><span>اسم هر آیتم زیرش نوشته بشه</span><input type="checkbox" id="tbLb"></label>
       <div class="lbl" style="margin-top:6px">عکس پس‌زمینه</div>
       <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 8px">
         <img id="tbBgPrev" alt="" style="width:52px;height:64px;object-fit:cover;border-radius:6px;background:var(--line,#eee)">
-        <button type="button" class="btn sec" style="padding:6px 12px" id="tbBgPick">تغییر عکس</button>
-        <button type="button" class="btn sec" style="padding:6px 12px" id="tbBgDel">برگشت به عکس پیش‌فرض</button>
+        <button type="button" class="btn sec" style="padding:6px 12px" id="tbBgPick">عکس رو عوض کن</button>
+        <button type="button" class="btn sec" style="padding:6px 12px" id="tbBgDel">برگرد به عکس اصلی</button>
         <input type="file" id="tbBgFile" accept="image/*" class="hide">
       </div>
-      <p class="mut" style="margin:0 0 10px;font-size:12px">عکس عمودی (مثل عکس موبایل) بهتر است و سطح میز باید پایین عکس باشد. با عکس خودت، جای گوشی در عکس پیش‌فرض دیگر کنار گذاشته نمی‌شود.</p>
-      <button type="button" class="btn sec sm" id="tbReset">بازگرداندن همه‌ی تنظیمات قالب به پیش‌فرض</button>
+      <p class="mut" style="margin:0 0 10px;font-size:12px">بهتره عکس عمودی باشه، مثل عکسی که با گوشی می‌گیری، و میز توی نیمه‌ی پایینش باشه. با عکس خودت دیگه جای گوشیِ عکس اصلی کنار گذاشته نمی‌شه، پس هرجا لازمه خودت ناحیه‌ی قرمز بذار.</p>
+      <button type="button" class="btn sec sm" id="tbReset">همه‌ی تنظیمات این قالب رو به حالت اول برگردون</button>
     </div>
     <div class="card">
       <h2>ویژگی‌های ویژه</h2>
@@ -1090,7 +1091,7 @@ var DEFZ=[[.592,.663,1,.864]];
 function zonesOf(t){return t&&t.zones!=null?t.zones:(t&&t.bg?[]:DEFZ)}
 function tbCalc(o){
   var W=o.W,H=o.H,IW=o.IW,IH=o.IH,sc=Math.max(W/IW,H/IH),ox=(W-IW*sc)/2,oy=H-IH*sc;
-  var zf=Math.min(1.6,Math.max(.6,(+o.sz||100)/100)),lbh=o.nolb?8:26;
+  var zf=Math.min(2.5,Math.max(.6,(+o.sz||100)/100)),lbh=o.nolb?8:26;
   var x0=Math.max(8,ox+10),x1=Math.min(W-8,ox+IW*sc-10);
   var y0=Math.max(o.top,oy+Math.min(80,Math.max(20,o.tf))/100*IH*sc),y1=H-o.bar-4;
   var zs=(o.zones||[]).map(function(z){return {x0:ox+z[0]*IW*sc-8,y0:oy+z[1]*IH*sc-8,x1:ox+z[2]*IW*sc+8,y1:oy+z[3]*IH*sc+8}});
@@ -1106,7 +1107,7 @@ function tbCalc(o){
     out.sort(function(a,b){return Math.hypot(a.x-mx,(a.y-my)*1.3)-Math.hypot(b.x-mx,(b.y-my)*1.3)});
     return out;
   }
-  var mind=Math.max(22,Math.round(W*.1)),d=Math.round(Math.min(170*zf,Math.max(mind,IW*sc*0.15*zf))),out=build(d);
+  var mind=Math.max(22,Math.round(W*.1)),d=Math.round(Math.min(300*zf,Math.max(mind,IW*sc*0.15*zf))),out=build(d);
   while(out.length<5&&d>mind){d=Math.max(mind,Math.round(d*.94));out=build(d)}
   return {d:d,slots:out,sc:sc,ox:ox,oy:oy};
 }
@@ -1151,7 +1152,7 @@ function renderTbPv(){
   if(TBZN!==zonesOf(t).length||box.querySelectorAll(".pz").length!==zonesOf(t).length)buildZones();
   zonesOf(t).forEach((z,i)=>{const e=box.querySelector('.pz[data-i="'+i+'"]');if(!e)return;
     e.style.left=(c.ox+z[0]*cfg.IW*c.sc)+"px";e.style.top=(c.oy+z[1]*cfg.IH*c.sc)+"px";e.style.width=((z[2]-z[0])*cfg.IW*c.sc)+"px";e.style.height=((z[3]-z[1])*cfg.IH*c.sc)+"px";box.appendChild(e)});
-  $("#tbCap").textContent="ظرفیت میز: "+fa(c.slots.length)+" آیتم (حداقل ۵ آیتم همیشه جا دارد)";
+  $("#tbCap").textContent="روی این میز تا "+fa(c.slots.length)+" آیتم جا می‌شه (همیشه دست‌کم ۵ تا)";
 }
 function renderTb(){
   const t=SITE.tb||{},sz=t.sz||100,tp=t.top!=null?t.top:50;
@@ -1161,7 +1162,7 @@ function renderTb(){
   $("#tbBgPrev").src=t.bg?src_(t.bg):"images/table-bg.webp";$("#tbBgDel").style.display=t.bg?"":"none";
   renderTbPv();
 }
-$("#tbSz").oninput=e=>{tbS().sz=Math.min(170,Math.max(60,+e.target.value||100));renderTb();bar()};
+$("#tbSz").oninput=e=>{tbS().sz=Math.min(250,Math.max(60,+e.target.value||100));renderTb();bar()};
 $("#tbTop").oninput=e=>{tbS().top=Math.min(80,Math.max(20,+e.target.value||50));renderTb();bar()};
 $("#tbLb").onchange=e=>{tbS().lb=e.target.checked?1:0;bar()};
 $("#tbBgPick").onclick=()=>$("#tbBgFile").click();
