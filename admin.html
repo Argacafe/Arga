@@ -366,6 +366,24 @@ dialog::backdrop{background:rgba(3,18,11,.55)}
       <p class="mut" style="margin:10px 0 0">مشتری‌ای که خودش فونت را از داخل سایت عوض کرده باشد، فونت خودش می‌ماند.</p>
     </div>
     <div class="card">
+      <h2>قالب جدید (میز)</h2>
+      <div class="lbl">اندازه‌ی آیتم‌ها <span id="tbSzV" class="mut"></span></div>
+      <input type="range" id="tbSz" min="60" max="160" step="5" style="width:100%;margin:2px 0 12px">
+      <div class="lbl">شروع سطح میز از بالای عکس <span id="tbTopV" class="mut"></span></div>
+      <input type="range" id="tbTop" min="20" max="80" step="1" style="width:100%;margin:2px 0 4px">
+      <p class="mut" style="margin:0 0 12px;font-size:12px">آیتم‌ها فقط از این خط به پایین روی میز می‌نشینند. با عکس پس‌زمینه‌ی خودت این را روی سطح میز تنظیم کن.</p>
+      <label class="tg2"><span>نمایش اسم زیر آیتم‌ها</span><input type="checkbox" id="tbLb"></label>
+      <div class="lbl" style="margin-top:6px">عکس پس‌زمینه</div>
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 8px">
+        <img id="tbBgPrev" alt="" style="width:52px;height:64px;object-fit:cover;border-radius:6px;background:var(--line,#eee)">
+        <button type="button" class="btn sec" style="padding:6px 12px" id="tbBgPick">تغییر عکس</button>
+        <button type="button" class="btn sec" style="padding:6px 12px" id="tbBgDel">برگشت به عکس پیش‌فرض</button>
+        <input type="file" id="tbBgFile" accept="image/*" class="hide">
+      </div>
+      <p class="mut" style="margin:0 0 10px;font-size:12px">عکس عمودی (مثل عکس موبایل) بهتر است و سطح میز باید پایین عکس باشد. با عکس خودت، جای گوشی در عکس پیش‌فرض دیگر کنار گذاشته نمی‌شود.</p>
+      <button type="button" class="btn sec sm" id="tbReset">بازگرداندن همه‌ی تنظیمات قالب به پیش‌فرض</button>
+    </div>
+    <div class="card">
       <h2>ویژگی‌های ویژه</h2>
       <label class="tg2"><span>زبان انگلیسی</span><input type="checkbox" id="swEn"></label>
       <label class="tg2"><span>زبان کوردی (سورانی)</span><input type="checkbox" id="swKu"></label>
@@ -535,7 +553,7 @@ function serStory(){
   const k=n=>/^[A-Za-z_]\w*$/.test(n)?n:q(n);
   return "const STORY={\n"+Object.keys(all).map(n=>" "+k(n)+":{img:"+q(all[n].img)+(all[n].cut?",cut:1":"")+"}").join(",\n")+"\n};";
 }
-const serSite=()=>{const o=Object.assign({},SITE);if(!o.txt||!Object.keys(o.txt).length)delete o.txt;if(!o.nft||!Object.keys(o.nft).length)delete o.nft;return "const SITE="+JSON.stringify(o)+";"};
+const serSite=()=>{const o=Object.assign({},SITE);if(!o.txt||!Object.keys(o.txt).length)delete o.txt;if(!o.nft||!Object.keys(o.nft).length)delete o.nft;if(o.tb){const t=o.tb;if(t.sz===100||!t.sz)delete t.sz;if(t.top===50||t.top==null)delete t.top;if(t.lb!==0)delete t.lb;if(!t.bg)delete t.bg;if(!Object.keys(t).length)delete o.tb}return "const SITE="+JSON.stringify(o)+";"};
 const serGal=()=>"const GALLERY="+JSON.stringify(GALLERY)+";";
 const serInfo=()=>{const o=Object.assign({},INFO);if(!o.wa)delete o.wa;if(!o.hl)delete o.hl;return "const INFO="+JSON.stringify(o)+";"};
 const state=()=>serMenu()+serLocal()+serGal()+serInfo()+serStory()+serSite()+Object.keys(PENDING).join()+LOGOVER;
@@ -646,7 +664,7 @@ function renderInfo(){renderTxt();renderNfTx();renderOrd();
   $("#swFoot").checked=SITE.foot!==0;$("#swEn").checked=SITE.en!==0;$("#swFx").checked=SITE.fx===1;$("#swLock").checked=SITE.lock!==0;$("#swMir").checked=SITE.mir!==0;$("#swSud").checked=SITE.sud!==0;$("#swHs").checked=SITE.hs!==0;$("#swNf").checked=SITE.nf!==0;$("#nfOpts").style.display=SITE.nf!==0?"":"none";$("#nfApi").value=SITE.nfApi||"";$("#swDg").checked=SITE.dg!==0;$("#dgOpts").style.display=SITE.dg!==0?"":"none";$("#dgUrl").value=SITE.dgUrl||"";$("#swHint").checked=SITE.hint!==0;$("#hintOpts").style.display=SITE.hint!==0?"flex":"none";$("#hintSec").value=SITE.hintSec||25;document.querySelectorAll("#icPick [data-ic]").forEach(b=>{const on=(+b.dataset.ic)===(SITE.ic===1?1:0);b.style.outline=on?"2px solid var(--acc)":"none";b.style.outlineOffset="1px"});
   $("#lockOpts").style.display=SITE.lock!==0?"flex":"none";
   $("#lockPrev").style.display=SITE.lockImg?"":"none";if(SITE.lockImg)$("#lockPrev").src=src_(SITE.lockImg);
-  $("#lockEmoji").value=SITE.lockEmoji||"";$("#lockEmoji").style.display=SITE.lockImg?"none":"";$("#lockDel").style.display=SITE.lockImg?"":"none";$("#swKu").checked=SITE.ku!==0;document.body.classList.toggle("noEn",SITE.en===0);document.body.classList.toggle("noKu",SITE.ku===0);$("#swEgg").checked=SITE.egg!==0;
+  $("#lockEmoji").value=SITE.lockEmoji||"";$("#lockEmoji").style.display=SITE.lockImg?"none":"";$("#lockDel").style.display=SITE.lockImg?"":"none";$("#swKu").checked=SITE.ku!==0;document.body.classList.toggle("noEn",SITE.en===0);document.body.classList.toggle("noKu",SITE.ku===0);$("#swEgg").checked=SITE.egg!==0;renderTb();
   $("#licLine").textContent="✓ کاربر : "+(SITE.lic||"Sara")+" مجاز است";
   $("#fontPick").innerHTML=FONTS.map((f,k)=>'<button data-font="'+k+'" class="'+(SITE.font===k?"on":"")+'" style="font-family:\''+f+'\',Vazirmatn,sans-serif">کافه آرگا</button>').join("");
   $("#accPick").innerHTML=ACCS.map(a=>'<button data-acc="'+a+'" class="'+(SITE.accent.toLowerCase()===a?"on":"")+'" style="background:'+a+'" aria-label="رنگ"></button>').join("");
@@ -1047,6 +1065,21 @@ $("#swEn").onchange=e=>{SITE.en=e.target.checked?1:0;bar();renderInfo();render()
 $("#swKu").onchange=e=>{SITE.ku=e.target.checked?1:0;bar();renderInfo();render()};
 $("#swFoot").onchange=e=>{SITE.foot=e.target.checked?1:0;bar()};
 $("#swEgg").onchange=e=>{SITE.egg=e.target.checked?1:0;bar()};
+function tbS(){if(!SITE.tb)SITE.tb={};return SITE.tb}
+function renderTb(){
+  const t=SITE.tb||{},sz=t.sz||100,tp=t.top!=null?t.top:50;
+  $("#tbSz").value=sz;$("#tbSzV").textContent="("+fa(sz)+"٪)";
+  $("#tbTop").value=tp;$("#tbTopV").textContent="("+fa(tp)+"٪)";
+  $("#tbLb").checked=t.lb!==0;
+  $("#tbBgPrev").src=t.bg?src_(t.bg):"images/table-bg.webp";$("#tbBgDel").style.display=t.bg?"":"none";
+}
+$("#tbSz").oninput=e=>{tbS().sz=Math.min(160,Math.max(60,+e.target.value||100));renderTb();bar()};
+$("#tbTop").oninput=e=>{tbS().top=Math.min(80,Math.max(20,+e.target.value||50));renderTb();bar()};
+$("#tbLb").onchange=e=>{tbS().lb=e.target.checked?1:0;bar()};
+$("#tbBgPick").onclick=()=>$("#tbBgFile").click();
+$("#tbBgFile").addEventListener("change",async e=>{const f=e.target.files[0];e.target.value="";if(!f)return;const d=await wideJpeg(f);if(!d)return;const p=newPath("table");PENDING[p]=d;tbS().bg=p;renderTb();bar()});
+$("#tbBgDel").onclick=()=>{tbS().bg="";renderTb();bar()};
+$("#tbReset").onclick=()=>{SITE.tb={};renderTb();bar()};
 $("#fontPick").addEventListener("click",e=>{const b=e.target.closest("[data-font]");if(b){SITE.font=+b.dataset.font;renderInfo()}});
 $("#accPick").addEventListener("click",e=>{const b=e.target.closest("[data-acc]");if(b){SITE.accent=b.dataset.acc;renderInfo()}});
 $("#pickLogo").onclick=()=>$("#logoFile").click();
@@ -1224,7 +1257,7 @@ $("#save").onclick=async()=>{
     const base=await gh("/git/commits/"+HEAD).then(r=>r.json());
     const out=buildOut();
     const used=new Set(GALLERY.concat(CATS.reduce((a,c)=>a.concat(c.items.map(i=>i.photo),c.story?[c.story.img]:[]),[])));
-    LOGOS.concat(MASKABLE).forEach(l=>used.add(l[0]));if(SITE.lockImg)used.add(SITE.lockImg);
+    LOGOS.concat(MASKABLE).forEach(l=>used.add(l[0]));if(SITE.lockImg)used.add(SITE.lockImg);if(SITE.tb&&SITE.tb.bg)used.add(SITE.tb.bg);
     const tree=[];
     for(const p of Object.keys(PENDING)){
       if(!used.has(p))continue;

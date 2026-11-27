@@ -79,6 +79,7 @@ body.tpl-table #stories,body.tpl-table .tabs,body.tpl-table #searchBox,body.tpl-
 #tbHome .tb-pl.free img{width:115%;height:auto;max-width:none;flex:none;object-fit:contain;border-radius:0;filter:drop-shadow(0 6px 5px rgba(0,0,0,.6))}
 #tbHome .tb-lb{position:relative;left:50%;transform:translateX(-50%);width:max-content;box-sizing:border-box;max-width:86%;margin-top:3px;padding:1px 6px;border-radius:9px;background:rgba(20,12,6,.78);color:#fff;font-size:11px;line-height:1.5;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #tbHome .tb-bar{position:absolute;left:0;right:0;bottom:0;z-index:4;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:26px 14px 12px;background:linear-gradient(#0000,#000c 55%)}
+#tbHome.nolb .tb-lb{display:none}
 #tbHome .tb-bar{pointer-events:none}
 #tbHome .tb-sum,#tbHome .tb-clear{pointer-events:auto}
 #tbHome .tb-sum{font-size:14px;font-weight:700;text-shadow:0 1px 3px #000}
@@ -1571,7 +1572,7 @@ const act=()=>{hide();arm()};
 </script>
 <script>
 (function(){
-  var IW=912,IH=1169,PHN={x0:540,x1:912,y0:775,y1:1010},KEY="arga_tpl";
+  var IW=912,IH=1169,PHN={x0:540,x1:912,y0:775,y1:1010},KEY="arga_tpl",T=SITE.tb||{},BGDEF="images/table-bg.webp";
   var TBPIC={"لته":"images/table-latte.webp"};
   var HOME=document.getElementById("tbHome"),on=false,built=false,placed=[],seq=0,cat0=null,slots=[],geo={},msgT=0;
   function mk(t,c,h){var e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e}
@@ -1587,13 +1588,14 @@ const act=()=>{hide();arm()};
     var W=HOME.clientWidth,H=HOME.clientHeight;if(!W||!H)return;
     var sc=Math.max(W/IW,H/IH),ox=(W-IW*sc)/2,oy=H-IH*sc;
     var bg=q(".tb-bg");bg.style.width=IW*sc+"px";bg.style.height=IH*sc+"px";bg.style.left=ox+"px";bg.style.top=oy+"px";
-    var d=Math.round(Math.min(150,Math.max(56,IW*sc*0.12)));
+    var zf=Math.min(1.6,Math.max(.6,(+T.sz||100)/100)),d=Math.round(Math.min(150*zf,Math.max(40,IW*sc*0.12*zf)));
+    var nolb=T.lb===0;HOME.classList.toggle("nolb",nolb);
     var top=q(".tb-top").offsetHeight+4,bar=q(".tb-bar").offsetHeight-26;
     var x0=Math.max(8,ox+10),x1=Math.min(W-8,ox+IW*sc-10);
-    var y0=Math.max(top,oy+585*sc),y1=H-bar-4;
-    var cw=d*1.12,ch=d+26,cols=Math.max(1,Math.floor((x1-x0)/cw)),rows=Math.max(1,Math.floor((y1-y0)/ch));
+    var y0=Math.max(top,oy+(T.top!=null?Math.min(80,Math.max(20,+T.top)):50)/100*IH*sc),y1=H-bar-4;
+    var cw=d*1.12,ch=d+(nolb?8:26),cols=Math.max(1,Math.floor((x1-x0)/cw)),rows=Math.max(1,Math.floor((y1-y0)/ch));
     var gx=x0+((x1-x0)-cols*cw)/2,gy=y0+Math.max(0,((y1-y0)-rows*ch)/2);
-    var ph={x0:ox+PHN.x0*sc-8,x1:ox+PHN.x1*sc+8,y0:oy+PHN.y0*sc-8,y1:oy+PHN.y1*sc+8};
+    var ph=T.bg?{x0:1e9,x1:1e9,y0:1e9,y1:1e9}:{x0:ox+PHN.x0*sc-8,x1:ox+PHN.x1*sc+8,y0:oy+PHN.y0*sc-8,y1:oy+PHN.y1*sc+8};
     var out=[],r,c;
     for(r=0;r<rows;r++)for(c=0;c<cols;c++){
       var cx=gx+(c+.5)*cw+((r*7+c*13)%5-2)*1.5,cy=gy+r*ch+d/2+((r*11+c*5)%5-2)*1.5;
@@ -1673,11 +1675,13 @@ const act=()=>{hide();arm()};
     refresh();
   }
   function build(){
-    HOME.innerHTML='<img class="tb-bg" alt="" src="images/table-bg.webp"><div class="tb-shade"></div>'
+    HOME.innerHTML='<img class="tb-bg" alt="" src="'+eh(T.bg||BGDEF)+'"><div class="tb-shade"></div>'
       +'<div class="tb-top"><div class="tb-row1"><div class="tb-cats"></div></div><div class="tb-stories"></div></div>'
       +'<div class="tb-stage"></div><div class="tb-msg"></div>'
       +'<div class="tb-bar"><div class="tb-sum"></div><button type="button" class="tb-clear"></button></div>';
     built=true;placed=[];
+    var bgi=q(".tb-bg");bgi.onload=function(){if(T.bg&&bgi.naturalWidth){IW=bgi.naturalWidth;IH=bgi.naturalHeight;onResize()}};
+    bgi.onerror=function(){if(T.bg&&bgi.getAttribute("src")!==BGDEF){IW=912;IH=1169;T=Object.assign({},T,{bg:""});bgi.src=BGDEF}};
     if(!cat0)cat0=(CATS[1]||CATS[0]).id;
     cats();stories();layout();refresh();
     q(".tb-cats").onclick=function(e){var b=e.target.closest("button[data-c]");if(!b)return;cat0=b.dataset.c;cats();stories();onResize()};
