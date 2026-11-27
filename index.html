@@ -75,6 +75,8 @@ body.tpl-table #stories,body.tpl-table .tabs,body.tpl-table #searchBox,body.tpl-
 #tbHome .tb-pl{width:100%;aspect-ratio:1;border-radius:50%;background:#fffaf0;border:3px solid #fffaf0;overflow:hidden;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 8px rgba(0,0,0,.55);font-size:30px}
 #tbHome .tb-pl img{width:100%;height:100%;object-fit:cover;border-radius:50%}
 #tbHome .tb-pl img.cut{object-fit:contain}
+#tbHome .tb-pl.free{background:none;border:0;box-shadow:none;border-radius:0;overflow:visible}
+#tbHome .tb-pl.free img{width:100%;height:100%;object-fit:contain;border-radius:0;filter:drop-shadow(0 6px 5px rgba(0,0,0,.6))}
 #tbHome .tb-lb{position:relative;left:50%;transform:translateX(-50%);width:max-content;max-width:112%;margin-top:3px;padding:1px 8px;border-radius:9px;background:rgba(20,12,6,.78);color:#fff;font-size:11px;line-height:1.5;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #tbHome .tb-bar{position:absolute;left:0;right:0;bottom:0;z-index:4;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:26px 14px 12px;background:linear-gradient(#0000,#000c 55%)}
 #tbHome .tb-sum{font-size:14px;font-weight:700;text-shadow:0 1px 3px #000}
@@ -1568,6 +1570,7 @@ const act=()=>{hide();arm()};
 <script>
 (function(){
   var IW=912,IH=1169,PHN={x0:540,x1:912,y0:775,y1:1010},KEY="arga_tpl";
+  var TBPIC={"لته":"images/table-latte.webp"};
   var HOME=document.getElementById("tbHome"),on=false,built=false,placed=[],seq=0,cat0=null,slots=[],geo={},msgT=0;
   function mk(t,c,h){var e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e}
   function q(s){return HOME.querySelector(s)}
@@ -1622,7 +1625,8 @@ const act=()=>{hide();arm()};
   function add(i,from){
     var k=freeSlot();if(k<0){msg(L("میز پر شد","The table is full","مێزەکە پڕە"));return}
     var it={id:++seq,item:i,slot:k,rot:((seq*37)%9)-4};
-    var e=mk("div","tb-it",'<div class="tb-pl">'+face(i)+'</div><div class="tb-lb">'+eh(nm(i))+'</div>');
+    var cut=TBPIC[i.n];
+    var e=mk("div","tb-it",'<div class="tb-pl'+(cut?' free':'')+'">'+(cut?'<img src="'+cut+'" alt="">':face(i))+'</div><div class="tb-lb">'+eh(nm(i))+'</div>');
     it.el=e;placed.push(it);q(".tb-stage").appendChild(e);put(it);
     e.style.zIndex=10;
     var s=slots[k],d=geo.d,cr=HOME.getBoundingClientRect(),fr=from.getBoundingClientRect();
@@ -1632,7 +1636,8 @@ const act=()=>{hide();arm()};
       {transform:"translate("+dx*0.35+"px,"+(dy*0.35-10)+"px) rotate(260deg) scale("+(s0+(1-s0)*.45)+")",offset:.35},
       {transform:"translate(0px,0px) rotate("+(R+720)+"deg) scale(1)",offset:1}
     ],{duration:820,easing:"cubic-bezier(.5,.02,.9,.55)"});
-    e.querySelector(".tb-pl").animate([{boxShadow:"0 30px 28px rgba(0,0,0,.28)"},{boxShadow:"0 6px 8px rgba(0,0,0,.55)"}],{duration:820,easing:"ease-in"});
+    if(cut)e.querySelector("img").animate([{filter:"drop-shadow(0 28px 18px rgba(0,0,0,.25))"},{filter:"drop-shadow(0 6px 5px rgba(0,0,0,.6))"}],{duration:820,easing:"ease-in"});
+    else e.querySelector(".tb-pl").animate([{boxShadow:"0 30px 28px rgba(0,0,0,.28)"},{boxShadow:"0 6px 8px rgba(0,0,0,.55)"}],{duration:820,easing:"ease-in"});
     a.onfinish=function(){
       e.style.zIndex="";
       e.animate([
