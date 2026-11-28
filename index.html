@@ -1576,12 +1576,14 @@ const act=()=>{hide();arm()};
   var DEFZ=[[.592,.663,1,.864]];
   function zonesOf(t){return t&&t.zones!=null?t.zones:(t&&t.bg?[]:DEFZ)}
   function tbCalc(o){
-    var W=o.W,H=o.H,IW=o.IW,IH=o.IH,sc=Math.max(W/IW,H/IH),ox=(W-IW*sc)/2,oy=H-IH*sc;
-    var zf=Math.min(2.5,Math.max(.6,(+o.sz||100)/100)),lbh=o.nolb?8:26;
-    var x0=Math.max(8,ox+10),x1=Math.min(W-8,ox+IW*sc-10);
-    var y0=Math.max(o.top,oy+Math.min(80,Math.max(20,o.tf))/100*IH*sc),y1=H-o.bar-4;
-    var zs=(o.zones||[]).map(function(z){return {x0:ox+z[0]*IW*sc-8,y0:oy+z[1]*IH*sc-8,x1:ox+z[2]*IW*sc+8,y1:oy+z[3]*IH*sc+8}});
-    function build(d){
+    var W=o.W,IW=o.IW,IH=o.IH,H0=o.H,sc0=Math.max(W/IW,H0/IH);
+    var zf=Math.min(4,Math.max(.6,(+o.sz||100)/100)),lbh=o.nolb?8:26,mind=Math.max(22,Math.round(W*.1));
+    var tf=Math.min(80,Math.max(20,o.tf))/100;
+    function lay(H,d){
+      var sc=Math.max(W/IW,H/IH),ox=(W-IW*sc)/2,oy=H-IH*sc;
+      var x0=Math.max(8,ox+10),x1=Math.min(W-8,ox+IW*sc-10);
+      var y0=Math.max(o.top,oy+tf*IH*sc),y1=H-o.bar-4;
+      var zs=(o.zones||[]).map(function(z){return {x0:ox+z[0]*IW*sc-8,y0:oy+z[1]*IH*sc-8,x1:ox+z[2]*IW*sc+8,y1:oy+z[3]*IH*sc+8}});
       var cw=d*1.12,ch=d+lbh,cols=Math.max(1,Math.floor((x1-x0)/cw)),rows=Math.max(1,Math.floor((y1-y0)/ch));
       var gx=x0+((x1-x0)-cols*cw)/2,gy=y0+Math.max(0,((y1-y0)-rows*ch)/2),out=[],r,c;
       for(r=0;r<rows;r++)for(c=0;c<cols;c++){
@@ -1589,13 +1591,14 @@ const act=()=>{hide();arm()};
         if(zs.some(function(p){return cx+d/2>p.x0&&cx-d/2<p.x1&&cy+d/2+(o.nolb?0:24)>p.y0&&cy-d/2<p.y1}))continue;
         out.push({x:cx,y:cy});
       }
-      var mx=(x0+x1)/2,my=(y0+y1)/2;
-      out.sort(function(a,b){return Math.hypot(a.x-mx,(a.y-my)*1.3)-Math.hypot(b.x-mx,(b.y-my)*1.3)});
-      return out;
+      var mx=(x0+x1)/2;
+      out.sort(function(a,b){return (Math.abs(a.x-mx)*.6+(a.y-y0))-(Math.abs(b.x-mx)*.6+(b.y-y0))});
+      return {slots:out,sc:sc,ox:ox,oy:oy};
     }
-    var mind=Math.max(22,Math.round(W*.1)),d=Math.round(Math.min(300*zf,Math.max(mind,IW*sc*0.15*zf))),out=build(d);
-    while(out.length<5&&d>mind){d=Math.max(mind,Math.round(d*.94));out=build(d)}
-    return {d:d,slots:out,sc:sc,ox:ox,oy:oy};
+    var d=Math.round(Math.min(W-16,Math.max(mind,IW*sc0*0.15*zf))),H=H0,r=lay(H,d);
+    while(r.slots.length<5&&H<H0*5){H=Math.round(H*1.06);r=lay(H,d)}
+    while(r.slots.length<5&&d>mind){d=Math.max(mind,Math.round(d*.94));r=lay(H,d)}
+    return {d:d,slots:r.slots,sc:r.sc,ox:r.ox,oy:r.oy,H:H};
   }
   
   var TBPIC={"لته":"images/table-latte.webp","لته با سیروپ دلخواه":"images/table-latte.webp"};
@@ -1609,12 +1612,23 @@ const act=()=>{hide();arm()};
   function face(i){return pic(i)||'<span>'+eh(i.e||"")+'</span>'}
   function msg(t){var m=q(".tb-msg");m.textContent=t;m.classList.add("show");clearTimeout(msgT);msgT=setTimeout(function(){m.classList.remove("show")},1600)}
 
+  function stick(){
+    if(!on||!built)return;
+    var t=q(".tb-top"),b=q(".tb-bar"),m=q(".tb-msg"),r=HOME.getBoundingClientRect(),H=HOME.clientHeight;
+    var hh=(document.querySelector("header.top")||{offsetHeight:0}).offsetHeight,nv=(document.querySelector("nav.bottom")||{offsetHeight:0}).offsetHeight;
+    var ty=Math.min(Math.max(hh-r.top,0),Math.max(0,H-t.offsetHeight));
+    t.style.top=ty+"px";
+    var by=Math.min(Math.max(innerHeight-nv-r.top-b.offsetHeight,0),Math.max(0,H-b.offsetHeight));
+    b.style.top=by+"px";b.style.bottom="auto";
+    m.style.top=Math.max(0,by-44)+"px";m.style.bottom="auto";
+  }
   function layout(){
-    var W=HOME.clientWidth,H=HOME.clientHeight;if(!W||!H)return;
-    var nolb=T.lb===0;HOME.classList.toggle("nolb",nolb);
-    var c=tbCalc({W:W,H:H,IW:IW,IH:IH,top:q(".tb-top").offsetHeight+4,bar:q(".tb-bar").offsetHeight-26,sz:T.sz,tf:T.top!=null?T.top:50,zones:zonesOf(T),nolb:nolb});
+    var W=HOME.clientWidth;if(!W)return;
+    var H0=Math.max(540,innerHeight-112),nolb=T.lb===0;HOME.classList.toggle("nolb",nolb);
+    var c=tbCalc({W:W,H:H0,IW:IW,IH:IH,top:q(".tb-top").offsetHeight+4,bar:q(".tb-bar").offsetHeight-26,sz:T.sz,tf:T.top!=null?T.top:50,zones:zonesOf(T),nolb:nolb});
+    HOME.style.height=c.H+"px";
     var bg=q(".tb-bg");bg.style.width=IW*c.sc+"px";bg.style.height=IH*c.sc+"px";bg.style.left=c.ox+"px";bg.style.top=c.oy+"px";
-    slots=c.slots;geo={d:c.d};
+    slots=c.slots;geo={d:c.d};stick();
   }
   function put(it){
     var s=slots[it.slot];if(!s)return;var d=geo.d,e=it.el;
@@ -1643,7 +1657,14 @@ const act=()=>{hide();arm()};
     var e=mk("div","tb-it",'<div class="tb-pl'+(cut?' free':'')+'">'+(cut?'<img src="'+cut+'" alt="">':face(i))+'</div><div class="tb-lb">'+eh(nm(i))+'</div>');
     it.el=e;placed.push(it);q(".tb-stage").appendChild(e);put(it);
     e.style.zIndex=10;
-    var s=slots[k],d=geo.d,cr=HOME.getBoundingClientRect(),fr=from.getBoundingClientRect();
+    var s=slots[k],d=geo.d;
+    (function(){
+      var rr=HOME.getBoundingClientRect(),hh=(document.querySelector("header.top")||{offsetHeight:0}).offsetHeight,nv=(document.querySelector("nav.bottom")||{offsetHeight:0}).offsetHeight;
+      var vt=hh+q(".tb-top").offsetHeight+8,vb=innerHeight-nv-q(".tb-bar").offsetHeight-6,y=rr.top+s.y,dl=0;
+      if(y+d/2+26>vb)dl=y+d/2+26-vb;else if(y-d/2<vt)dl=y-d/2-vt;
+      if(dl){window.scrollBy(0,dl);stick()}
+    })();
+    var cr=HOME.getBoundingClientRect(),fr=from.getBoundingClientRect();
     var dx=fr.left-cr.left+fr.width/2-s.x,dy=fr.top-cr.top+fr.height/2-s.y,s0=fr.width/d,R=it.rot;
     var a=e.animate([
       {transform:"translate("+dx+"px,"+dy+"px) rotate(0deg) scale("+s0+")",offset:0},
@@ -1720,7 +1741,7 @@ const act=()=>{hide();arm()};
     _render.apply(this,arguments);
     if(on&&built){cats();stories();placed.forEach(function(it){var lb=it.el.querySelector(".tb-lb");if(lb)lb.textContent=nm(it.item)});refresh()}
   };
-  addEventListener("resize",onResize);addEventListener("load",onResize);
+  addEventListener("resize",onResize);addEventListener("load",onResize);addEventListener("scroll",stick,{passive:true});
   try{if(localStorage.getItem(KEY)==="table")apply(true,true)}catch(e){}
 })();
 </script>

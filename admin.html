@@ -388,8 +388,8 @@ dialog::backdrop{background:rgba(3,18,11,.55)}
       </div>
       <p class="mut" style="margin:0 0 12px;font-size:12px">این مستطیل‌های قرمز جاهایی‌ان که آیتم‌ها نمی‌افتن روشون، مثلاً جای گوشی یا گلدون. با انگشتت هر کدوم رو بکش و جابه‌جاش کن، با مربع گوشه‌ی پایینش هم بزرگ و کوچیکش کن. اگه لازمش نداری، با ✕ پاکش کن. پیش‌فرض فقط جای گوشی توی عکس اصلی علامت خورده.</p>
       <div class="lbl">اندازه‌ی آیتم‌ها <span id="tbSzV" class="mut"></span></div>
-      <p class="mut" style="margin:0 0 4px;font-size:12px">هرچی بیشتر باشه آیتم‌ها درشت‌تر می‌شن، ولی جای کمتری روی میز می‌مونه. تغییرش رو همین بالا روی میز می‌بینی.</p>
-      <input type="range" id="tbSz" min="60" max="250" step="5" style="width:100%;margin:2px 0 12px">
+      <p class="mut" style="margin:0 0 4px;font-size:12px">هرچی بیشتر باشه آیتم‌ها درشت‌تر می‌شن. اگه خیلی درشت باشن، میز روی گوشی بلندتر می‌شه تا دست‌کم ۵ آیتم جا بشه و باید کمی اسکرول کنی. تغییرش رو همین بالا می‌بینی.</p>
+      <input type="range" id="tbSz" min="60" max="400" step="5" style="width:100%;margin:2px 0 12px">
       <div class="lbl">میز از کجای عکس شروع بشه؟ <span id="tbTopV" class="mut"></span></div>
       <input type="range" id="tbTop" min="20" max="80" step="1" style="width:100%;margin:2px 0 4px">
       <p class="mut" style="margin:0 0 12px;font-size:12px">آیتم‌ها فقط پایین‌تر از این خط زرد روی میز می‌افتن. اگه عکس خودت رو گذاشتی، خط رو بذار روی لبه‌ی بالای میز.</p>
@@ -1090,12 +1090,14 @@ function tbS(){if(!SITE.tb)SITE.tb={};return SITE.tb}
 var DEFZ=[[.592,.663,1,.864]];
 function zonesOf(t){return t&&t.zones!=null?t.zones:(t&&t.bg?[]:DEFZ)}
 function tbCalc(o){
-  var W=o.W,H=o.H,IW=o.IW,IH=o.IH,sc=Math.max(W/IW,H/IH),ox=(W-IW*sc)/2,oy=H-IH*sc;
-  var zf=Math.min(2.5,Math.max(.6,(+o.sz||100)/100)),lbh=o.nolb?8:26;
-  var x0=Math.max(8,ox+10),x1=Math.min(W-8,ox+IW*sc-10);
-  var y0=Math.max(o.top,oy+Math.min(80,Math.max(20,o.tf))/100*IH*sc),y1=H-o.bar-4;
-  var zs=(o.zones||[]).map(function(z){return {x0:ox+z[0]*IW*sc-8,y0:oy+z[1]*IH*sc-8,x1:ox+z[2]*IW*sc+8,y1:oy+z[3]*IH*sc+8}});
-  function build(d){
+  var W=o.W,IW=o.IW,IH=o.IH,H0=o.H,sc0=Math.max(W/IW,H0/IH);
+  var zf=Math.min(4,Math.max(.6,(+o.sz||100)/100)),lbh=o.nolb?8:26,mind=Math.max(22,Math.round(W*.1));
+  var tf=Math.min(80,Math.max(20,o.tf))/100;
+  function lay(H,d){
+    var sc=Math.max(W/IW,H/IH),ox=(W-IW*sc)/2,oy=H-IH*sc;
+    var x0=Math.max(8,ox+10),x1=Math.min(W-8,ox+IW*sc-10);
+    var y0=Math.max(o.top,oy+tf*IH*sc),y1=H-o.bar-4;
+    var zs=(o.zones||[]).map(function(z){return {x0:ox+z[0]*IW*sc-8,y0:oy+z[1]*IH*sc-8,x1:ox+z[2]*IW*sc+8,y1:oy+z[3]*IH*sc+8}});
     var cw=d*1.12,ch=d+lbh,cols=Math.max(1,Math.floor((x1-x0)/cw)),rows=Math.max(1,Math.floor((y1-y0)/ch));
     var gx=x0+((x1-x0)-cols*cw)/2,gy=y0+Math.max(0,((y1-y0)-rows*ch)/2),out=[],r,c;
     for(r=0;r<rows;r++)for(c=0;c<cols;c++){
@@ -1103,13 +1105,14 @@ function tbCalc(o){
       if(zs.some(function(p){return cx+d/2>p.x0&&cx-d/2<p.x1&&cy+d/2+(o.nolb?0:24)>p.y0&&cy-d/2<p.y1}))continue;
       out.push({x:cx,y:cy});
     }
-    var mx=(x0+x1)/2,my=(y0+y1)/2;
-    out.sort(function(a,b){return Math.hypot(a.x-mx,(a.y-my)*1.3)-Math.hypot(b.x-mx,(b.y-my)*1.3)});
-    return out;
+    var mx=(x0+x1)/2;
+    out.sort(function(a,b){return (Math.abs(a.x-mx)*.6+(a.y-y0))-(Math.abs(b.x-mx)*.6+(b.y-y0))});
+    return {slots:out,sc:sc,ox:ox,oy:oy};
   }
-  var mind=Math.max(22,Math.round(W*.1)),d=Math.round(Math.min(300*zf,Math.max(mind,IW*sc*0.15*zf))),out=build(d);
-  while(out.length<5&&d>mind){d=Math.max(mind,Math.round(d*.94));out=build(d)}
-  return {d:d,slots:out,sc:sc,ox:ox,oy:oy};
+  var d=Math.round(Math.min(W-16,Math.max(mind,IW*sc0*0.15*zf))),H=H0,r=lay(H,d);
+  while(r.slots.length<5&&H<H0*5){H=Math.round(H*1.06);r=lay(H,d)}
+  while(r.slots.length<5&&d>mind){d=Math.max(mind,Math.round(d*.94));r=lay(H,d)}
+  return {d:d,slots:r.slots,sc:r.sc,ox:r.ox,oy:r.oy,H:H};
 }
 
 const TBIM={w:912,h:1169};
@@ -1141,7 +1144,7 @@ const TBIMW=()=>(SITE.tb&&SITE.tb.bg)?TBIM.w:912,TBIMH=()=>(SITE.tb&&SITE.tb.bg)
 function renderTbPv(){
   const box=$("#tbPv");if(!box)return;const t=SITE.tb||{},src=t.bg?src_(t.bg):"images/table-bg.webp",bgi=$("#tbPvBg");
   if(bgi.dataset.s!==src){bgi.dataset.s=src;bgi.onload=()=>{if(t.bg===(SITE.tb||{}).bg){TBIM.w=bgi.naturalWidth||912;TBIM.h=bgi.naturalHeight||1169;renderTbPv()}};bgi.src=src}
-  const cfg=tbCfg(),c=tbCalc(cfg);
+  const cfg=tbCfg(),c=tbCalc(cfg);box.style.height=c.H+"px";
   bgi.style.width=cfg.IW*c.sc+"px";bgi.style.height=cfg.IH*c.sc+"px";bgi.style.left=c.ox+"px";bgi.style.top=c.oy+"px";
   box.querySelectorAll(".pp,.pl2,.ln").forEach(e=>e.remove());
   const ln=document.createElement("div");ln.className="ln";ln.style.top=Math.max(cfg.top,c.oy+Math.min(80,Math.max(20,cfg.tf))/100*cfg.IH*c.sc)+"px";box.appendChild(ln);
@@ -1152,7 +1155,7 @@ function renderTbPv(){
   if(TBZN!==zonesOf(t).length||box.querySelectorAll(".pz").length!==zonesOf(t).length)buildZones();
   zonesOf(t).forEach((z,i)=>{const e=box.querySelector('.pz[data-i="'+i+'"]');if(!e)return;
     e.style.left=(c.ox+z[0]*cfg.IW*c.sc)+"px";e.style.top=(c.oy+z[1]*cfg.IH*c.sc)+"px";e.style.width=((z[2]-z[0])*cfg.IW*c.sc)+"px";e.style.height=((z[3]-z[1])*cfg.IH*c.sc)+"px";box.appendChild(e)});
-  $("#tbCap").textContent="روی این میز تا "+fa(c.slots.length)+" آیتم جا می‌شه (همیشه دست‌کم ۵ تا)";
+  $("#tbCap").textContent="روی این میز تا "+fa(c.slots.length)+" آیتم جا می‌شه (همیشه دست‌کم ۵ تا)"+(c.H>TBPH*1.3?". آیتم‌ها درشتن، برای همین میز روی گوشی بلندتر می‌شه و باید کمی اسکرول کنی.":"");
 }
 function renderTb(){
   const t=SITE.tb||{},sz=t.sz||100,tp=t.top!=null?t.top:50;
@@ -1162,7 +1165,7 @@ function renderTb(){
   $("#tbBgPrev").src=t.bg?src_(t.bg):"images/table-bg.webp";$("#tbBgDel").style.display=t.bg?"":"none";
   renderTbPv();
 }
-$("#tbSz").oninput=e=>{tbS().sz=Math.min(250,Math.max(60,+e.target.value||100));renderTb();bar()};
+$("#tbSz").oninput=e=>{tbS().sz=Math.min(400,Math.max(60,+e.target.value||100));renderTb();bar()};
 $("#tbTop").oninput=e=>{tbS().top=Math.min(80,Math.max(20,+e.target.value||50));renderTb();bar()};
 $("#tbLb").onchange=e=>{tbS().lb=e.target.checked?1:0;bar()};
 $("#tbBgPick").onclick=()=>$("#tbBgFile").click();
